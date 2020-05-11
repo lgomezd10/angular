@@ -15,6 +15,7 @@ export class CajaComponent implements OnInit {
 
   ventas: Venta[] = [];
   ventaActual: Venta;
+  searchText: string;
   mostrarNuevo: boolean = false;  
   productos$: Observable<Producto[]>;  
   seleccionado: Producto;
@@ -46,6 +47,7 @@ export class CajaComponent implements OnInit {
   mostrarBoton(boton: string) {
     if (boton == "Añadir producto") {
       this.nuevoProducto();
+      this.searchText = "";
       this.desactivarBoton(boton);
       this.activarBoton("Añadir");
     }   
@@ -54,7 +56,7 @@ export class CajaComponent implements OnInit {
       this.cargar();
          
     }
-    if (boton == "Finalizar venta") {      
+    if (boton == "Finalizar venta") {    
       this.finalizarVenta();
     }
     if (boton == "Nueva venta") {      

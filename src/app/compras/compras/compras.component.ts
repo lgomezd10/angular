@@ -15,6 +15,7 @@ export class ComprasComponent implements OnInit {
 
   compras: Compra[] = [];
   compraActual: Compra;
+  searchText: string;
   productos$: Observable<Producto[]>;
   mostrarNuevo: boolean = false;
   mostrarNuevoProducto: boolean = false;
@@ -70,9 +71,13 @@ export class ComprasComponent implements OnInit {
   }
 
   cargar() {    
-    if (this.compraActual.cantidad <= 0 || this.compraActual.precio <=0) {
+    if (this.compraActual.producto == null){
+      alert("Seleccione un producto");
+    }
+    else if (this.compraActual.cantidad <= 0 || this.compraActual.precio <=0){
       alert("La cantidad y el precio debe ser mayor que 0");
-    } else {
+    }  
+    else {
       this.compras.push(this.compraActual);
       this.total = this.totalCompra();
       this.mostrarNuevo = false;
@@ -85,6 +90,7 @@ export class ComprasComponent implements OnInit {
   nuevoProducto() {
     this.compraActual = new Compra();
     this.mostrarNuevo = true;
+    this.searchText = "";
   }
 
   totalCompra(): number {

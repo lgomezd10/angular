@@ -1,0 +1,19 @@
+<h2>Productos</h2>
+Buscar productos: <input type="text" [(ngModel)]= "searchText"><br>
+<div id = "listaProductos">
+<ul class="productos">
+  <li *ngFor="let producto of productos$ | async | sort:'nombre' | filter: searchText">
+    <span class="id_producto">{{producto.id_producto}}</span> 
+    <input class = "nombre" type="text" [(ngModel)] = "producto.nombre"> 
+    <span class = "stock">  {{producto.stock}} </span> 
+    <input class= "precio" type="number" [(ngModel)] = "producto.precio">
+    <button (click)="cambioPrecio(producto, precioAntiguo)">Guardar</button> 
+    <a [title]="producto.nombre + ' details'" [routerLink]="['/producto', producto.id_producto]">
+      Detalle
+    </a>    
+  </li>
+</ul>
+</div>
+<button (click) = "nuevo=true">Añadir Nuevo</button> <br>
+
+<app-nuevo *ngIf="nuevo"></app-nuevo>

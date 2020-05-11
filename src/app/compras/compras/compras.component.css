@@ -1,0 +1,53 @@
+table.mostrar td {
+    vertical-align: top;
+}
+
+table.compra {
+    width: 90%;
+    max-width: 400px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+ }
+ table.compra th {background-color: green; }
+
+ table.compra tr:nth-child(odd) {background-color: grey;}
+ 
+ table.compra tr:nth-child(even) {background-color: white;}
+
+ table.compra td {
+     text-align: center;
+ }
+
+ table.mostrar.colum-derecha td {
+   border: red 5px solid;
+  margin-right: 30px;
+ }
+ 
+ .btn-borde {
+    padding: .375rem .75rem;
+    border: 1px solid #007bff;
+    border-radius: .25rem;
+    color: #007bff;
+    transition: color .15s ease-in-out,
+      background-color .15s ease-in-out;
+  }
+  
+  .btn-borde:hover, .btn-borde:active, .btn-borde:focus {
+    color: #fff;
+    background-color: #007bff;
+  }
+  .nuevo-izquierda {
+    float: left;
+  }
+  .nuevo-derecha {
+    float: right;
+  }
+
+  #zona-botones {
+    width: 30%;
+    float: right;
+  }
+  #zona-principal {
+    width: 70%;
+    float: left;
+  }

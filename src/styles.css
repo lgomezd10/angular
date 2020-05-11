@@ -1,0 +1,90 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+nav a {
+    padding: 5px 10px;
+    text-decoration: none;
+    margin-top: 10px;
+    display: inline-block;
+    background-color: #eee;
+    border-radius: 4px;
+  }
+  nav a:visited, a:link {
+    color: #607d8b;
+  }
+  nav a:hover {
+    color: #039be5;
+    background-color: #cfd8dc;
+  }
+  nav a.active {
+    color: #039be5;
+  }
+
+  
+  table.resultados {
+    width: 90%;
+    max-width: 400px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center
+ }
+ table.resultados th {
+   background-color: green; 
+   text-align: center;
+   color: white;
+  }
+
+ table.resultados tr:nth-child(odd) {background-color: grey;}
+ 
+ table.resultados tr:nth-child(even) {background-color: white;}
+
+
+ table.resultados td {
+     text-align: center;
+ }
+
+ div.formulario label {
+  display: inline-block;
+  width: 100px;
+  margin: .5em 0;
+  color: #607D8B;
+  font-weight: bold;
+}
+
+div.formulario select {
+    
+    height: 2em;
+  font-size: 1em;
+  padding-left: .4em;
+}
+div.formulario input {
+  height: 2em;
+  font-size: 1em;
+  padding-left: .4em;
+}
+
+.alinear-izquierda {
+  float: left;
+  
+}
+.alinear-derecha {
+  float: right;
+}
+.alinear-centro {
+  width: 100%;
+  display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.zona-botones {
+  width: 30%;
+  float: right;
+}
+.zona-principal {
+  width: 70%;
+  float: left;
+}
+
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

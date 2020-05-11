@@ -1,0 +1,26 @@
+<nav>
+  <a routerLink="/compras" routerLinkActive="active">Compras</a>
+  <a routerLink="/compras-fechas" routerLinkActive="active">Buscar compras</a>
+</nav>
+<router-outlet></router-outlet>
+<app-seleccion-fechas (enviarFechas) = "buscarCompras($event)"></app-seleccion-fechas>
+
+<table class="resultados" *ngFor = "let compra of compras | groupByFecha">  
+  <tr>
+    <td>Fecha</td>
+    <td>{{compra.key}}</td>
+  </tr>
+  <tr>
+    <th>Producto</th>
+    <th>Cantidad</th>
+    <th>Precio Kg</th>
+    <th>Precio</th>
+  </tr>  
+  <tr *ngFor = "let item of compra.value">
+    <td>{{item.id_producto | producto}}</td>
+    <td>{{item.cantidad}}</td>
+    <td>{{item.precio}}</td>
+    <td>{{item.cantidad * item.precio | number: '1.0-2'}}</td>
+  </tr>
+</table>
+

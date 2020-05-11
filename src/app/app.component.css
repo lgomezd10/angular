@@ -1,0 +1,35 @@
+#principal {
+    max-width: 800px;
+    min-width: 300px;
+    margin: 0 auto 0 auto; text-align: left;
+}
+
+#header {
+    width: 100%;
+    font-family: Orbitron;
+    font-size: 18px;
+    font-weight: bold;
+    display: table;
+    background-color: rgb(181, 216, 27);
+}
+ul {
+    list-style: none;    
+    padding-left: 0px;
+}
+.nav li {
+    display: table-cell;
+}
+.nav li a {
+    color: white;
+    text-decoration: none;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-top: 18px;
+    padding-bottom: 18px;
+}
+.nav li a:hover{
+    background-color:rgb(118, 145, 44); 
+}
+.nav li a.active {
+    color: #039be5;
+  }

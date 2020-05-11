@@ -1,0 +1,62 @@
+<nav>
+  <a routerLink="/caja" routerLinkActive="active">Caja</a>
+  <a routerLink="/ventas-fechas" routerLinkActive="active">Buscar ventas</a>
+</nav>
+<router-outlet></router-outlet>
+
+<h2>Caja</h2>
+
+<div *ngIf="codigoVenta > 0">
+  <p>Venta finalizada</p>
+  <p>Código Venta: {{codigoVenta}}</p>
+</div>
+
+<div class="zona-botones">
+    <app-lista-botones [lista]="botones" (enviarBoton)= "mostrarBoton($event)"></app-lista-botones>
+  </div>
+  
+<div class="zona-principal">
+
+  <table class="resultados">
+    <tr>
+      <th>Producto</th>
+      <th>Cantidad</th>
+      <th>Precio Kg</th>
+      <th>Precio</th>
+      <th *ngIf="codigoVenta == 0">Eliminar</th>
+    </tr>
+    <tr *ngFor="let venta of ventas">
+      <td>{{venta.producto.nombre}}</td>
+      <td>{{venta.cantidad}}</td>
+      <td>{{venta.precio}}</td>
+      <td>{{venta.cantidad * venta.precio | number: '1.0-2'}}</td>
+      <td *ngIf="codigoVenta == 0"> <button (click)=eliminarVenta(venta)>Eliminar</button></td>
+    </tr>
+  </table>
+  <h2>Total : {{total}}</h2>
+  <br>
+
+  <div *ngIf="codigoVenta == 0">
+    <input type="checkbox" [(ngModel)]="tarjeta"/> Pago con tarjeta    
+  </div>
+</div>
+
+<div *ngIf="mostrarNuevo" class="formulario">
+
+  <table class="mostrar">
+    <tr>
+      <td>
+        <input type="text" [(ngModel)]="searchText"><br>
+        <select [(ngModel)]="ventaActual.producto" size="5">
+          <option *ngFor="let producto of productos$| async | sort:'nombre' |filter: searchText" [ngValue]="producto">
+            {{producto.id_producto}} {{producto.nombre}} {{producto.precio}}</option>
+        </select>
+      </td>
+      <td>
+        Cantidad <input type="number" min=0 [(ngModel)]="ventaActual.cantidad">
+      </td>
+      
+    </tr>
+  </table>
+</div>
+

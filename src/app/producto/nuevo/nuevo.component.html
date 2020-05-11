@@ -1,0 +1,34 @@
+<div *ngIf="!enviado">
+    <div class="formulario" >
+        <div class="alinear-izquierda">
+            <label>Nombre:  </label> <input type="text" [(ngModel)] = "producto.nombre" 
+            (keyup)="procesarKeyup($event, precio)">
+            <br>
+            <label>Precio:  </label> <input type="text" [(ngModel)] = "producto.precio" #precio
+            (keyup)="procesarKeyup($event, tipo)">
+            <br>    
+            <label>Tipo:  </label> 
+            <select [(ngModel)] = "producto.tipo" #tipo (change)="onChange($event,enviar)">
+                <option *ngFor = "let tipo of tipos" [ngValue] = "tipo" >{{tipo}}</option>
+            </select>
+        </div>
+        <div class="alinear-derecha">
+                <button (click) = "guardarProducto()" #enviar>Enviar</button><br>
+        </div>
+    </div>
+    <div class="alinear-centro">    
+        <p *ngIf="!correcto">Faltan datos para guardar el producto. Rellene todos los campos</p>
+    </div>
+    <div class="alinear-centro">
+        <div id = "listaProductos">
+            <ul>
+                <li *ngFor = "let p of productos$ | async | sort:'nombre' | filter: producto.nombre">{{p.nombre}}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div *ngIf="enviado">
+    <h2>Nuevo producto creado</h2>
+</div>
+
+

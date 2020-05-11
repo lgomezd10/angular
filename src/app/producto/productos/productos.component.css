@@ -1,0 +1,33 @@
+#listaProductos {
+    height: 300px;
+    overflow : auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    
+}
+
+span.id_producto, span.stock {
+    width: 10%;
+    max-width: 40px;
+    background: #288033;
+    display:inline-block;
+    text-align: center;
+}
+
+span.nombre {        
+    width: 50%;
+    max-width: 200px;
+    background: #9CFFA9;
+    display:inline-block;
+}
+
+li {
+    width: 80%;
+    list-style: none;
+}
+
+
+input.precio {
+    width: 10%;
+    max-width: 60px;
+}

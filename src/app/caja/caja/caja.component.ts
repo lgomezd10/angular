@@ -14,6 +14,8 @@ import { Boton } from 'src/app/herramientas/boton';
 export class CajaComponent implements OnInit {
 
   ventas: Venta[] = [];
+  abierta: boolean = false;
+  buscarVenta: number = 0;
   ventaActual: Venta;
   searchText: string;
   mostrarNuevo: boolean = false;  
@@ -109,6 +111,17 @@ export class CajaComponent implements OnInit {
     this.desactivarBoton("Añadir");
     console.log("Desde finalizar venta",this.codigoVenta);
 
+  }
+
+  abrirVenta(id_ventas: number) {    
+    this.cajaService.obtenerVenta(id_ventas).subscribe(ventas => {
+      console.log("elementos recibidos", ventas.elementos);
+      this.ventas = [];
+      this.ventas = this.cajaService.ventasAListaVenta(ventas);
+    });
+    this.abierta = true;    
+    console.log("lo guardado en ventas", this.ventas);
+    
   }
 
   reiniciar() {

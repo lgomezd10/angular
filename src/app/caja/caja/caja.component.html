@@ -6,6 +6,9 @@
 
 <h2>Caja</h2>
 
+<input type="text" [(ngModel)]="buscarVenta">
+<button (click)=abrirVenta(buscarVenta)>Buscar</button>
+
 <div *ngIf="codigoVenta > 0">
   <p>Venta finalizada</p>
   <p>Código Venta: {{codigoVenta}}</p>

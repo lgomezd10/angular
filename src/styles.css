@@ -56,8 +56,22 @@ div.formulario select {
   font-size: 1em;
   padding-left: .4em;
 }
+
+div.formulario input[type=number] {
+  height: 2em;
+  width: 3em;
+  font-size: 1em;
+  padding-left: .4em;
+}
+
 div.formulario input {
   height: 2em;
+  font-size: 1em;
+  padding-left: .4em;
+}
+
+div.formulario select {
+  height: 5em;
   font-size: 1em;
   padding-left: .4em;
 }

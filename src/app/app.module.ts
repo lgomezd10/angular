@@ -16,6 +16,7 @@ import { ErroresModule } from './errores/errores.module';
 import { HerramientasModule } from './herramientas/herramientas.module';
 import { ProductoComponent } from './producto/producto/producto.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 const appRoutes: Routes = [
   {

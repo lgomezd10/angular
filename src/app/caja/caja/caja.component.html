@@ -26,20 +26,20 @@
       <th>Cantidad</th>
       <th>Precio Kg</th>
       <th>Precio</th>
-      <th *ngIf="codigoVenta == 0">Eliminar</th>
+      <th *ngIf="codigoVenta == 0 || abierta">Eliminar</th>
     </tr>
     <tr *ngFor="let venta of ventas">
       <td>{{venta.producto.nombre}}</td>
       <td>{{venta.cantidad}}</td>
       <td>{{venta.precio}}</td>
       <td>{{venta.cantidad * venta.precio | number: '1.0-2'}}</td>
-      <td *ngIf="codigoVenta == 0"> <button (click)=eliminarVenta(venta)>Eliminar</button></td>
+      <td *ngIf="codigoVenta == 0 || abierta"> <button (click)=eliminarVenta(venta)>Eliminar</button></td>
     </tr>
   </table>
   <h2>Total : {{total}}</h2>
   <br>
 
-  <div *ngIf="codigoVenta == 0">
+  <div *ngIf="codigoVenta == 0 || abierta">
     <input type="checkbox" [(ngModel)]="tarjeta"/> Pago con tarjeta    
   </div>
 </div>

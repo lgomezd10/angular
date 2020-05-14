@@ -28,7 +28,8 @@ export class CajaComponent implements OnInit {
     {nombre:"Nueva venta", mostrar:false},
     {nombre:"Finalizar venta", mostrar:false},
     {nombre:"Añadir producto", mostrar: true},
-    {nombre:"Añadir", mostrar:false}      
+    {nombre:"Añadir", mostrar:false},
+    {nombre:"Reabrir ticket", mostrar:false}
   ];
 
   constructor(private productosService: ProductosService, private cajaService: CajaService) { }
@@ -64,6 +65,12 @@ export class CajaComponent implements OnInit {
     if (boton == "Nueva venta") {      
       this.nuevaVenta();
     }
+    if (boton == "Reabrir ticket") {
+      this.abierta = true;
+      this.activarBoton("Añadir producto");
+      this.desactivarBoton("Reabrir ticket");
+      this.activarBoton("Finalizar venta");
+    }
   }
 
   nuevoProducto() {
@@ -96,7 +103,7 @@ export class CajaComponent implements OnInit {
       this.ventaActual.precio = this.ventaActual.producto.precio;    
       this.ventas.push(this.ventaActual);
       this.mostrarNuevo = false;
-      this.total = this.totalVenta();      
+      this.total = this.totalVenta();     
       this.activarBoton("Finalizar venta");
       this.activarBoton("Añadir producto");
       this.desactivarBoton("Añadir");
@@ -105,10 +112,16 @@ export class CajaComponent implements OnInit {
   }
 
   finalizarVenta(): void {
-    this.cajaService.guardarVenta(this.ventas, this.tarjeta).subscribe(cod => this.codigoVenta = cod);
+    if (this.codigoVenta == 0)
+      this.cajaService.guardarVenta(this.ventas, this.tarjeta).subscribe(cod => this.codigoVenta = cod);
+    else 
+      this.cajaService.actualizarVenta(this.codigoVenta, this.ventas, this.tarjeta).subscribe(cod => this.codigoVenta = cod);      
     this.mostrarNuevo = false; 
+    this.abierta = false;
     this.desactivarBoton("Finalizar venta");
     this.desactivarBoton("Añadir");
+    this.desactivarBoton("Añadir producto");
+    this.activarBoton("Reabrir ticket");
     console.log("Desde finalizar venta",this.codigoVenta);
 
   }
@@ -118,8 +131,11 @@ export class CajaComponent implements OnInit {
       console.log("elementos recibidos", ventas.elementos);
       this.ventas = [];
       this.ventas = this.cajaService.ventasAListaVenta(ventas);
-    });
-    this.abierta = true;    
+      this.codigoVenta = ventas.id_ventas;
+      this.tarjeta = ventas.tarjeta;      
+      this.total = this.totalVenta();
+      this.abierta = true;
+    });     
     console.log("lo guardado en ventas", this.ventas);
     
   }

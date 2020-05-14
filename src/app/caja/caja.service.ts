@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Venta } from './venta';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { Ventas } from './ventas';
+import { Ventas, ItemVentas } from './ventas';
 import { ProductosService } from '../producto/productos.service';
 
 const httpOptions = {
@@ -56,7 +56,8 @@ export class CajaService {
     return respuesta;
   }
 
-  actualizarVenta(id_ventas: number, ventas: Ventas, tarjeta: boolean): Observable<number> {
+
+  actualizarVenta(id_ventas: number, ventas: Venta[], tarjeta: boolean): Observable<number> {
     let envio = {
       id_ventas: id_ventas,
       tarjeta:  tarjeta?1:0,
@@ -92,6 +93,7 @@ export class CajaService {
     });
     return salida;
   }
+
 
   ventasPorFechas(desde: string, hasta: string): BehaviorSubject<Ventas[]> {
     let fechas = {desde: desde, hasta: hasta};

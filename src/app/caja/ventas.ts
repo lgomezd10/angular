@@ -10,12 +10,14 @@ export class ItemVentas {
 export class Ventas {
     id_ventas: number;
     fecha: Date;
+    tarjeta: boolean;
     elementos: ItemVentas[];
     
     constructor() {
         
         this.id_ventas = 0;
         this.fecha = null;
+        this.tarjeta = false;
         this.elementos= [];
         
     }

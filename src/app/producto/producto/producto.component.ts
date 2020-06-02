@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TIPOS } from '../tipos-productos';
 import { Location } from '@angular/common';
 import { Observable } from 'rxjs';
+import { Boton } from 'src/app/herramientas/boton';
 
 
 @Component({
@@ -17,6 +18,10 @@ export class ProductoComponent implements OnInit {
   private productos$: Observable<Producto[]>;
   private producto: Producto;
   public tipos = TIPOS;
+  botones: Boton[] = [
+    {nombre:"Guardar", mostrar:true},
+    {nombre:"Volver", mostrar:true}
+  ];
 
   constructor(private productosService: ProductosService, private route: ActivatedRoute, private location: Location) { }
 
@@ -29,6 +34,24 @@ export class ProductoComponent implements OnInit {
       //this.producto = this.productosService.getProducto(+params.get('productoId'));
     });
    
+  }
+
+  activarBoton(nombreBoton: string) {
+    this.botones.find(boton => { return boton.nombre == nombreBoton}).mostrar = true;
+  }
+
+  desactivarBoton(nombreBoton: string) {
+    this.botones.find(boton => { return boton.nombre == nombreBoton}).mostrar = false;
+  }
+
+  mostrarBoton(boton: string) {
+    if (boton == "Volver") {
+      this.volver();
+    }
+    if (boton == "Guardar") {
+      this.modificarProducto();
+    }
+    
   }
 
   modificarProducto() {

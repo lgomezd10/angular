@@ -11,6 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HerramientasModule } from '../herramientas/herramientas.module';
 import { Routes, RouterModule } from '@angular/router';
 import { CajaComponent } from '../caja/caja/caja.component';
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 const comprasRoutes: Routes = [
   {
@@ -26,6 +27,7 @@ const comprasRoutes: Routes = [
 @NgModule({
   declarations: [ComprasComponent, ComprasFechaComponent],
   imports: [
+    FlexLayoutModule,
     CommonModule,
     FormsModule,
     HttpClientModule,

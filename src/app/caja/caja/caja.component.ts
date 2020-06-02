@@ -9,7 +9,7 @@ import { Boton } from 'src/app/herramientas/boton';
 @Component({
   selector: 'app-caja',
   templateUrl: './caja.component.html',
-  styleUrls: ['./caja.component.css']
+  styleUrls: ['./caja.component.scss']
 })
 export class CajaComponent implements OnInit {
 

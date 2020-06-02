@@ -9,7 +9,7 @@ import { Boton } from 'src/app/herramientas/boton';
 @Component({
   selector: 'app-compras',
   templateUrl: './compras.component.html',
-  styleUrls: ['./compras.component.css']
+  styleUrls: ['./compras.component.scss']
 })
 export class ComprasComponent implements OnInit {
 

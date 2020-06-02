@@ -1,0 +1,81 @@
+table.mostrar td {
+    vertical-align: top;   
+
+}
+
+table.compra {
+    width: 90%;
+    max-width: 400px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+ }
+ table.compra th {background-color: green; }
+
+ table.compra tr:nth-child(odd) {background-color: greenyellow;}
+ 
+ table.compra tr:nth-child(even) {background-color: white;}
+
+ table.compra td {
+     text-align: center;
+ }
+ 
+ .btn-borde {
+    padding: .375rem .75rem;
+    border: 1px solid #007bff;
+    border-radius: .25rem;
+    color: #007bff;
+    transition: color .15s ease-in-out,
+      background-color .15s ease-in-out;
+  }
+  
+  .btn-borde:hover, .btn-borde:active, .btn-borde:focus {
+    color: #fff;
+    background-color: #007bff;
+  }
+
+     
+  .addProduct{
+    display: grid;
+    grid-template-areas: "form1 form2";
+    
+    }
+
+    @media (max-width: 600px) {
+      .compra-venta{
+        display: grid;
+        grid-template-columns: auto;
+        background-color: yellow;
+        column-gap: 20px;
+      }
+      .addProduct{
+        display: grid;
+        grid-template-areas: "form1" "form2";
+
+      .form2{
+        justify-self: start;
+      }
+      }
+    }
+
+  .form1{
+    display: grid;
+    justify-self: start;
+    align-self: start;
+  }
+
+  .form2{
+    display: grid;
+    justify-self: end;
+    align-self: start;
+  } 
+
+  .table td{
+    text-align: center;
+  }
+
+  .select select { text-rendering: auto !important; }
+ 
+
+  
+
+ 

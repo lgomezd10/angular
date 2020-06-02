@@ -4,62 +4,95 @@
 </nav>
 <router-outlet></router-outlet>
 
-<h2>Caja</h2>
+<h2 class="title is-3">Caja</h2>
 
 <input type="text" [(ngModel)]="buscarVenta">
 <button (click)=abrirVenta(buscarVenta)>Buscar</button>
+<br><br>
 
-<div *ngIf="codigoVenta > 0">
+<div *ngIf="codigoVenta > 0 && !abierta">
   <p>Venta finalizada</p>
   <p>Código Venta: {{codigoVenta}}</p>
 </div>
 
-<div class="zona-botones">
-    <app-lista-botones [lista]="botones" (enviarBoton)= "mostrarBoton($event)"></app-lista-botones>
-  </div>
-  
-<div class="zona-principal">
+<div class="columns">
+  <div class="column is-three-quarters">
+    <div class="zona-tabla">
+      <!--
+      <table class="resultados">
+        <tr>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Precio Kg</th>
+          <th>Precio</th>
+          <th *ngIf="codigoVenta == 0 || abierta">Eliminar</th>
+        </tr>
+        <tr *ngFor="let venta of ventas">
+          <td>{{venta.producto.nombre}}</td>
+          <td>{{venta.cantidad}}</td>
+          <td>{{venta.precio}}</td>
+          <td>{{venta.cantidad * venta.precio | number: '1.0-2'}}</td>
+          <td *ngIf="codigoVenta == 0 || abierta"> <button (click)=eliminarVenta(venta)>Eliminar</button></td>
+        </tr>
+      </table>
+      <h2>Total : {{total}}</h2>
+      <br>
 
-  <table class="resultados">
-    <tr>
-      <th>Producto</th>
-      <th>Cantidad</th>
-      <th>Precio Kg</th>
-      <th>Precio</th>
-      <th *ngIf="codigoVenta == 0 || abierta">Eliminar</th>
-    </tr>
-    <tr *ngFor="let venta of ventas">
-      <td>{{venta.producto.nombre}}</td>
-      <td>{{venta.cantidad}}</td>
-      <td>{{venta.precio}}</td>
-      <td>{{venta.cantidad * venta.precio | number: '1.0-2'}}</td>
-      <td *ngIf="codigoVenta == 0 || abierta"> <button (click)=eliminarVenta(venta)>Eliminar</button></td>
-    </tr>
-  </table>
-  <h2>Total : {{total}}</h2>
-  <br>
+      <div *ngIf="codigoVenta == 0 || abierta">
+        <input type="checkbox" [(ngModel)]="tarjeta" /> Pago con tarjeta
+      </div>
+      -->
+      <table class="table is-striped">
+        <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Precio Kg</th>
+          <th>Precio</th>
+          <th *ngIf="codigoVenta == 0 || abierta">Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let venta of ventas">
+          <td>{{venta.producto.nombre}}</td>
+          <td>{{venta.cantidad}}</td>
+          <td>{{venta.precio}}</td>
+          <td>{{venta.cantidad * venta.precio | number: '1.0-2'}}</td>
+          <td *ngIf="codigoVenta == 0 || abierta"> <button (click)=eliminarVenta(venta)>Eliminar</button></td>
+        </tr>
+      </tbody>
+      </table>
+      <h2>Total : {{total}}</h2>
+      <br>
 
-  <div *ngIf="codigoVenta == 0 || abierta">
-    <input type="checkbox" [(ngModel)]="tarjeta"/> Pago con tarjeta    
-  </div>
-</div>
+      <div *ngIf="codigoVenta == 0 || abierta">
+        <input type="checkbox" [(ngModel)]="tarjeta" /> Pago con tarjeta
+      </div>
+    </div>
 
-<div *ngIf="mostrarNuevo" class="formulario">
-
-  <table class="mostrar">
-    <tr>
-      <td>
-        <input type="text" [(ngModel)]="searchText"><br>
-        <select [(ngModel)]="ventaActual.producto" size="5">
+    <div *ngIf="mostrarNuevo" class="columns">
+      <div class="column">
+        <label class="label">Buscar producto: </label>
+        <input class="input" type="text" [(ngModel)]="searchText" />
+        
+        
+        <select size="5" [(ngModel)]="ventaActual.producto">
           <option *ngFor="let producto of productos$| async | sort:'nombre' |filter: searchText" [ngValue]="producto">
             {{producto.id_producto}} {{producto.nombre}} {{producto.precio}}</option>
         </select>
-      </td>
-      <td>
-        Cantidad <input type="number" min=0 [(ngModel)]="ventaActual.cantidad">
-      </td>
       
-    </tr>
-  </table>
-</div>
+      
+      </div>
+      <div class="column">
+        <label class="label"> Cantidad</label>
+         <input class="input" type="number" min=0 [(ngModel)]="ventaActual.cantidad">
+      </div>
+    </div>
 
+  </div>
+
+  <div class="column">
+    <app-lista-botones [lista]="botones" (enviarBoton)="mostrarBoton($event)"></app-lista-botones>
+  </div>
+
+</div>

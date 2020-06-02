@@ -1,18 +1,18 @@
+@import "src/sass/mystyles.scss";
 li {    
     list-style: none;
-    width: 200px;
 }
-button {
-    margin-top: 20px;
+/*button {
+    margin-bottom: 20px;
     font-family: Arial;
-    background-color: #eee;
+    background-color: rgb(42, 167, 104);
     border: none;
     padding: 5px 10px;
     border-radius: 4px;
     cursor: pointer;
     cursor: hand;
-    width: 200px;
-    height: 50px;
+    width: 150px;
+    height: 50px;    
   }
   button:hover {
     background-color: #cfd8dc;
@@ -21,4 +21,11 @@ button {
     background-color: #eee;
     color: #ccc;
     cursor: auto;
+  }*/
+
+  .button{
+    margin-bottom: 20px;
   }
+
+  
+  

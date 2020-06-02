@@ -4,6 +4,7 @@ import { Producto } from '../producto';
 import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
+import { Boton } from 'src/app/herramientas/boton';
 
 
 
@@ -12,12 +13,13 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './productos.component.html',
   styleUrls: ['./productos.component.css']
 })
-export class ProductosComponent implements OnInit {
-
-  
+export class ProductosComponent implements OnInit {  
   
   productos$: Observable<Producto[]>;
   nuevo = false;
+  botones: Boton[] = [
+    {nombre:"Añadir nuevo", mostrar:true}
+  ];
   
   constructor(private productosService: ProductosService, private route:ActivatedRoute) {
     /*route.url.subscribe(url => {
@@ -29,6 +31,22 @@ export class ProductosComponent implements OnInit {
         });
       }
     })*/
+  }
+
+  activarBoton(nombreBoton: string) {
+    this.botones.find(boton => { return boton.nombre == nombreBoton}).mostrar = true;
+  }
+
+  desactivarBoton(nombreBoton: string) {
+    this.botones.find(boton => { return boton.nombre == nombreBoton}).mostrar = false;
+  }
+
+  mostrarBoton(boton: string) {
+    if (boton == "Añadir nuevo") {
+      this.nuevo=true;
+      //this.desactivarBoton("Añadir nuevo");
+    }
+    
   }
 
   cambioPrecio(producto: Producto, precioAntiguo) {

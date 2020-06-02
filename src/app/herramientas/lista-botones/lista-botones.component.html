@@ -1,7 +1,11 @@
-<ul>
-  <ng-container *ngFor="let boton of lista">
-  <li *ngIf="boton.mostrar">
-    <button (click)="onEnviar(boton.nombre)">{{boton.nombre}}</button>
-  </li>
-</ng-container>
-</ul>
+<div class="columns">
+  <div class="column">
+    <ul>
+      <ng-container *ngFor="let boton of lista">
+        <li *ngIf="boton.mostrar">
+          <button class="button is-primary is-outlined is-fullwidth" (click)="onEnviar(boton.nombre)">{{boton.nombre}}</button>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+</div>

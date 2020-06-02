@@ -4,7 +4,7 @@ import { Boton } from '../boton';
 @Component({
   selector: 'app-lista-botones',
   templateUrl: './lista-botones.component.html',
-  styleUrls: ['./lista-botones.component.css']
+  styleUrls: ['./lista-botones.component.scss']
 })
 export class ListaBotonesComponent implements OnInit {
 

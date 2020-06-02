@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { HerramientasModule } from '../herramientas/herramientas.module';
 import { Routes, RouterModule } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 const ventasRoutes: Routes = [
   {
@@ -27,6 +28,7 @@ const ventasRoutes: Routes = [
 @NgModule({
   declarations: [CajaComponent, VentasFechaComponent],
   imports: [
+    FontAwesomeModule,
     CommonModule,
     FormsModule,
     HttpClientModule,

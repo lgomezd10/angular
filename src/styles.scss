@@ -1,5 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+// Update some of Bulma's component variables
+// $body-background-color: $beige-lighter;
+
+@import "src/sass/mystyles.scss";
 nav a {
     padding: 5px 10px;
     text-decoration: none;
@@ -18,8 +22,7 @@ nav a {
   nav a.active {
     color: #039be5;
   }
-
-  
+ 
   table.resultados {
     width: 90%;
     max-width: 400px;
@@ -96,6 +99,16 @@ div.formulario select {
 .zona-principal {
   width: 70%;
   float: left;
+}
+
+/*BULMA*/
+.title.is-3 {
+  margin-top: 20px;
+}
+
+.input {
+  margin-bottom: 20px;
+  max-width: 200px;
 }
 
 

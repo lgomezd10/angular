@@ -11,10 +11,13 @@
     font-weight: bold;
     display: table;
     background-color: rgb(181, 216, 27);
+    
 }
 ul {
     list-style: none;    
     padding-left: 0px;
+    height: 60px;
+    padding-top: 17px;
 }
 .nav li {
     display: table-cell;

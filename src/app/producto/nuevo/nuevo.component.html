@@ -1,19 +1,20 @@
+{{enviar}}
 <div *ngIf="!enviado">
-    <div class="formulario" >
+    <div >
         <div class="alinear-izquierda">
-            <label>Nombre:  </label> <input type="text" [(ngModel)] = "producto.nombre" 
+            <label class="label">Nombre:  </label> <input class="input" type="text" [(ngModel)] = "producto.nombre" 
             (keyup)="procesarKeyup($event, precio)">
             <br>
-            <label>Precio:  </label> <input type="text" [(ngModel)] = "producto.precio" #precio
+            <label class="label">Precio:  </label> <input class="input" type="text" [(ngModel)] = "producto.precio" #precio
             (keyup)="procesarKeyup($event, tipo)">
             <br>    
-            <label>Tipo:  </label> 
-            <select [(ngModel)] = "producto.tipo" #tipo (change)="onChange($event,enviar)">
+            <label class="label">Tipo:  </label> 
+            <select class="select" [(ngModel)] = "producto.tipo" #tipo (change)="onChange($event,enviar)">
                 <option *ngFor = "let tipo of tipos" [ngValue] = "tipo" >{{tipo}}</option>
             </select>
         </div>
         <div class="alinear-derecha">
-                <button (click) = "guardarProducto()" #enviar>Enviar</button><br>
+                <button class="button" (click) = "guardarProducto()" #enviar>Enviar</button><br>
         </div>
     </div>
     <div class="alinear-centro">    

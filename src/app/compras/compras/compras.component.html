@@ -4,7 +4,7 @@
 </nav>
 <router-outlet></router-outlet>
 
-<h2>Compras</h2>
+<h2 class="title is-3">Compras</h2>
 
 <!--Prueba de botones
 <ul>
@@ -12,55 +12,64 @@
 </ul>
 -->
 
-<div id="zona-botones">
-  <app-lista-botones [lista]="botones" (enviarBoton)= "mostrarBoton($event)"></app-lista-botones>
-</div>
+<div class="columns">
 
-<div id="zona-principal">
+  <div class="column is-three-quarters">
+    <div class="zona-tabla">
+      <table class="table is-striped">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio Kg</th>
+            <th>Precio</th>
+            <th *ngIf="!compraFinalizada">Eliminar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let compra of compras">
+            <td>{{compra.producto.nombre}}</td>
+            <td>{{compra.cantidad}}</td>
+            <td>{{compra.precio}}</td>
+            <td>{{compra.cantidad * compra.precio | number: '1.0-2'}}</td>
+            <td *ngIf="!compraFinalizada"> <button (click)=eliminarCompra(compra)>Eliminar</button></td>
+          </tr>
+        </tbody>
+      </table>
 
-<table class="resultados">
-    <tr>
-  
-      <th>Producto</th>
-  
-      <th>Cantidad</th>
-  
-      <th>Precio Kg</th>
-  
-      <th>Precio</th>
-  
-      <th *ngIf="!compraFinalizada">Eliminar</th>
-    </tr>
-    <tr *ngFor="let compra of compras">
-      <td>{{compra.producto.nombre}}</td>
-      <td>{{compra.cantidad}}</td>
-      <td>{{compra.precio}}</td>
-      <td>{{compra.cantidad * compra.precio | number: '1.0-2'}}</td>
-      <td *ngIf="!compraFinalizada"> <button (click)=eliminarCompra(compra)>Eliminar</button></td>
-    </tr>
-  </table>
+      <h1>Total: {{total}}</h1>
+      <br><br>
+      <!--<button (click)=nuevoProducto() *ngIf ="!compraFinalizada">Nueva compra</button>-->
+      <p *ngIf="compraFinalizada">Compra guardada correctamente</p>
 
-  <h1>Total: {{total}}</h1>  
-  <br><br>
-  <!--<button (click)=nuevoProducto() *ngIf ="!compraFinalizada">Nueva compra</button>-->
-  <p *ngIf ="compraFinalizada">Compra guardada correctamente</p>
+    </div>
 
-<div *ngIf="mostrarNuevo" class="formulario">
-  <div class="nuevo-izquierda">    
-    <input type="text" [(ngModel)]="searchText"><br>
-    <select [(ngModel)]="compraActual.producto" size="5">
-      <option *ngFor="let producto of productos$| async | sort:'nombre' |filter: searchText" [ngValue]="producto">
-        {{producto.id_producto}} {{producto.nombre}} stock: {{producto.stock}}</option>
-    </select><br>
+    <div *ngIf="mostrarNuevo" class="columns">
+      <div class="column">
+        <label class="label">Buscar:</label>
+        <input class="input" type="text" [(ngModel)]="searchText"><br>
+        <select class="select is-multiple" [(ngModel)]="compraActual.producto" size="5">
+          <option *ngFor="let producto of productos$| async | sort:'nombre' |filter: searchText" [ngValue]="producto">
+            {{producto.id_producto}} {{producto.nombre}} stock: {{producto.stock}}</option>
+        </select><br>
+      </div>
+      <div class="column">
+        <label class="label">Cantidad:</label> <input class="input" type="number"
+          [(ngModel)]="compraActual.cantidad"><br>
+        <label class="label">Precio: </label> <input class="input" type="number" [(ngModel)]="compraActual.precio">
+
+      </div>
+    </div>
+    <div class="crear-nuevo">
+      <!--<button (click) = enviarCompra() *ngIf ="compras.length > 0 && !compraFinalizada">Enviar compra</button>-->
+      <app-nuevo *ngIf="mostrarNuevoProducto"></app-nuevo>
+    </div>
+
   </div>
-  <div class="nuevo-derecha">
-    <label>Cantidad:</label> <input type="number" [(ngModel)]="compraActual.cantidad"> <br>
-    <label>Precio: </label> <input type="number" [(ngModel)]="compraActual.precio">
+
+  <div class="column">
+    <app-lista-botones [lista]="botones" (enviarBoton)="mostrarBoton($event)"></app-lista-botones>
   </div>
-</div>
-<br>
-<!--<button (click) = enviarCompra() *ngIf ="compras.length > 0 && !compraFinalizada">Enviar compra</button>-->
-<app-nuevo *ngIf = "mostrarNuevoProducto"></app-nuevo>
-</div>
 
-
+</div>
+<!--Class container-->

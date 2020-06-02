@@ -1,21 +1,27 @@
 <div *ngIf ="producto != undefined">
-  <h2>
+  <h2 class="title is-3">
     Detalle {{producto.nombre}}
   </h2>
 
-  <div class="formulario">
+  <div class="columns">
+    <div class="column is-three-quarters">
+      <div class="formulario">
 
-    <p><label class="etiquetas">Identificador:</label> <label class="id_producto">{{producto.id_producto}}</label></p>
-    <label class="etiquetas">Nombre:</label><input class = "nombre" type="text" [(ngModel)] = "producto.nombre"> <br>
-    <label class="etiquetas">Stock:</label><label class = "stock">  {{producto.stock}} </label> <br>
-    <label class="etiquetas">Precio:</label><input class= "precio" type="text" [(ngModel)] = "producto.precio"><br>
-    <label class="etiquetas">Tipo:</label>
-    <select [(ngModel)] = "producto.tipo">
-      <option *ngFor = "let tipo of tipos" [ngValue] = "tipo">{{tipo}}</option>
-      </select><br>
-    <button (click)="modificarProducto()">Guardar</button> <br>
-    <button (click)="volver()">Volver</button>
+        <p><label class="etiquetas">Identificador:</label> <label class="id_producto">{{producto.id_producto}}</label></p>
+        <label class="etiquetas">Nombre:</label><input class = "input" type="text" [(ngModel)] = "producto.nombre"> <br>
+        <label class="etiquetas">Stock:</label><label class = "label">  {{producto.stock}} </label> <br>
+        <label class="etiquetas">Precio:</label><input class= "input" type="text" [(ngModel)] = "producto.precio"><br>
+        <label class="etiquetas">Tipo:</label>
+        <select class="select" [(ngModel)] = "producto.tipo">
+          <option *ngFor = "let tipo of tipos" [ngValue] = "tipo">{{tipo}}</option>
+          </select>
+      </div>
+    </div>
+    <div class="column">
+      <app-lista-botones [lista]="botones" (enviarBoton)= "mostrarBoton($event)"></app-lista-botones>
+    </div>
   </div>
+  
 </div>
 <div *ngIf ="producto == undefined">
   <h2>No se ha encontrado el producto</h2>

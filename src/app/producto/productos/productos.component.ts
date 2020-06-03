@@ -56,8 +56,7 @@ export class ProductosComponent implements OnInit {
     }
     else
       this.productosService.postModificarProducto(producto).subscribe(producto => {console.log(producto);});
-  }
-  
+  }  
   
 
   ngOnInit() {

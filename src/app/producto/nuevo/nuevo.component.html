@@ -1,35 +1,35 @@
 {{enviar}}
 <div *ngIf="!enviado">
-    <div >
-        <div class="alinear-izquierda">
-            <label class="label">Nombre:  </label> <input class="input" type="text" [(ngModel)] = "producto.nombre" 
-            (keyup)="procesarKeyup($event, precio)">
-            <br>
-            <label class="label">Precio:  </label> <input class="input" type="text" [(ngModel)] = "producto.precio" #precio
-            (keyup)="procesarKeyup($event, tipo)">
-            <br>    
-            <label class="label">Tipo:  </label> 
-            <select class="select" [(ngModel)] = "producto.tipo" #tipo (change)="onChange($event,enviar)">
-                <option *ngFor = "let tipo of tipos" [ngValue] = "tipo" >{{tipo}}</option>
-            </select>
+    <div>
+        <div class="columns">
+            <div class="column">
+                <label class="label">Nombre: </label> <input class="input" type="text" [(ngModel)]="producto.nombre"
+                    (keyup)="procesarKeyup($event, precio)">
+                <div id="listaProductos">
+                    <ul>
+                        <li *ngFor="let p of productos$ | async | sort:'nombre' | filter: producto.nombre">{{p.nombre}}</li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="column">
+                <label class="label">Precio: </label> <input class="input" type="text" [(ngModel)]="producto.precio"
+                    #precio (keyup)="procesarKeyup($event, tipo)">
+                <br>
+                <label class="label">Tipo: </label>
+                <div class="select">
+                    <select class="select" [(ngModel)]="producto.tipo" #tipo (change)="onChange($event,enviar)">
+                        <option *ngFor="let tipo of tipos" [ngValue]="tipo">{{tipo}}</option>
+                    </select>
+                </div>
+            </div>
+
         </div>
-        <div class="alinear-derecha">
-                <button class="button" (click) = "guardarProducto()" #enviar>Enviar</button><br>
-        </div>
-    </div>
-    <div class="alinear-centro">    
-        <p *ngIf="!correcto">Faltan datos para guardar el producto. Rellene todos los campos</p>
     </div>
     <div class="alinear-centro">
-        <div id = "listaProductos">
-            <ul>
-                <li *ngFor = "let p of productos$ | async | sort:'nombre' | filter: producto.nombre">{{p.nombre}}</li>
-            </ul>
-        </div>
+        <p *ngIf="!correcto">Faltan datos para guardar el producto. Rellene todos los campos</p>
     </div>
 </div>
 <div *ngIf="enviado">
     <h2>Nuevo producto creado</h2>
 </div>
-
-

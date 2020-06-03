@@ -1,7 +1,7 @@
 <div class="columns">
   <div class="column">
     <ul>
-      <ng-container *ngFor="let boton of lista">
+      <ng-container *ngFor="let boton of listaBotones$ | async">
         <li *ngIf="boton.mostrar">
           <button class="button is-primary is-outlined is-fullwidth" (click)="onEnviar(boton.nombre)">{{boton.nombre}}</button>
         </li>

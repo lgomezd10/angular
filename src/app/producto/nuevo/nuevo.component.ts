@@ -3,6 +3,8 @@ import { Producto } from '../producto';
 import { ProductosService } from '../productos.service';
 import { Observable } from 'rxjs';
 import { TIPOS } from '../tipos-productos';
+import { HerramientasService } from 'src/app/herramientas/herramientas.service';
+import { Boton } from 'src/app/herramientas/boton';
 
 @Component({
   selector: 'app-nuevo',
@@ -11,7 +13,7 @@ import { TIPOS } from '../tipos-productos';
 })
 export class NuevoComponent implements OnInit {
 
-  constructor(private productosService: ProductosService) { }
+  constructor(private productosService: ProductosService, private herramientasServices: HerramientasService) { }
 
   public tipos = TIPOS;
 
@@ -23,9 +25,19 @@ export class NuevoComponent implements OnInit {
 
   enviado: boolean = false;
 
+  botones$: Observable<Boton[]>;
+
+  boton: Boton = {nombre:"Guardar nuevo", mostrar:true};
+
   ngOnInit() {
     this.producto = new Producto();
     this.productos$ =  this.productosService.getProductos$();
+    this.herramientasServices.nuevoBoton(this.boton);
+    this.herramientasServices.getPulsado$().subscribe(boton => {      
+      if(boton == "Guardar nuevo") {
+        this.guardarProducto();
+      }
+    });
   }
 
   darFormato() {
@@ -39,6 +51,7 @@ export class NuevoComponent implements OnInit {
       this.darFormato();
       this.productosService.postNuevoProducto(JSON.parse (JSON.stringify (this.producto)));
       this.enviado=true;
+      this.herramientasServices.eliminarBoton(this.boton);
     } else {
       this.correcto = false;
     }

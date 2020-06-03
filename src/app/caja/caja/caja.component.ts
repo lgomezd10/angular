@@ -97,16 +97,22 @@ export class CajaComponent implements OnInit {
 
   cargar() {
     console.log(this.ventaActual.producto);
-    if (this.ventaActual.cantidad <= 0 || this.ventaActual.producto== null) {
+    if (this.ventaActual.cantidad <= 0 || this.ventaActual.producto == null) {
       alert("La cantidad debe ser mayor que 0 y hay que seleccionar un producto");
-    } else {    
-      this.ventaActual.precio = this.ventaActual.producto.precio;    
-      this.ventas.push(this.ventaActual);
+    } else {
+      let venta = this.ventas.find(venta => venta.producto.nombre == this.ventaActual.producto.nombre);
+
+      if (venta == undefined) {
+        this.ventaActual.precio = this.ventaActual.producto.precio;
+        this.ventas.push(this.ventaActual);        
+      } else {
+        venta.cantidad = this.ventaActual.cantidad + venta.cantidad;
+      }
       this.mostrarNuevo = false;
-      this.total = this.totalVenta();     
-      this.activarBoton("Finalizar venta");
-      this.activarBoton("Añadir producto");
-      this.desactivarBoton("Añadir");
+        this.total = this.totalVenta();
+        this.activarBoton("Finalizar venta");
+        this.activarBoton("Añadir producto");
+        this.desactivarBoton("Añadir");
     }
     
   }

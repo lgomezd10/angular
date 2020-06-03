@@ -23,9 +23,9 @@ export class ComprasComponent implements OnInit {
   compraFinalizada: boolean = false;
   myDateValue: Date = new Date();
   botones: Boton[] = [
-    {nombre:"Enviar compra", mostrar:false},
-    {nombre:"Añadir producto", mostrar: true},
+    {nombre:"Enviar compra", mostrar:false},    
     {nombre:"Crear producto", mostrar:true},
+    {nombre:"Añadir producto", mostrar: true},
     {nombre:"Añadir", mostrar:false}    
   ];
 
@@ -70,19 +70,25 @@ export class ComprasComponent implements OnInit {
     }
   }
 
-  cargar() {    
-    if (this.compraActual.producto == null){
+  cargar() {
+    if (this.compraActual.producto == null) {
       alert("Seleccione un producto");
     }
-    else if (this.compraActual.cantidad <= 0 || this.compraActual.precio <=0){
+    else if (this.compraActual.cantidad <= 0 || this.compraActual.precio <= 0) {
       alert("La cantidad y el precio debe ser mayor que 0");
-    }  
+    }
     else {
-      this.compras.push(this.compraActual);
+      let compra = this.compras.find(compra => compra.producto.nombre == this.compraActual.producto.nombre);
+
+      if (compra == undefined || compra.precio != this.compraActual.precio) {
+        this.compras.push(this.compraActual);
+      } else {
+        compra.cantidad = compra.cantidad + this.compraActual.cantidad;
+      }
       this.total = this.totalCompra();
       this.mostrarNuevo = false;
       this.activarBoton("Añadir producto");
-      this.desactivarBoton("Añadir");      
+      this.desactivarBoton("Añadir");
       this.activarBoton("Enviar compra");
     }
   }

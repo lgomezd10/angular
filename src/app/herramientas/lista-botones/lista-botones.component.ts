@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { Boton } from '../boton';
 import { HerramientasService } from '../herramientas.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription, combineLatest } from 'rxjs';
+import { filter, tap, map, delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-lista-botones',
@@ -14,19 +15,59 @@ export class ListaBotonesComponent implements OnInit {
 
   @Output()
   enviarBoton = new EventEmitter<string>();
+  @ViewChildren('listButton') buttons: QueryList<ElementRef>;
 
   listaBotones$: Observable<Boton[]>;
-  
-  constructor(private herramientasServices: HerramientasService) { }
+  foco$: Observable<string>;
+
+  viewUpdated$: Observable<any>;
+
+  _focoSub: Subscription;
+
+  constructor(private herramientasServices: HerramientasService) {
+
+  }
 
   ngOnInit() {
     this.herramientasServices.crearBotones(this.lista);
     this.listaBotones$ = this.herramientasServices.getBotones$();
+    this.foco$ = this.herramientasServices.getFoco$();
+
+    this.viewUpdated$ = combineLatest(this.foco$, this.listaBotones$)
+
+    this._focoSub = this.foco$
+    .pipe(      
+      filter((boton) => boton !== null),
+      filter((boton) => boton !== ""),
+      delay(1),
+      tap((boton) => console.log(`El valor del botón es: ${boton}`))
+    )
+    .subscribe(boton => {
+        console.log("DESDE LISTA-BOTONES, lista de botones", this.herramientasServices.getBotones());
+        console.log("DESDE LISTA-BOTONES. Botones en documento:",document.getElementsByTagName('button'));
+        console.log("DESDE LISTA-BOTONES se va a enfocar ", boton);
+        console.log("DESDE LISTA-BOTONES elementById ", document.getElementById(boton));
+
+        console.log("DESDE LISTA-BOTONES Buttons ",this.buttons);
+        this.buttons.forEach((button: ElementRef) => {
+          if (button.nativeElement.id === boton ){
+            button.nativeElement.focus();
+          }
+        });
+        /*if(document.getElementById(boton) != null)
+          document.getElementById(boton).focus();      */
+    });
+
+
   }
 
   onEnviar(boton: string) {
     this.enviarBoton.emit(boton);
     this.herramientasServices.pulsarBoton(boton);
+  }
+
+  ngOnDestroy() {    
+    this._focoSub.unsubscribe();
   }
 
 }

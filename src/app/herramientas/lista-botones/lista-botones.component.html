@@ -3,7 +3,7 @@
     <ul>
       <ng-container *ngFor="let boton of listaBotones$ | async">
         <li *ngIf="boton.mostrar">
-          <button class="button is-primary is-outlined is-fullwidth" (click)="onEnviar(boton.nombre)">{{boton.nombre}}</button>
+          <button class="button is-fullwidth" id="{{boton.id}}" (click)="onEnviar(boton.id)" #listButton>{{boton.nombre}}</button>
         </li>
       </ng-container>
     </ul>

@@ -19,8 +19,8 @@ export class ProductoComponent implements OnInit {
   private producto: Producto;
   public tipos = TIPOS;
   botones: Boton[] = [
-    {nombre:"Guardar", mostrar:true},
-    {nombre:"Volver", mostrar:true}
+    {id:"Guardar" ,nombre:"Guardar", mostrar:true},
+    {id:"Volver",nombre:"Volver", mostrar:true}
   ];
 
   constructor(private productosService: ProductosService, private route: ActivatedRoute, private location: Location) { }
@@ -36,12 +36,12 @@ export class ProductoComponent implements OnInit {
    
   }
 
-  activarBoton(nombreBoton: string) {
-    this.botones.find(boton => { return boton.nombre == nombreBoton}).mostrar = true;
+  activarBoton(id: string) {
+    this.botones.find(boton => { return boton.id == id}).mostrar = true;
   }
 
-  desactivarBoton(nombreBoton: string) {
-    this.botones.find(boton => { return boton.nombre == nombreBoton}).mostrar = false;
+  desactivarBoton(id: string) {
+    this.botones.find(boton => { return boton.id == id}).mostrar = false;
   }
 
   mostrarBoton(boton: string) {

@@ -57,7 +57,7 @@ export class ProductosService {
   backendUrl = 'http://localhost:3000';
 
   private cargarProductos() {
-    this.getProductosServidor().subscribe(respuesta => {
+    this._docSub =this.getProductosServidor().subscribe(respuesta => {
       console.log("productos del servidor", respuesta.response);
       this.productos$.next(respuesta.response);
     });
@@ -68,7 +68,7 @@ export class ProductosService {
   }
 
   getProductos$(): Observable<Producto[]> {
-    return this.productos$.asObservable();
+    return this.productos$;
   }
 
   getProductos(): Producto[] {

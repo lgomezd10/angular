@@ -3,25 +3,24 @@
     <div>
         <div class="columns">
             <div class="column">
-                <label class="label">Nombre: </label> <input class="input" type="text" [(ngModel)]="producto.nombre"
-                    (keyup)="procesarKeyup($event, precio)">
+                <label class="label">Nombre: </label> <input class="input" type="text" #nombre [(ngModel)]="producto.nombre"
+                    (keyup)="procesarKeyup($event, tipo)">
                 <div id="listaProductos">
                     <ul>
                         <li *ngFor="let p of productos$ | async | sort:'nombre' | filter: producto.nombre">{{p.nombre}}</li>
                     </ul>
                 </div>
-
             </div>
             <div class="column">
-                <label class="label">Precio: </label> <input class="input" type="text" [(ngModel)]="producto.precio"
-                    #precio (keyup)="procesarKeyup($event, tipo)">
-                <br>
                 <label class="label">Tipo: </label>
                 <div class="select">
-                    <select class="select" [(ngModel)]="producto.tipo" #tipo (change)="onChange($event,enviar)">
+                    <select class="select" [(ngModel)]="producto.tipo" #tipo (change)="onChange($event,precio)">
                         <option *ngFor="let tipo of tipos" [ngValue]="tipo">{{tipo}}</option>
                     </select>
+                    <div #enviar id="enviar"></div>
                 </div>
+                <label class="label">Precio: </label> 
+                <input class="input" id="precio" type="text" [(ngModel)]="producto.precio" #precio (keyup)="procesarKeyup($event, enviar)">                               
             </div>
 
         </div>

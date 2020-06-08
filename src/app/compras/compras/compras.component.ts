@@ -5,6 +5,9 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { Producto } from 'src/app/producto/producto';
 import { ComprasService } from '../compras.service';
 import { Boton } from 'src/app/herramientas/boton';
+import { HerramientasService } from 'src/app/herramientas/herramientas.service';
+
+const nombreBotones = {enviarCompra:'EnviarCompra', crearProducto:'CrearProducto', addProducto:'AddProducto', add:'Add'};
 
 @Component({
   selector: 'app-compras',
@@ -23,49 +26,49 @@ export class ComprasComponent implements OnInit {
   compraFinalizada: boolean = false;
   myDateValue: Date = new Date();
   botones: Boton[] = [
-    {nombre:"Enviar compra", mostrar:false},    
-    {nombre:"Crear producto", mostrar:true},
-    {nombre:"Añadir producto", mostrar: true},
-    {nombre:"Añadir", mostrar:false}    
+    {id:nombreBotones.enviarCompra, nombre:"Enviar compra", mostrar:false},
+    {id:nombreBotones.crearProducto, nombre: "Crear producto", mostrar:true},
+    {id:nombreBotones.addProducto, nombre:"Añadir producto", mostrar: true},
+    {id:nombreBotones.add, nombre:"Añadir", mostrar:false}    
   ];
 
-  constructor(private productosService: ProductosService, private comprasService: ComprasService) { }
+  constructor(private productosService: ProductosService, private comprasService: ComprasService, private herramientasServices: HerramientasService) { }
 
   ngOnInit() {
     this.productos$ = this.productosService.getProductos$();
   }
 
-  cambiarBoton(nombreBoton: string, mostrar: boolean) {    
-     this.botones.find(boton => { return boton.nombre == nombreBoton}).mostrar = mostrar;
+  cambiarBoton(id: string, mostrar: boolean) {    
+     this.botones.find(boton => { return boton.id == id}).mostrar = mostrar;
      
   }
 
-  activarBoton(nombreBoton: string) {
-    this.botones.find(boton => { return boton.nombre == nombreBoton}).mostrar = true;
+  activarBoton(id: string) {
+    this.botones.find(boton => { return boton.id == id}).mostrar = true;
   }
 
-  desactivarBoton(nombreBoton: string) {
-    this.botones.find(boton => { return boton.nombre == nombreBoton}).mostrar = false;
+  desactivarBoton(id: string) {
+    this.botones.find(boton => { return boton.id == id}).mostrar = false;
   }
   mostrarBoton(boton: string) {
-    if (boton == "Añadir producto") {
+    if (boton == nombreBotones.addProducto) {
       this.nuevoProducto();
       this.desactivarBoton(boton);
-      this.activarBoton("Añadir");
-      this.activarBoton("Crear producto");
+      this.activarBoton(nombreBotones.add);
+      this.activarBoton(nombreBotones.crearProducto);
       this.mostrarNuevoProducto = false;
     }
-    if (boton== "Crear producto") {      
+    if (boton== nombreBotones.crearProducto) {      
       this.desactivarBoton(boton);
-      this.activarBoton("Añadir producto");
-      this.desactivarBoton("Añadir");
+      this.activarBoton(nombreBotones.addProducto);
+      this.desactivarBoton(nombreBotones.add);
       this.mostrarNuevoProducto = true;
       this.mostrarNuevo = false;
     }
-    if (boton == "Añadir"){
+    if (boton == nombreBotones.add){
       this.cargar();      
     }
-    if (boton == "Enviar compra") {      
+    if (boton == nombreBotones.enviarCompra) {      
       this.enviarCompra();
     }
   }
@@ -87,9 +90,9 @@ export class ComprasComponent implements OnInit {
       }
       this.total = this.totalCompra();
       this.mostrarNuevo = false;
-      this.activarBoton("Añadir producto");
-      this.desactivarBoton("Añadir");
-      this.activarBoton("Enviar compra");
+      this.activarBoton(nombreBotones.addProducto);
+      this.desactivarBoton(nombreBotones.add);
+      this.activarBoton(nombreBotones.enviarCompra);
     }
   }
 
@@ -120,14 +123,29 @@ export class ComprasComponent implements OnInit {
       alert("No hay productos comprados");
     else {
       this.comprasService.guardarCompra(this.compras).subscribe(resp => this.compraFinalizada = true);
-      this.desactivarBoton("Añadir producto");
-      this.desactivarBoton("Crear producto");
-      this.desactivarBoton("Enviar compra");
+      this.desactivarBoton(nombreBotones.addProducto);
+      this.desactivarBoton(nombreBotones.crearProducto);
+      this.desactivarBoton(nombreBotones.enviarCompra);
     }
   }
 
   agregarProducto() {
     this.mostrarNuevoProducto = true;
+  }
+
+  procesarKeyup(key: KeyboardEvent, campo: HTMLElement) {
+    if(key.keyCode == 13) { // press Enter      
+      if (document.getElementById("enviar") == campo) {
+        console.log("Se va a enviar el foco a lista-botones", "Añadir");
+        this.herramientasServices.activarFoco(nombreBotones.add);
+      } else {
+        campo.focus();
+      }
+    }
+  }
+
+  onChange(e,campo) {
+    campo.focus();
   }
 
 }

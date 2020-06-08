@@ -9,20 +9,36 @@ import { ListaBotonesComponent } from './lista-botones/lista-botones.component';
 export class HerramientasService {
 
   botones: Boton[] = [];
-  botones$: BehaviorSubject<Boton[]>;
-  pulsado$: BehaviorSubject<string>;
+  botones$: BehaviorSubject<Boton[]> = new BehaviorSubject<Boton[]>(this.botones);
+  pulsado$: BehaviorSubject<string> = new BehaviorSubject<string>("");
+  foco$: BehaviorSubject<string> = new BehaviorSubject<string>("");
 
   constructor() {
-    this.botones$ = new BehaviorSubject<Boton[]>(this.botones);
+    /*this.botones$ = new BehaviorSubject<Boton[]>(this.botones);
     this.pulsado$ = new BehaviorSubject<string>("");
-   }
+    this.foco$ = new BehaviorSubject<string>("");*/
+  }
 
-   getBotones$(): Observable<Boton[]> {
-    return this.botones$.asObservable();
+  getBotones$(): Observable<Boton[]> {
+    return this.botones$;
+  }
+
+  getBotones(): Boton[]{
+    return this.botones$.getValue();
   }
 
   getPulsado$() : Observable<string> {
-    return this.pulsado$.asObservable();
+    return this.pulsado$;
+  }
+
+  getFoco$(): Observable<string> {
+    return this.foco$;
+  }
+
+  activarFoco(boton: string) {
+    console.log("DESDE HERRAMIENTAS SEVICE: Entrando en activar foco del string", boton);
+    console.log("Desde HERRAMIENTAS hay estos botones", this.botones$.getValue());
+    this.foco$.next(boton);
   }
 
   crearBotones(lista: Boton[]) {
@@ -37,6 +53,8 @@ export class HerramientasService {
 
   eliminarBoton(boton: Boton) {
     this.botones.splice(this.botones.indexOf(boton),1);
+    console.log("DESDE HERRAMIENTAS SERVICE. Botones en la lista:", this.botones);
+    this.botones$.next(this.botones);
   }
 
   limpiarBotones(){
@@ -46,6 +64,11 @@ export class HerramientasService {
 
   pulsarBoton(boton: string) {
     this.pulsado$.next(boton);
+    this.foco$.next("");
+  }
+
+  destroy(){
+
   }
 
 }

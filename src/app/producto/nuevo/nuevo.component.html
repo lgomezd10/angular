@@ -4,7 +4,7 @@
         <div class="columns">
             <div class="column">
                 <label class="label">Nombre: </label> <input class="input" type="text" #nombre [(ngModel)]="producto.nombre"
-                    (keyup)="procesarKeyup($event, tipo)">
+                    (keypress)="procesarKeypress($event, tipo)" #nombre>
                 <div id="listaProductos">
                     <ul>
                         <li *ngFor="let p of productos$ | async | sort:'nombre' | filter: producto.nombre">{{p.nombre}}</li>
@@ -20,7 +20,7 @@
                     <div #enviar id="enviar"></div>
                 </div>
                 <label class="label">Precio: </label> 
-                <input class="input" id="precio" type="text" [(ngModel)]="producto.precio" #precio (keyup)="procesarKeyup($event, enviar)">                               
+                <input class="input" id="precio" type="text" [(ngModel)]="producto.precio" #precio (keypress)="procesarKeypress($event, enviar)">                               
             </div>
 
         </div>

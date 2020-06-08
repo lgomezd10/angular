@@ -47,17 +47,18 @@
     <div *ngIf="mostrarNuevo" class="columns">
       <div class="column">
         <label class="label">Buscar:</label>
-        <input class="input" type="text" [(ngModel)]="searchText"><br>
-        <select class="select is-multiple" [(ngModel)]="compraActual.producto" size="5">
+        <input class="input" type="text" [(ngModel)]="searchText" (keypress)="procesarKeypress($event, producto)" #buscar><br>
+        <select class="select is-multiple" [(ngModel)]="compraActual.producto" size="5" (keypress)="procesarKeypress($event, cantidad)" #producto>
           <option *ngFor="let producto of productos$| async | sort:'nombre' |filter: searchText" [ngValue]="producto">
             {{producto.id_producto}} {{producto.nombre}} stock: {{producto.stock}}</option>
         </select><br>
       </div>
       <div class="column">
         <label class="label">Cantidad:</label> <input class="input" type="number"
-          [(ngModel)]="compraActual.cantidad"><br>
-        <label class="label">Precio: </label> <input class="input" type="number" [(ngModel)]="compraActual.precio">
-
+          [(ngModel)]="compraActual.cantidad" (keypress)="procesarKeypress($event, precio)" #cantidad><br>
+        <label class="label">Precio: </label> <input class="input" type="number" [(ngModel)]="compraActual.precio" 
+        (keypress)="procesarKeypress($event, enviar)" #precio>
+        <div id="enviar" #enviar></div>
       </div>
     </div>
     <div class="crear-nuevo">

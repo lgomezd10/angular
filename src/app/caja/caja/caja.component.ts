@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Venta } from '../venta';
 import { Producto } from 'src/app/producto/producto';
 import { Observable } from 'rxjs';
@@ -17,6 +17,13 @@ const nombreBotones = {nuevaVenta:'NuevaVenta', finalizarVenta:'FinalizarVenta',
 
 
 export class CajaComponent implements OnInit {
+
+  @ViewChild('buscar', { static: false }) set content(content: ElementRef) {
+    if(content) {
+      content.nativeElement.focus();
+    }
+  }
+  @ViewChild('enviar', { static: false }) pasarASummit: ElementRef;
 
   ventas: Venta[] = [];
   abierta: boolean = false;
@@ -180,17 +187,21 @@ export class CajaComponent implements OnInit {
     this.ngOnInit();
   }*/
 
-  procesarKeyup(key: KeyboardEvent, campo: HTMLElement) {
+  procesarKeypress(key: KeyboardEvent, campo: HTMLElement) {
     if(key.keyCode == 13) { // press Enter      
-      if (document.getElementById("enviar") == campo) {
+      if (this.pasarASummit.nativeElement == campo) {
         console.log("DESDE CAJA COMPONENTE TS: Se va a enviar el foco a lista-botones", "Add");
         this.herramientasService.activarFoco("Add");
       } else {
+        console.log("El atributo de campo es", campo.getAttributeNames());
         campo.focus();
+       // let cosa: HTMLInputElement = campo;
+       // cosa.select
       }
     }
   }
 
+  
   onChange(e,campo) {
     campo.focus();
   }

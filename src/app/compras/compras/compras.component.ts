@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { ProductosService } from 'src/app/producto/productos.service';
 import { Compra } from '../compra';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -16,6 +16,14 @@ const nombreBotones = {enviarCompra:'EnviarCompra', crearProducto:'CrearProducto
 })
 export class ComprasComponent implements OnInit {
 
+  @ViewChild('buscar', { static: false }) set content(content: ElementRef) {
+    if(content) {
+      content.nativeElement.focus();
+    }
+  }
+  @ViewChild('enviar', { static: false }) pasarASummit: ElementRef;
+
+  
   compras: Compra[] = [];
   compraActual: Compra;
   searchText: string;
@@ -50,13 +58,18 @@ export class ComprasComponent implements OnInit {
   desactivarBoton(id: string) {
     this.botones.find(boton => { return boton.id == id}).mostrar = false;
   }
+
+    
   mostrarBoton(boton: string) {
-    if (boton == nombreBotones.addProducto) {
+    if (boton == nombreBotones.addProducto) {      
+      this.mostrarNuevoProducto = false;
       this.nuevoProducto();
       this.desactivarBoton(boton);
       this.activarBoton(nombreBotones.add);
       this.activarBoton(nombreBotones.crearProducto);
-      this.mostrarNuevoProducto = false;
+      //console.log("DESDE COMPRAS COMPONENT este es el hijo autofoco", this.autoFoco);
+      //setTimeout(() => this.autoFoco.nativeElement.focus(), 100);
+      //this.autoFoco.nativeElement.focus();
     }
     if (boton== nombreBotones.crearProducto) {      
       this.desactivarBoton(boton);
@@ -93,6 +106,7 @@ export class ComprasComponent implements OnInit {
       this.activarBoton(nombreBotones.addProducto);
       this.desactivarBoton(nombreBotones.add);
       this.activarBoton(nombreBotones.enviarCompra);
+      this.herramientasServices.activarFoco(nombreBotones.addProducto);
     }
   }
 
@@ -133,14 +147,15 @@ export class ComprasComponent implements OnInit {
     this.mostrarNuevoProducto = true;
   }
 
-  procesarKeyup(key: KeyboardEvent, campo: HTMLElement) {
+  procesarKeypress(key: KeyboardEvent, campo: HTMLElement) {
     if(key.keyCode == 13) { // press Enter      
-      if (document.getElementById("enviar") == campo) {
+      if (this.pasarASummit.nativeElement == campo) {
         console.log("Se va a enviar el foco a lista-botones", "Añadir");
         this.herramientasServices.activarFoco(nombreBotones.add);
       } else {
         campo.focus();
       }
+      
     }
   }
 

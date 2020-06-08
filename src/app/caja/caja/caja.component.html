@@ -73,10 +73,10 @@
     <div *ngIf="mostrarNuevo" class="columns">
       <div class="column">
         <label class="label">Buscar producto: </label>
-        <input class="input" type="text" [(ngModel)]="searchText" (keyup)="procesarKeyup($event, producto)" />
+        <input class="input" type="text" [(ngModel)]="searchText" (keypress)="procesarKeypress($event, producto)" #buscar/>
         
         
-        <select size="5" [(ngModel)]="ventaActual.producto" (keyup)="procesarKeyup($event, cantidad)"  #producto>
+        <select size="5" [(ngModel)]="ventaActual.producto" (keypress)="procesarKeypress($event, cantidad)"  #producto>
           <option *ngFor="let producto of productos$| async | sort:'nombre' |filter: searchText" [ngValue]="producto">
             {{producto.id_producto}} {{producto.nombre}} {{producto.precio}}</option>
         </select>
@@ -86,11 +86,10 @@
       </div>
       <div class="column">
         <label class="label"> Cantidad</label>
-         <input class="input" type="number" min=0 [(ngModel)]="ventaActual.cantidad" (keyup)="procesarKeyup($event, enviar)" #cantidad>
+         <input class="input" type="number" min=0 [(ngModel)]="ventaActual.cantidad" (keypress)="procesarKeypress($event, enviar)" #cantidad>
          <div id="enviar" #enviar></div>
       </div>
     </div>
-
   </div>
 
   <div class="column">

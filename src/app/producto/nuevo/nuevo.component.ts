@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Producto } from '../producto';
 import { ProductosService } from '../productos.service';
 import { Observable, Subscription } from 'rxjs';
 import { TIPOS } from '../tipos-productos';
 import { HerramientasService } from 'src/app/herramientas/herramientas.service';
 import { Boton } from 'src/app/herramientas/boton';
-import { element } from 'protractor';
 
 @Component({
   selector: 'app-nuevo',
@@ -13,6 +12,16 @@ import { element } from 'protractor';
   styleUrls: ['./nuevo.component.css']
 })
 export class NuevoComponent implements OnInit {
+
+  botonNombre: ElementRef;
+
+  @ViewChild('nombre', { static: false }) set content(content: ElementRef) {
+    if(content) {
+      content.nativeElement.focus();
+      this.botonNombre= content;
+    }
+  }
+  @ViewChild('enviar', { static: false }) pasarASummit: ElementRef;
 
   constructor(private productosService: ProductosService, private herramientasServices: HerramientasService) { }
 
@@ -31,6 +40,8 @@ export class NuevoComponent implements OnInit {
   _pulsadoSub: Subscription;
 
   boton: Boton = {id:"GuardarNuevo",nombre:"Guardar nuevo", mostrar:true};
+
+  
 
   ngOnInit() {
     this.producto = new Producto();
@@ -58,13 +69,14 @@ export class NuevoComponent implements OnInit {
       console.log("DESDE NUEVO COMPONENT GUARDAR PRODUCTO se ha guardado",this.producto.nombre);
     } else {
       this.correcto = false;
+      this.botonNombre.nativeElement.focus();
     }
     this.producto = new Producto();
   }
 
-  procesarKeyup(key: KeyboardEvent, campo: HTMLElement) {
+  procesarKeypress(key: KeyboardEvent, campo: HTMLElement) {
     if(key.keyCode == 13) { // press Enter      
-      if (document.getElementById("enviar") == campo) {
+      if (this.pasarASummit.nativeElement == campo) {
         console.log("DESDE NUEVO COMPONENT Se va a enviar el foco a lista-botones", this.boton.id);
         this.herramientasServices.activarFoco(this.boton.id);
       } else {

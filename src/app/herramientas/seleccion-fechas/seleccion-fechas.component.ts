@@ -15,7 +15,7 @@ export class SeleccionFechasComponent implements OnInit {
   hastaString: string;
 
   @Output()
-  enviarFechas = new EventEmitter<Fechas>();
+  enviarFechas: EventEmitter<Fechas> = new EventEmitter<Fechas>();
 
   constructor(private datePipe: DatePipe) { }
 

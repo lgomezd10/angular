@@ -52,9 +52,13 @@ export class HerramientasService {
   }
 
   eliminarBoton(boton: Boton) {
+    if (this.botones.find((b) => b.nombre === boton.nombre ) != undefined) {
     this.botones.splice(this.botones.indexOf(boton),1);
     console.log("DESDE HERRAMIENTAS SERVICE. Botones en la lista:", this.botones);
     this.botones$.next(this.botones);
+    } else {
+      console.log("DESDE HERRAMIENTAS SERVICE. No se ha eliminado el boton porque no existe:", boton);
+    }
   }
 
   limpiarBotones(){

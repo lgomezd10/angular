@@ -30,7 +30,7 @@ export class ComprasComponent implements OnInit {
   productos$: Observable<Producto[]>;
   mostrarNuevo: boolean = false;
   mostrarNuevoProducto: boolean = false;
-  total: number = 0;
+  //total: number = 0;
   compraFinalizada: boolean = false;
   myDateValue: Date = new Date();
   botones: Boton[] = [
@@ -59,7 +59,7 @@ export class ComprasComponent implements OnInit {
     this.botones.find(boton => { return boton.id == id}).mostrar = false;
   }
 
-    
+      
   mostrarBoton(boton: string) {
     if (boton == nombreBotones.addProducto) {      
       this.mostrarNuevoProducto = false;
@@ -101,7 +101,7 @@ export class ComprasComponent implements OnInit {
       } else {
         compra.cantidad = compra.cantidad + this.compraActual.cantidad;
       }
-      this.total = this.totalCompra();
+      //this.total = this.totalCompra();
       this.mostrarNuevo = false;
       this.activarBoton(nombreBotones.addProducto);
       this.desactivarBoton(nombreBotones.add);
@@ -116,6 +116,12 @@ export class ComprasComponent implements OnInit {
     this.searchText = "";
   }
 
+  nuevoGuardado(producto: Producto) {
+    console.log("DESDE Compras COMPONET: Recibido evento de nuevoGuardado");
+    this.activarBoton(nombreBotones.addProducto);
+    this.activarBoton(nombreBotones.crearProducto);
+  }
+
   totalCompra(): number {
     let suma = 0;
     this.compras.forEach(compra => {      
@@ -128,7 +134,7 @@ export class ComprasComponent implements OnInit {
 
   eliminarCompra(compra: Compra) {
     this.compras.splice(this.compras.indexOf(compra), 1);
-    this.total = this.totalCompra();
+    //this.total = this.totalCompra();
   }
 
   enviarCompra() {

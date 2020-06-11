@@ -2,7 +2,7 @@
 
 <div class="columns">
   <div class="column is-three-quarters">
-    <app-nuevo *ngIf="nuevo"></app-nuevo>
+    <app-nuevo *ngIf="nuevo" (productoGuardado)="nuevoProductoGuardado(event$)"></app-nuevo>
 
     <label class="label">Buscar productos: </label>
     <input class="input" type="text" [(ngModel)]="searchText"> <br>

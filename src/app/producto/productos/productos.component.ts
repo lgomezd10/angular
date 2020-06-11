@@ -33,6 +33,17 @@ export class ProductosComponent implements OnInit {
     })*/
   }
 
+  ngOnInit() {
+    console.log("pasa por init")
+    this.productos$ = this.productosService.getProductos$().pipe(
+      tap((value) => { this.nuevo = false; }),
+    );
+    /* this.productos$.subscribe(productos => {
+      this.productos = productos;
+      this.nuevo = false;
+    }); */
+  }
+
   activarBoton(id: string) {
     this.botones.find(boton => { return boton.id == id}).mostrar = true;
   }
@@ -44,6 +55,7 @@ export class ProductosComponent implements OnInit {
   mostrarBoton(boton: string) {
     if (boton == "AddNuevo") {
       this.nuevo=true;
+      this.desactivarBoton("AddNuevo");
       //this.desactivarBoton("Añadir nuevo");
     }
     
@@ -57,18 +69,13 @@ export class ProductosComponent implements OnInit {
     else
       this.productosService.postModificarProducto(producto).subscribe(producto => {console.log(producto);});
   }  
+
+  nuevoProductoGuardado(producto: Producto) {
+    console.log("DESDE PRODUCTOS: Recibido evento de nuevo producto guardado");
+    this.activarBoton("AddNuevo");
+  }
   
 
-  ngOnInit() {
-    console.log("pasa por init")
-    this.productos$ = this.productosService.getProductos$().pipe(
-      tap((value) => { this.nuevo = false; }),
-
-    );
-    /* this.productos$.subscribe(productos => {
-      this.productos = productos;
-      this.nuevo = false;
-    }); */
-  }
+  
 
 }

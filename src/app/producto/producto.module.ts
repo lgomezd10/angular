@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductosComponent } from './productos/productos.component';
 import { HttpClientModule }    from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NuevoComponent } from './nuevo/nuevo.component';
 import { FilterPipe } from './filter.pipe';
@@ -24,6 +24,7 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     CommonModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule,
     SocketIoModule.forRoot(config)
   ],

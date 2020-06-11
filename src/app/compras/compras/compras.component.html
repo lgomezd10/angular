@@ -37,7 +37,7 @@
         </tbody>
       </table>
 
-      <h1>Total: {{total}}</h1>
+      <h1>Total: {{totalCompra()}}</h1>
       <br><br>
       <!--<button (click)=nuevoProducto() *ngIf ="!compraFinalizada">Nueva compra</button>-->
       <p *ngIf="compraFinalizada">Compra guardada correctamente</p>
@@ -63,7 +63,7 @@
     </div>
     <div class="crear-nuevo">
       <!--<button (click) = enviarCompra() *ngIf ="compras.length > 0 && !compraFinalizada">Enviar compra</button>-->
-      <app-nuevo *ngIf="mostrarNuevoProducto"></app-nuevo>
+      <app-nuevo *ngIf="mostrarNuevoProducto" (productoGuardado)="nuevoGuardado($event)"></app-nuevo>
     </div>
 
   </div>

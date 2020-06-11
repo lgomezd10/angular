@@ -62,7 +62,7 @@
         </tr>
       </tbody>
       </table>
-      <h2>Total : {{total}}</h2>
+      <h2>Total : {{totalVenta()}}</h2>
       <br>
 
       <div *ngIf="codigoVenta == 0 || abierta">
@@ -73,7 +73,7 @@
     <div *ngIf="mostrarNuevo" class="columns">
       <div class="column">
         <label class="label">Buscar producto: </label>
-        <input class="input" type="text" [(ngModel)]="searchText" (keypress)="procesarKeypress($event, producto)" #buscar/>
+        <input class="input" placeholder="Buscar producto" type="text" [(ngModel)]="searchText" (keypress)="procesarKeypress($event, producto)" #buscar/>
         
         
         <select size="5" [(ngModel)]="ventaActual.producto" (keypress)="procesarKeypress($event, cantidad)"  #producto>

@@ -1,5 +1,5 @@
 #listaProductos {
-    height: 300px;
+    max-height: 300px;
     overflow : auto;
     margin-top: 20px;
     margin-bottom: 20px;

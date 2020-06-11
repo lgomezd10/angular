@@ -20,6 +20,7 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 library.add(fas);
 
 const appRoutes: Routes = [
@@ -55,6 +56,8 @@ const appRoutes: Routes = [
     LogoComponent
   ],
   imports: [
+    FormsModule,
+    ReactiveFormsModule,
     BrowserModule,
     ProductoModule,
     CajaModule,
@@ -68,7 +71,7 @@ const appRoutes: Routes = [
     ),
     BrowserAnimationsModule,
     FontAwesomeModule
-    
+
   ],
   exports: [FontAwesomeModule],
   providers: [],

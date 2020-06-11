@@ -33,7 +33,7 @@ export class CajaComponent implements OnInit {
   mostrarNuevo: boolean = false;  
   productos$: Observable<Producto[]>;  
   seleccionado: Producto;
-  total: number=0;
+  //total: number=0;
   codigoVenta: number = 0;
   tarjeta: boolean = false;
   
@@ -105,7 +105,7 @@ export class CajaComponent implements OnInit {
 
   eliminarVenta(venta: Venta) {
     this.ventas.splice(this.ventas.indexOf(venta),1);
-    this.total = this.totalVenta();
+    //this.totalVenta = this.totalVenta();
 
   }
 
@@ -123,7 +123,7 @@ export class CajaComponent implements OnInit {
         venta.cantidad = this.ventaActual.cantidad + venta.cantidad;
       }
       this.mostrarNuevo = false;
-        this.total = this.totalVenta();
+        //this.totalVenta = this.totalVenta();
         this.activarBoton(nombreBotones.finalizarVenta);
         this.activarBoton(nombreBotones.addProducto);
         this.desactivarBoton(nombreBotones.add);
@@ -154,7 +154,7 @@ export class CajaComponent implements OnInit {
       this.ventas = this.cajaService.ventasAListaVenta(ventas);
       this.codigoVenta = ventas.id_ventas;
       this.tarjeta = ventas.tarjeta;      
-      this.total = this.totalVenta();
+      //this.totalVenta = this.totalVenta();
       this.abierta = true;
     });     
     console.log("lo guardado en ventas", this.ventas);
@@ -164,7 +164,7 @@ export class CajaComponent implements OnInit {
   reiniciar() {
     this.ventas = [];
     this.mostrarNuevo= false; 
-    this.total =0;
+    //this.totalVenta =0;
     this.codigoVenta = 0;
     this.activarBoton(nombreBotones.nuevaVenta);
     this.desactivarBoton(nombreBotones.finalizarVenta);

@@ -42,13 +42,7 @@ export class ListaBotonesComponent implements OnInit {
       delay(1),
       tap((boton) => console.log(`El valor del botón es: ${boton}`))
     )
-    .subscribe(boton => {
-        console.log("DESDE LISTA-BOTONES, lista de botones", this.herramientasServices.getBotones());
-        console.log("DESDE LISTA-BOTONES. Botones en documento:",document.getElementsByTagName('button'));
-        console.log("DESDE LISTA-BOTONES se va a enfocar ", boton);
-        console.log("DESDE LISTA-BOTONES elementById ", document.getElementById(boton));
-
-        console.log("DESDE LISTA-BOTONES Buttons ",this.buttons);
+    .subscribe(boton => {        
         this.buttons.forEach((button: ElementRef) => {
           if (button.nativeElement.id === boton ){
             button.nativeElement.focus();

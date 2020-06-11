@@ -33,7 +33,10 @@ $input-shadow: none;
 $primary: $red;
 
 // Update some of Bulma's component variables
-//$button-background-color: #FA7C91;
+$button-text-color: rgb(255, 255, 255);
+$button-background-color: rgb(181, 216, 27);
+$button-active-border-color: red;
+
 
 // Import only what you need from Bulma
 @import "bulma/sass/utilities/_all.sass";

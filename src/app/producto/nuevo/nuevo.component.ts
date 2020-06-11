@@ -1,10 +1,17 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { Producto } from '../producto';
 import { ProductosService } from '../productos.service';
 import { Observable, Subscription } from 'rxjs';
 import { TIPOS } from '../tipos-productos';
 import { HerramientasService } from 'src/app/herramientas/herramientas.service';
 import { Boton } from 'src/app/herramientas/boton';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+
+/*function productoValidator(control: FormControl): {[s: string]: boolean} {
+  if(this.productosService.getProductoPorNombre(control.value) != undefined) {
+    return {nombreRepetido: true};
+  }
+}*/
 
 @Component({
   selector: 'app-nuevo',
@@ -13,25 +20,37 @@ import { Boton } from 'src/app/herramientas/boton';
 })
 export class NuevoComponent implements OnInit {
 
+  @Output() productoGuardado = new EventEmitter<Producto>();
+
   botonNombre: ElementRef;
 
   @ViewChild('nombre', { static: false }) set content(content: ElementRef) {
-    if(content) {
+    if (content) {
       content.nativeElement.focus();
-      this.botonNombre= content;
+      this.botonNombre = content;
     }
   }
   @ViewChild('enviar', { static: false }) pasarASummit: ElementRef;
 
-  constructor(private productosService: ProductosService, private herramientasServices: HerramientasService) { }
+  formulario: FormGroup;
+
+  constructor(private productosService: ProductosService, private herramientasServices: HerramientasService, formBuilder: FormBuilder) {
+    this.formulario = formBuilder.group({
+      'nombre': ['', Validators.required],
+      'tipo': ['', Validators.required],
+      'precio': ['', Validators.compose([Validators.required, Validators.min(0.01)])]
+
+    });
+
+  }
 
   public tipos = TIPOS;
 
   productos$: Observable<Producto[]>;
 
-  correcto = true;
-
   producto: Producto;
+
+  productoRepetido: boolean = false;
 
   enviado: boolean = false;
 
@@ -39,17 +58,17 @@ export class NuevoComponent implements OnInit {
 
   _pulsadoSub: Subscription;
 
-  boton: Boton = {id:"GuardarNuevo",nombre:"Guardar nuevo", mostrar:true};
+  boton: Boton = { id: "GuardarNuevo", nombre: "Guardar nuevo", mostrar: true };
 
-  
+
 
   ngOnInit() {
     this.producto = new Producto();
-    this.productos$ =  this.productosService.getProductos$();
+    this.productos$ = this.productosService.getProductos$();
     this.herramientasServices.nuevoBoton(this.boton);
-    this._pulsadoSub = this.herramientasServices.getPulsado$().subscribe(boton => {      
-      if(boton == "GuardarNuevo") {
-        this.guardarProducto();
+    this._pulsadoSub = this.herramientasServices.getPulsado$().subscribe(boton => {
+      if (boton == "GuardarNuevo") {
+        this.onSubmit(this.formulario.value);
       }
     });
   }
@@ -61,21 +80,18 @@ export class NuevoComponent implements OnInit {
 
   // JSON.parse (JSON.stringif para pasar el objeto por referencia
   guardarProducto() {
-    if (this.producto.nombre != "" && this.producto.tipo !="") {
-      this.darFormato();
-      this.productosService.postNuevoProducto(JSON.parse (JSON.stringify (this.producto)));
-      this.enviado=true;
-      this.herramientasServices.eliminarBoton(this.boton);
-      console.log("DESDE NUEVO COMPONENT GUARDAR PRODUCTO se ha guardado",this.producto.nombre);
-    } else {
-      this.correcto = false;
-      this.botonNombre.nativeElement.focus();
-    }
+    
+    //this.productosService.postNuevoProducto(JSON.parse(JSON.stringify(this.producto)));
+    this.productosService.postNuevoProducto(this.producto);
+    this.enviado = true;
+    this.herramientasServices.eliminarBoton(this.boton);
+    console.log("DESDE NUEVO COMPONENT GUARDAR PRODUCTO se ha guardado", this.producto.nombre);
     this.producto = new Producto();
+    this.productoGuardado.emit(this.producto)
   }
 
   procesarKeypress(key: KeyboardEvent, campo: HTMLElement) {
-    if(key.keyCode == 13) { // press Enter      
+    if (key.keyCode == 13) { // press Enter      
       if (this.pasarASummit.nativeElement == campo) {
         console.log("DESDE NUEVO COMPONENT Se va a enviar el foco a lista-botones", this.boton.id);
         this.herramientasServices.activarFoco(this.boton.id);
@@ -85,13 +101,34 @@ export class NuevoComponent implements OnInit {
     }
   }
 
-  onChange(e,campo) {
+  onSubmit(value: any) {
+    console.log("Lo devuelto por el formulario", value);
+    this.productoRepetido = false;
+
+    if (this.formulario.valid) {
+      if(this.productosService.getProductoPorNombre(value.nombre) != undefined) {
+        this.productoRepetido = true;
+      } else {
+        this.producto.nombre = value.nombre;
+        this.producto.tipo = value.tipo;
+        this.producto.precio = value.precio;
+        this.guardarProducto();
+      }
+    } else {
+      this.botonNombre.nativeElement.focus();
+    }
+  }
+
+  onChange(e, campo) {
     campo.focus();
   }
 
   ngOnDestroy() {
     this._pulsadoSub.unsubscribe();
+    this.herramientasServices.eliminarBoton(this.boton);
   }
- 
+
 
 }
+
+

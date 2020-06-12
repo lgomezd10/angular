@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CajaComponent } from './caja/caja.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule }    from '@angular/common/http';
 import { ProductoModule } from '../producto/producto.module';
 import { VentasFechaComponent } from './ventas-fecha/ventas-fecha.component';
@@ -31,6 +31,7 @@ const ventasRoutes: Routes = [
     FontAwesomeModule,
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     ProductoModule,
     HerramientasModule,

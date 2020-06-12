@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule }    from '@angular/common/http';
 import { ProductoModule } from '../producto/producto.module';
 import { ComprasComponent } from './compras/compras.component';
@@ -30,6 +30,7 @@ const comprasRoutes: Routes = [
     FlexLayoutModule,
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     ProductoModule,
     HerramientasModule,

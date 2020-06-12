@@ -43,24 +43,51 @@
       <p *ngIf="compraFinalizada">Compra guardada correctamente</p>
 
     </div>
+    
+    <form *ngIf="mostrarNuevo" [formGroup]="formulario" [class.error]="!formulario.valid && formulario.touched">
+      
+      <div class="columns">
+        <div class="column">
+          <label class="label">Buscar:</label>
+          <input class="input" name="buscar" type="text" (keypress)="procesarKeypress($event, producto)" #buscar
+            [formControl]="formulario.controls['buscar']">
+          <select class="select is-multiple" name="producto" size="5" (keypress)="procesarKeypress($event, cantidad)" #producto
+            [formControl]="formulario.controls['producto']">
+            <option
+              *ngFor="let producto of productos$| async | sort:'nombre' |filter: formulario.controls['buscar'].value"
+              [ngValue]="producto">
+              {{producto.id_producto}} {{producto.nombre}} stock: {{producto.stock}}</option>
+          </select><br>
+          <div class="help is-danger"
+            *ngIf="!formulario.controls['producto'].valid && formulario.controls['producto'].touched">Seleccione un
+            producto</div>
+        </div>
+        <div class="column">
+          <label class="label">Cantidad:</label> <input class="input" type="number" name="cantidad"
+            (keypress)="procesarKeypress($event, precio)" #cantidad [formControl]="formulario.controls['cantidad']"><br>
 
-    <div *ngIf="mostrarNuevo" class="columns">
-      <div class="column">
-        <label class="label">Buscar:</label>
-        <input class="input" type="text" [(ngModel)]="searchText" (keypress)="procesarKeypress($event, producto)" #buscar><br>
-        <select class="select is-multiple" [(ngModel)]="compraActual.producto" size="5" (keypress)="procesarKeypress($event, cantidad)" #producto>
-          <option *ngFor="let producto of productos$| async | sort:'nombre' |filter: searchText" [ngValue]="producto">
-            {{producto.id_producto}} {{producto.nombre}} stock: {{producto.stock}}</option>
-        </select><br>
+          <div class="help is-danger"
+            *ngIf="formulario.controls['cantidad'].hasError('required') && formulario.controls['cantidad'].touched">
+            Introduzca la cantidad</div>
+          <div class="help is-danger"
+            *ngIf="formulario.controls['cantidad'].hasError('min') && formulario.controls['cantidad'].touched">La cantidad
+            debe ser mayor que 0</div>
+
+
+          <label class="label">Precio: </label>
+          <input class="input" type="number" name="precio" min=0 (keypress)="procesarKeypress($event, enviar)" #precio
+            [formControl]="formulario.controls['precio']">
+          <div class="help is-danger"
+            *ngIf="formulario.controls['precio'].hasError('required') && formulario.controls['precio'].touched">
+            Introduzca el precio</div>
+          <div class="help is-danger"
+            *ngIf="formulario.controls['precio'].hasError('min') && formulario.controls['precio'].touched">El precio
+            debe ser mayor que 0</div>
+          <div id="enviar" #enviar></div>
+        </div>
       </div>
-      <div class="column">
-        <label class="label">Cantidad:</label> <input class="input" type="number"
-          [(ngModel)]="compraActual.cantidad" (keypress)="procesarKeypress($event, precio)" #cantidad><br>
-        <label class="label">Precio: </label> <input class="input" type="number" [(ngModel)]="compraActual.precio" 
-        (keypress)="procesarKeypress($event, enviar)" #precio>
-        <div id="enviar" #enviar></div>
-      </div>
-    </div>
+    </form>
+  
     <div class="crear-nuevo">
       <!--<button (click) = enviarCompra() *ngIf ="compras.length > 0 && !compraFinalizada">Enviar compra</button>-->
       <app-nuevo *ngIf="mostrarNuevoProducto" (productoGuardado)="nuevoGuardado($event)"></app-nuevo>

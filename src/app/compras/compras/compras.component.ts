@@ -23,6 +23,7 @@ export class ComprasComponent implements OnInit {
     }
   }
   @ViewChild('enviar', { static: false }) pasarASummit: ElementRef;
+  @ViewChild('elementoForm') elementoForm: ElementRef;
 
   formulario: FormGroup;
   compras: Compra[] = [];
@@ -121,6 +122,8 @@ export class ComprasComponent implements OnInit {
       this.compraActual.cantidad = this.formulario.value.cantidad;
       this.compraActual.precio = this.formulario.value.precio;
       this.cargar();
+    } else {
+      this.elementoForm.nativeElement.querySelector('.ng-invalid').focus();
     }
   }
 
@@ -135,6 +138,7 @@ export class ComprasComponent implements OnInit {
     console.log("DESDE Compras COMPONET: Recibido evento de nuevoGuardado");
     this.activarBoton(nombreBotones.addProducto);
     this.activarBoton(nombreBotones.crearProducto);
+    this.herramientasServices.activarFoco(nombreBotones.addProducto);
   }
 
   totalCompra(): number {

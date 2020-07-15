@@ -44,7 +44,7 @@
 
     </div>
     
-    <form *ngIf="mostrarNuevo" [formGroup]="formulario" [class.error]="!formulario.valid && formulario.touched">
+    <form *ngIf="mostrarNuevo" [formGroup]="formulario" [class.error]="!formulario.valid && formulario.touched" #elementoForm>
       
       <div class="columns">
         <div class="column">

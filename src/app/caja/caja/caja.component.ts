@@ -26,6 +26,8 @@ export class CajaComponent implements OnInit {
   }
   @ViewChild('enviar', { static: false }) pasarASummit: ElementRef;
 
+  @ViewChild('elementoForm') elementoForm: ElementRef;
+
   formulario: FormGroup;
   ventas: Venta[] = [];
   abierta: boolean = false;
@@ -145,6 +147,8 @@ export class CajaComponent implements OnInit {
       this.ventaActual.producto = this.formulario.value.producto;
       this.ventaActual.cantidad = this.formulario.value.cantidad;
       this.cargar();
+    } else {
+      this.elementoForm.nativeElement.querySelector('.ng-invalid').focus();
     }
   }
 

@@ -36,23 +36,46 @@ export class ListaBotonesComponent implements OnInit {
     this.viewUpdated$ = combineLatest(this.foco$, this.listaBotones$)
 
     this._focoSub = this.foco$
-    .pipe(      
-      filter((boton) => boton !== null),
-      filter((boton) => boton !== ""),
-      delay(1),
-      tap((boton) => console.log(`El valor del botón es: ${boton}`))
-    )
-    .subscribe(boton => {        
+      .pipe(
+        filter((boton) => boton !== null),
+        filter((boton) => boton !== ""),
+        delay(1),
+        tap((boton) => console.log(`El valor del botón es: ${boton}`))
+      )
+      .subscribe(boton => {
         this.buttons.forEach((button: ElementRef) => {
-          if (button.nativeElement.id === boton ){
+          if (button.nativeElement.id === boton) {
             button.nativeElement.focus();
           }
         });
         /*if(document.getElementById(boton) != null)
           document.getElementById(boton).focus();      */
-    });
+      });
 
+  }
 
+  procesarKeydown(key: KeyboardEvent, idBoton: string) {
+    console.log(`se va a procesa la tecla ${key} para el campo ${idBoton}`);
+    
+    if (key.keyCode == 38 || key.keyCode == 40) { // key up || key down
+           
+      let idActivar: string = idBoton;
+      let botones: Boton[] = this.herramientasServices.getBotones().filter((button:Boton )=> button.mostrar);
+      let index = botones.indexOf(botones.find(button => button.id == idBoton));
+      if (index < botones.length - 1 && key.keyCode == 40) {
+        idActivar = botones[index + 1].id;        
+      }
+      if (index > 0 && key.keyCode == 38) {
+        idActivar = botones[index - 1].id;
+      } 
+      if (idActivar != idBoton) {
+        this.buttons.forEach((button: ElementRef) => {
+          if (button.nativeElement.id == idActivar) {
+            button.nativeElement.focus();
+          }
+        });
+      }
+    }
   }
 
   onEnviar(boton: string) {
@@ -60,7 +83,7 @@ export class ListaBotonesComponent implements OnInit {
     this.herramientasServices.pulsarBoton(boton);
   }
 
-  ngOnDestroy() {    
+  ngOnDestroy() {
     this._focoSub.unsubscribe();
   }
 

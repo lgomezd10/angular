@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, ViewChildren, QueryList } from '@angular/core';
 import { Producto } from '../producto';
 import { ProductosService } from '../productos.service';
 import { Observable, Subscription } from 'rxjs';
@@ -32,9 +32,12 @@ export class NuevoComponent implements OnInit {
   }
   @ViewChild('enviar', { static: false }) pasarASummit: ElementRef;
 
+  @ViewChild('elementoForm') elementoForm: ElementRef;
+
   formulario: FormGroup;
 
-  constructor(private productosService: ProductosService, private herramientasServices: HerramientasService, formBuilder: FormBuilder) {
+  constructor(private productosService: ProductosService, private herramientasServices: HerramientasService, 
+    formBuilder: FormBuilder) {
     this.formulario = formBuilder.group({
       'nombre': ['', Validators.required],
       'tipo': ['', Validators.required],
@@ -50,7 +53,7 @@ export class NuevoComponent implements OnInit {
 
   producto: Producto;
 
-  productoRepetido: boolean = false;
+  productoRepetido: string = "";
 
   enviado: boolean = false;
 
@@ -103,19 +106,25 @@ export class NuevoComponent implements OnInit {
 
   onSubmit(value: any) {
     console.log("Lo devuelto por el formulario", value);
-    this.productoRepetido = false;
+    this.productoRepetido = "";
 
+    
     if (this.formulario.valid) {
       if(this.productosService.getProductoPorNombre(value.nombre) != undefined) {
-        this.productoRepetido = true;
+        this.productoRepetido = value.nombre;
+        this.botonNombre.nativeElement.focus();
       } else {
         this.producto.nombre = value.nombre;
         this.producto.tipo = value.tipo;
         this.producto.precio = value.precio;
         this.guardarProducto();
       }
-    } else {
+    } else if(value.nombre != "" && this.productosService.getProductoPorNombre(value.nombre) != undefined) {
+      this.productoRepetido = value.nombre;
       this.botonNombre.nativeElement.focus();
+    } else {
+      //this.botonNombre.nativeElement.focus();
+      this.elementoForm.nativeElement.querySelector('.ng-invalid').focus();
     }
   }
 

@@ -1,12 +1,12 @@
 {{enviar}}
-<form *ngIf="!enviado" [formGroup]="formulario" [class.error]="!formulario.valid && formulario.touched">
+<form *ngIf="!enviado" [formGroup]="formulario" [class.error]="!formulario.valid && formulario.touched" #elementoForm>
     <div>
         <div class="columns">
             <div class="column">
                 <label class="label">Nombre: </label>
                 <input class="input" name="nombre" type="text" autocomplete="off"
                     (keypress)="procesarKeypress($event, tipo)" #nombre [formControl]="formulario.controls['nombre']">
-                <div class="help is-danger" *ngIf="productoRepetido">Ya existe un producto
+                <div class="help is-danger" *ngIf="productoRepetido!='' && formulario.controls['nombre'].value == productoRepetido">Ya existe un producto
                     {{formulario.controls['nombre'].value}}</div>
                 <div class="help is-danger"
                     *ngIf="formulario.controls['nombre'].hasError('required') && formulario.controls['nombre'].touched">

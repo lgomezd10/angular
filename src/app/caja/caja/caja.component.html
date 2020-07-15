@@ -44,23 +44,23 @@
       -->
       <table class="table is-striped">
         <thead>
-        <tr>
-          <th>Producto</th>
-          <th>Cantidad</th>
-          <th>Precio Kg</th>
-          <th>Precio</th>
-          <th *ngIf="codigoVenta == 0 || abierta">Eliminar</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let venta of ventas">
-          <td>{{venta.producto.nombre}}</td>
-          <td>{{venta.cantidad}}</td>
-          <td>{{venta.precio}}</td>
-          <td>{{venta.cantidad * venta.precio | number: '1.0-2'}}</td>
-          <td *ngIf="codigoVenta == 0 || abierta"> <button (click)=eliminarVenta(venta)>Eliminar</button></td>
-        </tr>
-      </tbody>
+          <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio Kg</th>
+            <th>Precio</th>
+            <th *ngIf="codigoVenta == 0 || abierta">Eliminar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let venta of ventas">
+            <td>{{venta.producto.nombre}}</td>
+            <td>{{venta.cantidad}}</td>
+            <td>{{venta.precio}}</td>
+            <td>{{venta.cantidad * venta.precio | number: '1.0-2'}}</td>
+            <td *ngIf="codigoVenta == 0 || abierta"> <button (click)=eliminarVenta(venta)>Eliminar</button></td>
+          </tr>
+        </tbody>
       </table>
       <h2>Total : {{totalVenta()}}</h2>
       <br>
@@ -70,33 +70,41 @@
       </div>
     </div>
 
-    <div *ngIf="mostrarNuevo" class="columns">
+    <form *ngIf="mostrarNuevo" [formGroup]="formulario" [class.error]="!formulario.valid && formulario.touched" #elementoForm>
+      
+      <div class="columns">
       <div class="column">
         <label class="label">Buscar producto: </label>
-        <input class="input" placeholder="Buscar producto" type="text" [(ngModel)]="searchText" (keypress)="procesarKeypress($event, producto)" #buscar [formControl]="formulario.controls['buscar']"/>
-        
-        
-        <select size="5" [(ngModel)]="ventaActual.producto" (keypress)="procesarKeypress($event, cantidad)"  #producto [formControl]="formulario.controls['producto']">
-          <option *ngFor="let producto of productos$| async | sort:'nombre' |filter: formulario.controls['buscar'].value" [ngValue]="producto">
+        <input class="input" placeholder="Buscar producto" type="text"
+          (keypress)="procesarKeypress($event, producto)" #buscar [formControl]="formulario.controls['buscar']" />
+
+
+        <select size="5"(keypress)="procesarKeypress($event, cantidad)" #producto
+          [formControl]="formulario.controls['producto']">
+          <option
+            *ngFor="let producto of productos$| async | sort:'nombre' |filter: formulario.controls['buscar'].value"
+            [ngValue]="producto">
             {{producto.id_producto}} {{producto.nombre}} {{producto.precio}}</option>
-        </select>   
+        </select>
         <div class="help is-danger"
-            *ngIf="!formulario.controls['producto'].valid && formulario.controls['producto'].touched">Seleccione un
-            producto</div>   
+          *ngIf="!formulario.controls['producto'].valid && formulario.controls['producto'].touched">Seleccione un
+          producto</div>
 
       </div>
       <div class="column">
         <label class="label"> Cantidad</label>
-         <input class="input" type="number" (keypress)="procesarKeypress($event, enviar)" #cantidad [formControl]="formulario.controls['cantidad']">
-         <div class="help is-danger"
-            *ngIf="formulario.controls['cantidad'].hasError('required') && formulario.controls['cantidad'].touched">
-            Introduzca la cantidad</div>
-          <div class="help is-danger"
-            *ngIf="formulario.controls['cantidad'].hasError('min') && formulario.controls['cantidad'].touched">La cantidad
-            debe ser mayor que 0</div>
-         <div id="enviar" #enviar></div>
+        <input class="input" type="number" (keypress)="procesarKeypress($event, enviar)" #cantidad
+          [formControl]="formulario.controls['cantidad']">
+        <div class="help is-danger"
+          *ngIf="formulario.controls['cantidad'].hasError('required') && formulario.controls['cantidad'].touched">
+          Introduzca la cantidad</div>
+        <div class="help is-danger"
+          *ngIf="formulario.controls['cantidad'].hasError('min') && formulario.controls['cantidad'].touched">La cantidad
+          debe ser mayor que 0</div>
+        <div id="enviar" #enviar></div>
       </div>
     </div>
+    </form>
   </div>
 
   <div class="column">

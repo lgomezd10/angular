@@ -53,7 +53,7 @@ export class ProductosService {
 
   constructor(private http: HttpClient, private socket: Socket) {
     this.productos$ = new BehaviorSubject<Producto[]>([]);
-    this.cargarProductos();
+    //this.cargarProductos();
     this.actualizacion$.subscribe(productos => this.productos$.next(productos),
       err => console.log('error en socket', err));
 
@@ -63,7 +63,7 @@ export class ProductosService {
 
   backendUrl = 'http://localhost:3000';
 
-  private cargarProductos() {
+  private cargarProductos() {    
     this._docSub =this.getProductosServidor().subscribe(respuesta => {
       console.log("productos del servidor", respuesta.response);
       this.productos$.next(respuesta.response);
@@ -75,29 +75,23 @@ export class ProductosService {
   }
 
   getProductos$(): Observable<Producto[]> {
+    if (!this.productosCargados()) {
+      this.cargarProductos();
+    }
     return this.productos$;
   }
 
-  getProductos(): Producto[] {
+  private getProductos(): Producto[] {
+    if (this.productos$ == undefined) this.cargarProductos();
     return this.productos$.getValue();
   }
 
+  productosCargados(): boolean {
+     return (this.productos$ && this.productos$.getValue().length > 0);
+  }
+
   getProducto(id: number): Producto {
-    
-    return this.getProductos().find(producto => { return producto.id_producto == id });
-    
-      
-   /* if (this.productos$.getValue() == undefined) {
-      console.log("productos undefine");
-      this.getProductosServidor().subscribe(respuesta => {
-        console.log("productos del servidor", respuesta.response);
-
-        this.productos$.next(respuesta.response);
-        return this.productos$.getValue().find(producto => { return producto.id_producto == id });
-      });
-
-    } else
-      return this.productos$.getValue().find(producto => { return producto.id_producto == id });*/
+        return this.productos$.getValue().find(producto => { return producto.id_producto == id });    
   }
 
   getProductoPorNombre(nombre: string): Producto {

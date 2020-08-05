@@ -16,7 +16,7 @@ import { Boton } from 'src/app/herramientas/boton';
 export class ProductoComponent {
 
   //private productos$: Observable<Producto[]>;
-  private producto: Producto;
+  producto: Producto;
   public tipos = TIPOS;
   botones: Boton[] = [
     {id:"Guardar" ,nombre:"Guardar", mostrar:true},

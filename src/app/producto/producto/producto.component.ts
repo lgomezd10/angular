@@ -13,9 +13,9 @@ import { Boton } from 'src/app/herramientas/boton';
   templateUrl: './producto.component.html',
   styleUrls: ['./producto.component.css']
 })
-export class ProductoComponent implements OnInit {
+export class ProductoComponent {
 
-  private productos$: Observable<Producto[]>;
+  //private productos$: Observable<Producto[]>;
   private producto: Producto;
   public tipos = TIPOS;
   botones: Boton[] = [
@@ -23,19 +23,15 @@ export class ProductoComponent implements OnInit {
     {id:"Volver",nombre:"Volver", mostrar:true}
   ];
 
-  constructor(private productosService: ProductosService, private route: ActivatedRoute, private location: Location) { }
-
-  ngOnInit() {
-    this.productos$ = this.productosService.getProductos$();
+  constructor(private productosService: ProductosService, private route: ActivatedRoute, private location: Location) {
     this.route.paramMap.subscribe(params => {
-      this.productos$.subscribe(productos => {
-        this.producto = productos.find(producto => { return producto.id_producto == (+params.get('productoId'))});
-      });
-      //this.producto = this.productosService.getProducto(+params.get('productoId'));
+      this.productosService.getProductos$().subscribe(productos => {
+        this.producto = this.productosService.getProducto(+params.get('productoId')); 
+      });      
     });
-   
-  }
+   }
 
+  
   activarBoton(id: string) {
     this.botones.find(boton => { return boton.id == id}).mostrar = true;
   }

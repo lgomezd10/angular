@@ -38,6 +38,9 @@ export class ProductosComponent implements OnInit {
     this.productos$ = this.productosService.getProductos$().pipe(
       tap((value) => { this.nuevo = false; }),
     );
+    this.productosService.getProductos$().subscribe(productos => {
+      console.log("peticion al servidor", productos);
+    })
     /* this.productos$.subscribe(productos => {
       this.productos = productos;
       this.nuevo = false;

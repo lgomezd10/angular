@@ -23,7 +23,7 @@ export class MockProductosService extends SpyObject {
         this.fakeProducto.id_producto = 1;
         this.getProducto$Spy = this.spy('getProductos$').and.returnValue(this.fakeProductos$);
         this.getProductosSpy = this.spy('getProductos').and.returnValue(this.fakeProductos);
-        this.getProductoSpy = this.spy('getProducto').and.returnValue(this.fakeProducto);
+        this.getProductoSpy = this.spy('getProducto').and.callFake(() => this.fakeProducto)
         this.postModificarProductoSpy = this.spy('postModificarProducto').and.returnValue(this);
     }
      
@@ -34,6 +34,15 @@ export class MockProductosService extends SpyObject {
     setProductos(productos: Producto[]) {
         this.fakeProductos = productos;
         this.fakeProductos$.next(this.fakeProductos);
+    }
+    
+    setProducto(producto: Producto) {
+        this.fakeProducto = producto;
+        /*this.fakeProducto.nombre= producto.nombre;
+        this.fakeProducto.id_producto = producto.id_producto;
+        this.fakeProducto.precio = producto.precio;
+        this.fakeProducto.tipo = producto.tipo;*/
+        
     }
 
     getProviders(): Array<any> {

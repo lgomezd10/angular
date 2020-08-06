@@ -1,4 +1,4 @@
-import { NgModule, Component } from '@angular/core';
+import { NgModule, Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, Router, provideRoutes, ActivatedRoute } from '@angular/router';
 import { ProductoComponent } from '../producto/producto/producto.component';
@@ -6,6 +6,10 @@ import { ComponentFixture, tick, TestBed } from '@angular/core/testing';
 import { MockProductosService } from './productos.service.mock';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ProductosComponent } from '../producto/productos/productos.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FilterPipe } from '../producto/filter.pipe';
+import { SortPipe } from '../producto/sort.pipe';
+import { ProductoPipe } from '../producto/producto.pipe';
 
 @Component({
   selector: 'blank-cmp',
@@ -50,7 +54,7 @@ export function ConfigureProductoTest() {
     imports: [
       { // TODO RouterTestingModule.withRoutes coming soon
         ngModule: RouterTestingModule,
-        providers: [provideRoutes(routerConfig)]
+        providers: [provideRoutes(routerConfig)],        
       },
       TestModule
     ],
@@ -67,7 +71,7 @@ export function ConfigureProductoTest() {
 
 
 @NgModule({
-  imports: [RouterTestingModule, CommonModule],
+  imports: [RouterTestingModule, CommonModule, FormsModule],
   entryComponents: [
     BlankCmp,
     RootCmp,
@@ -77,7 +81,8 @@ export function ConfigureProductoTest() {
     BlankCmp,
     RootCmp,
     ProductoComponent
-  ],
+  ],  
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
     BlankCmp,
     RootCmp,

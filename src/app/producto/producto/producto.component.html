@@ -8,11 +8,11 @@
       <div class="formulario">
 
         <p><label class="etiquetas">Identificador:</label> <label class="id_producto">{{producto.id_producto}}</label></p>
-        <label class="etiquetas">Nombre:</label><input class = "input" type="text" [(ngModel)] = "producto.nombre"> <br>
-        <label class="etiquetas">Stock:</label><label class = "label">  {{producto.stock}} </label> <br>
-        <label class="etiquetas">Precio:</label><input class= "input" type="text" [(ngModel)] = "producto.precio"><br>
+        <label class="etiquetas">Nombre:</label><input class = "input" id="nombre" type="text" [(ngModel)] = "producto.nombre"> <br>
+        <label class="etiquetas">Stock:</label><label class = "label" id="stock">  {{producto.stock}} </label> <br>
+        <label class="etiquetas">Precio:</label><input class= "input" id="precio" type="text" [(ngModel)] = "producto.precio"><br>
         <label class="etiquetas">Tipo:</label>
-        <select class="select" [(ngModel)] = "producto.tipo">
+        <select class="select" id="tipo" [(ngModel)] = "producto.tipo">
           <option *ngFor = "let tipo of tipos" [ngValue] = "tipo">{{tipo}}</option>
           </select>
       </div>

@@ -65,7 +65,6 @@ export class TestHelper {
 
 export class SpyObject {
   constructor(type?: any) {
-      console.log("llega aquí");
     if (type) {
       for (const prop in type.prototype) {
         let m: any = null;

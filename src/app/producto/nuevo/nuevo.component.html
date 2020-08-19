@@ -4,7 +4,7 @@
         <div class="columns">
             <div class="column">
                 <label class="label">Nombre: </label>
-                <input class="input" name="nombre" type="text" autocomplete="off"
+                <input class="input" name="nombre" id="nombre" type="text" autocomplete="off"
                     (keypress)="procesarKeypress($event, tipo)" #nombre [formControl]="formulario.controls['nombre']">
                 <div class="help is-danger" *ngIf="productoRepetido!='' && formulario.controls['nombre'].value == productoRepetido">Ya existe un producto
                     {{formulario.controls['nombre'].value}}</div>
@@ -23,7 +23,7 @@
             <div class="column">
                 <label class="label">Tipo: </label>
                 <div class="select">
-                    <select class="select" name="tipo" [formControl]="formulario.controls['tipo']" #tipo
+                    <select class="select" name="tipo"  id="tipo" [formControl]="formulario.controls['tipo']" #tipo
                         (change)="onChange($event,precio)">
                         <option *ngFor="let tipo of tipos" [ngValue]="tipo">{{tipo}}</option>
                     </select>

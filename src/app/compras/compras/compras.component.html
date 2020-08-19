@@ -51,7 +51,7 @@
           <label class="label">Buscar:</label>
           <input class="input" name="buscar" type="text" (keypress)="procesarKeypress($event, producto)" #buscar
             [formControl]="formulario.controls['buscar']">
-          <select class="select is-multiple" name="producto" size="5" (keypress)="procesarKeypress($event, cantidad)" #producto
+          <select class="select is-multiple" id="producto" name="producto" size="5" (keypress)="procesarKeypress($event, cantidad)" #producto
             [formControl]="formulario.controls['producto']">
             <option
               *ngFor="let producto of productos$| async | sort:'nombre' |filter: formulario.controls['buscar'].value"
@@ -63,7 +63,7 @@
             producto</div>
         </div>
         <div class="column">
-          <label class="label">Cantidad:</label> <input class="input" type="number" name="cantidad"
+          <label class="label">Cantidad:</label> <input class="input" type="number" id="cantidad" name="cantidad"
             (keypress)="procesarKeypress($event, precio)" #cantidad [formControl]="formulario.controls['cantidad']"><br>
 
           <div class="help is-danger"
@@ -75,7 +75,7 @@
 
 
           <label class="label">Precio: </label>
-          <input class="input" type="number" name="precio" min=0 (keypress)="procesarKeypress($event, enviar)" #precio
+          <input class="input" type="number" id="precio" name="precio" min=0 (keypress)="procesarKeypress($event, enviar)" #precio
             [formControl]="formulario.controls['precio']">
           <div class="help is-danger"
             *ngIf="formulario.controls['precio'].hasError('required') && formulario.controls['precio'].touched">

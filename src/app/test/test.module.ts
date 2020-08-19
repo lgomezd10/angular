@@ -54,10 +54,11 @@ export function ConfigureProductoTest() {
     imports: [
       { // TODO RouterTestingModule.withRoutes coming soon
         ngModule: RouterTestingModule,
-        providers: [provideRoutes(routerConfig)],        
+        providers: [provideRoutes(routerConfig)],       
       },
       TestModule
     ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
       mockSpotifyService.getProviders(),
       {

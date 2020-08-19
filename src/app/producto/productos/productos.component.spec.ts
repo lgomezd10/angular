@@ -19,8 +19,7 @@ import { Producto } from '../producto';
 class MockActivatedRoute {
 
 }
-// bien hecho
-/*describe('ProductosComponent', () => {
+describe('ProductosComponent', () => {
   let component: ProductosComponent;
   let fixture: ComponentFixture<ProductosComponent>;
 
@@ -83,4 +82,4 @@ class MockActivatedRoute {
         expect(productos).toEqual([]);
   
       })));
-});*/
+});

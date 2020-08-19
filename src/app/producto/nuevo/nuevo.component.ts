@@ -48,22 +48,14 @@ export class NuevoComponent implements OnInit {
   }
 
   public tipos = TIPOS;
-
   productos$: Observable<Producto[]>;
-
   producto: Producto;
-
   productoRepetido: string = "";
-
   enviado: boolean = false;
-
   botones$: Observable<Boton[]>;
-
   _pulsadoSub: Subscription;
 
   boton: Boton = { id: "GuardarNuevo", nombre: "Guardar nuevo", mostrar: true };
-
-
 
   ngOnInit() {
     this.producto = new Producto();
@@ -82,8 +74,7 @@ export class NuevoComponent implements OnInit {
   }
 
   // JSON.parse (JSON.stringif para pasar el objeto por referencia
-  guardarProducto() {
-    
+  guardarProducto() {    
     //this.productosService.postNuevoProducto(JSON.parse(JSON.stringify(this.producto)));
     this.productosService.postNuevoProducto(this.producto);
     this.enviado = true;
@@ -107,7 +98,6 @@ export class NuevoComponent implements OnInit {
   onSubmit(value: any) {
     console.log("Lo devuelto por el formulario", value);
     this.productoRepetido = "";
-
     
     if (this.formulario.valid) {
       if(this.productosService.getProductoPorNombre(value.nombre) != undefined) {
@@ -133,7 +123,7 @@ export class NuevoComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this._pulsadoSub.unsubscribe();
+    if (this._pulsadoSub) this._pulsadoSub.unsubscribe();
     this.herramientasServices.eliminarBoton(this.boton);
   }
 

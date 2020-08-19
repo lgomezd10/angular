@@ -20,15 +20,7 @@ describe('ProductoComponent', () => {
   describe('uso funciones', () => {
     let component: ProductoComponent;
     let fixture: ComponentFixture<ProductoComponent>;
-    /*beforeEach(fakeAsync(
-      inject([Router, ProductosService], 
-        (router: Router, mockProductosService: MockProductosService) => {
-          const fixture = createRoot(router, RootCmp);        
-        router.navigateByUrl('/producto/2');
-        advance(fixture);
-        producto = fixture.debugElement.children[1].componentInstance;
-        })
-    ))*/
+    
     beforeEach(() => {
       fixture = TestBed.createComponent(ProductoComponent);
       component = fixture.componentInstance;

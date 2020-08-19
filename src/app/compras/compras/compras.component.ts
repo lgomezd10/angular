@@ -99,7 +99,6 @@ export class ComprasComponent implements OnInit {
   }
 
   cargar() {
-
     let compra = this.compras.find(compra => compra.producto.nombre == this.compraActual.producto.nombre);
 
     if (compra == undefined || compra.precio != this.compraActual.precio) {
@@ -123,6 +122,7 @@ export class ComprasComponent implements OnInit {
       this.compraActual.precio = this.formulario.value.precio;
       this.cargar();
     } else {
+      this.formulario.markAllAsTouched();
       this.elementoForm.nativeElement.querySelector('.ng-invalid').focus();
     }
   }
@@ -175,7 +175,6 @@ export class ComprasComponent implements OnInit {
   procesarKeypress(key: KeyboardEvent, campo: HTMLElement) {
     if (key.keyCode == 13) { // press Enter      
       if (this.pasarASummit.nativeElement == campo) {
-        console.log("Se va a enviar el foco a lista-botones", "Añadir");
         this.herramientasServices.activarFoco(nombreBotones.add);
       } else {
         campo.focus();

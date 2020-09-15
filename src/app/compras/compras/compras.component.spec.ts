@@ -18,11 +18,13 @@ import {
 import { ProductosService } from 'src/app/producto/productos.service';
 import { Producto } from 'src/app/producto/producto';
 import { Compra } from '../compra';
+import { error } from 'protractor';
+
 
 describe('ComprasComponent', () => {
   let component: ComprasComponent;
   let fixture: ComponentFixture<ComprasComponent>;
-  
+
 
   beforeEach(async(() => {
     const mockProductosService: MockProductosService = new MockProductosService();
@@ -30,15 +32,15 @@ describe('ComprasComponent', () => {
     const mockComprasService: MockComprasService = new MockComprasService();
     TestBed.configureTestingModule({
       imports: [FormsModule, ReactiveFormsModule, ProductoModule],
-      declarations: [ ComprasComponent ],
+      declarations: [ComprasComponent],
       providers: [
         mockProductosService.getProviders(),
-        { provide: HerramientasService, useValue: mockHerramientasServices},
-        { provide: ComprasService, useValue: mockComprasService}
-      ],      
+        { provide: HerramientasService, useValue: mockHerramientasServices },
+        { provide: ComprasService, useValue: mockComprasService }
+      ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -52,165 +54,184 @@ describe('ComprasComponent', () => {
   });
 
   describe('mostrar elementos', () => {
-    it('No mostrar formulario para añadir Producto',fakeAsync(() => {
-      
+    it('No mostrar formulario para añadir Producto', () => {
+
       expect(fixture.debugElement.query(By.css('form'))).toBeNull();
-    }));
+    });
 
-    it('Mostrar formulario para añadir producto',fakeAsync(() => {      
+    it('Mostrar formulario para añadir producto', () => {
       component.mostrarBoton("AddProducto");
-      fixture.detectChanges();      
+      fixture.detectChanges();
       expect(fixture.debugElement.query(By.css('form'))).not.toBeNull();
-    }));
+    });
+    
+    it('No mostrar formulario para crear producto', () => {      
+      expect(fixture.debugElement.query(By.css('app-nuevo'))).toBeNull();
+    });
 
-  })
+    it('Mostrar formulario para crear producto', () => {
+      component.mostrarBoton("CrearProducto");
+      fixture.detectChanges();      
+      expect(fixture.debugElement.query(By.css('app-nuevo'))).not.toBeNull();
+    });
+  });
 
-  describe('funciones', ()=> {
-    it('guardar compra correcta', fakeAsync(inject([ComprasService], 
-      ( mockComprasService: MockComprasService) => {
+  describe('funciones', () => {
+    it('guardar compra correcta', fakeAsync(inject([ComprasService],
+      (mockComprasService: MockComprasService) => {
         component.compras.push(new Compra());
         component.mostrarBoton('EnviarCompra');
-        expect(mockComprasService.guardarCompraSpy).toHaveBeenCalled(); 
-    })));
+        expect(mockComprasService.guardarCompraSpy).toHaveBeenCalled();
+      })));
 
-    it('guardar compra incorrecta', fakeAsync(inject([ComprasService], 
+    it('guardar compra incorrecta', fakeAsync(inject([ComprasService],
       (mockComprasService: MockComprasService) => {
         component.mostrarBoton('EnviarCompra');
         expect(mockComprasService.guardarCompraSpy).not.toHaveBeenCalled();
-    })));
-
-  })
+      })));      
+  });
 
   describe('formulario', () => {
     let producto, cantidad, precio, el;
     beforeEach(fakeAsync(inject([ProductosService],
       (mockProductosService: MockProductosService) => {
-      let p1 = new Producto();
-      p1.nombre = 'producto1';
-      let p2 = new Producto();
-      p2.nombre = 'producto2';
-      mockProductosService.setProductos([p1, p2]);
-      tick();
-      component.mostrarBoton("AddProducto");
-      fixture.detectChanges();
-      el = fixture.debugElement.nativeElement;
-      producto = fixture.debugElement.query(By.css('#producto')).nativeElement;
-      cantidad = fixture.debugElement.query(By.css('#cantidad')).nativeElement;
-      precio = fixture.debugElement.query(By.css('#precio')).nativeElement;
-      fixture.detectChanges();
-    })));
+        let p1 = new Producto();
+        p1.nombre = 'producto1';
+        let p2 = new Producto();
+        p2.nombre = 'producto2';
+        mockProductosService.setProductos([p1, p2]);
+        tick();
+        component.mostrarBoton("AddProducto");
+        fixture.detectChanges();
+        el = fixture.debugElement.nativeElement;
+        producto = fixture.debugElement.query(By.css('#producto')).nativeElement;
+        cantidad = fixture.debugElement.query(By.css('#cantidad')).nativeElement;
+        precio = fixture.debugElement.query(By.css('#precio')).nativeElement;
+        fixture.detectChanges();
+      })));
 
-    //afterAll(() => (<any>window).console = originalConsole);
+    
     describe('formulario con valores correctos', () => {
 
-      beforeEach(fakeAsync(() => {
-      
-       producto.options[0].selected = true;
+      beforeEach(() => {
+        producto.options[0].selected = true;
         dispatchEvent(producto, 'change');
         cantidad.value = 1;
         dispatchEvent(cantidad, 'input');
         precio.value = 1;
         dispatchEvent(precio, 'input');
         fixture.detectChanges();
-        
-      }));
+      });
 
       describe('campos de formulario', () => {
 
         afterAll(() => {
           component.formulario.reset();
-        })
-  
+        });
+
         it('campo producto', () => {
           expect(component.formulario.controls['producto'].value.nombre).toBe('producto1');
         });
         it('campo cantidad', () => {
           expect(component.formulario.controls['cantidad'].value).toBe(1);
         });
-  
+
         it('campo precio', () => {
           expect(component.formulario.controls['precio'].value).toBe(1);
         });
 
-      })      
+      });
 
-      it('No lanza errores',fakeAsync(() => { 
-        component.formulario.markAllAsTouched();     
-        fixture.detectChanges();  
+      it('No lanza errores', () => {
+        
+        expect(component.formulario.valid).toBeTruthy();
+
+        component.formulario.markAllAsTouched();        
+        fixture.detectChanges(); 
         const msgs = el.querySelectorAll('.help.is-danger');
-        fixture.detectChanges();        
+        fixture.detectChanges();
         expect(msgs.length).toBe(0);
-      }));
+      });
 
-      it('Enviar formulario', fakeAsync(() => {
+      it('Enviar formulario', () => {
         component.formulario.markAllAsTouched();
         fixture.detectChanges();
         component.mostrarBoton("Add");
         expect(component.compras.length).toBe(1);
-      }));
+      });
     });
 
     describe('Errores en formulario', () => {
 
-      afterEach(() => component.formulario.reset());
+      it('Errores en campo producto', () => {
+       
 
-      it('Errores en campo producto', fakeAsync(() => {
-               
-        component.formulario.controls['producto'].markAsTouched();        
+        component.formulario.controls['producto'].markAsTouched();
         fixture.detectChanges();
         const msgs = el.querySelectorAll('.help.is-danger');
-        fixture.detectChanges();        
+        fixture.detectChanges();
         expect(msgs[0].innerHTML).toContain('Seleccione un producto');
-      }));
+      });
 
-      it('Errores en campo cantidad', fakeAsync(() => {
-        cantidad.value = '';
-        dispatchEvent(cantidad, 'input');
-        component.formulario.controls['cantidad'].markAsTouched();        
+      it('Errores en campo cantidad', () => {
+
+        
+        
+        component.formulario.controls['cantidad'].markAsTouched();
         fixture.detectChanges();
         const msgs = el.querySelectorAll('.help.is-danger');
-        fixture.detectChanges();        
+        fixture.detectChanges();
         expect(msgs[0].innerHTML).toContain('Introduzca la cantidad');
-      }));
+      });
 
-      it('Errores cantidad menor que 0.1', fakeAsync(() => {
+      it('Errores cantidad menor que 0.1', () => {
+        // Otra forma de controlar los errores
+        let fcantidad = component.formulario.controls['cantidad'];
+        let errors = {};
+        errors = fcantidad.errors || {};        
+        expect(errors['required']).toBeTruthy();
+        fcantidad.setValue(0);
+        errors = fcantidad.errors || {};
+        console.log("Errores", errors);
+        expect(errors['min']).toBeTruthy();
+        expect(errors['required']).toBeFalsy();
+        
+        //////////////////////////////////////////
         cantidad.value = 0;
         dispatchEvent(cantidad, 'input');
-        component.formulario.controls['cantidad'].markAsTouched();        
+        component.formulario.controls['cantidad'].markAsTouched();
         fixture.detectChanges();
         const msgs = el.querySelectorAll('.help.is-danger');
-        fixture.detectChanges();        
+        fixture.detectChanges();
         expect(msgs[0].innerHTML).toContain('La cantidad debe ser mayor que 0');
-      }));
+      });
 
-      it('Error precio invalido', fakeAsync(() => {
-        precio.value = '';
-        dispatchEvent(precio, 'input');
-        component.formulario.controls['precio'].markAsTouched();        
+      it('Error precio invalido', () => {
+        
+        component.formulario.controls['precio'].markAsTouched();
         fixture.detectChanges();
         const msgs = el.querySelectorAll('.help.is-danger');
-        fixture.detectChanges();        
-        expect(msgs[0].innerHTML).toContain('Introduzca el precio');        
-      }));
+        fixture.detectChanges();
+        expect(msgs[0].innerHTML).toContain('Introduzca el precio');
+      });
 
-      it('Error precio menor que 0,1', fakeAsync(() => {
+      it('Error precio menor que 0,1', () => {
         precio.value = 0;
         dispatchEvent(precio, 'input');
-        component.formulario.controls['precio'].markAsTouched();        
+        component.formulario.controls['precio'].markAsTouched();
         fixture.detectChanges();
         const msgs = el.querySelectorAll('.help.is-danger');
-        fixture.detectChanges();     
-        expect(msgs[0].innerHTML).toContain('El precio debe ser mayor que 0');        
-      }));
+        fixture.detectChanges();
+        expect(msgs[0].innerHTML).toContain('El precio debe ser mayor que 0');
+      });
 
-      it('Enviar formulario no válido', fakeAsync(() => {
+      it('Enviar formulario no válido', () => {
         component.mostrarBoton("Add");
         expect(expect(component.compras.length).toBe(0));
         component.formulario.markAllAsTouched();
         component.mostrarBoton("Add");
         expect(expect(component.compras.length).toBe(0));
-
-      }))
+      });
     });
 
   })

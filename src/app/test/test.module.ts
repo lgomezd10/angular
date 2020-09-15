@@ -42,8 +42,7 @@ export function createRoot(router: Router,
   const f = TestBed.createComponent(componentType);
   advance(f);
   (<any>router).initialNavigation();
-  advance(f);
-  console.log("comprobar el componente",f.componentInstance);
+  advance(f);  
   return f;
 }
 

@@ -58,11 +58,7 @@ export class ComprasComponent implements OnInit {
     this.productos$ = this.productosService.getProductos$();
   }
 
-  cambiarBoton(id: string, mostrar: boolean) {
-    this.botones.find(boton => { return boton.id == id }).mostrar = mostrar;
-
-  }
-
+  
   activarBoton(id: string) {
     this.botones.find(boton => { return boton.id == id }).mostrar = true;
   }
@@ -166,11 +162,7 @@ export class ComprasComponent implements OnInit {
       this.desactivarBoton(nombreBotones.crearProducto);
       this.desactivarBoton(nombreBotones.enviarCompra);
     }
-  }
-
-  agregarProducto() {
-    this.mostrarNuevoProducto = true;
-  }
+  }  
 
   procesarKeypress(key: KeyboardEvent, campo: HTMLElement) {
     if (key.keyCode == 13) { // press Enter      

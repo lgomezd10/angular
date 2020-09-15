@@ -30,7 +30,6 @@ export class ProductoComponent {
       });      
     });
    }
-
   
   activarBoton(id: string) {
     this.botones.find(boton => { return boton.id == id}).mostrar = true;
@@ -46,15 +45,14 @@ export class ProductoComponent {
     }
     if (boton == "Guardar") {
       this.modificarProducto();
-    }
-    
+    }    
   }
 
   modificarProducto() {
     if(this.producto.precio <= 0)
       alert("el precio debe ser mayor que 0");
-    else
-      this.productosService.postModificarProducto(this.producto).subscribe(producto => {console.log(producto);})
+    else 
+      this.productosService.postModificarProducto(this.producto).subscribe(producto => {console.log("Respuesta tras guardar producto", producto);})
   }
 
   volver(){

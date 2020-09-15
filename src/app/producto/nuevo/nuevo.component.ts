@@ -76,7 +76,7 @@ export class NuevoComponent implements OnInit {
   // JSON.parse (JSON.stringif para pasar el objeto por referencia
   guardarProducto() {    
     //this.productosService.postNuevoProducto(JSON.parse(JSON.stringify(this.producto)));
-    this.productosService.postNuevoProducto(this.producto);
+    this.productosService.postNuevoProducto(this.producto).subscribe(respuesta => console.log("Se ha guardado el producto", respuesta));
     this.enviado = true;
     this.herramientasServices.eliminarBoton(this.boton);
     console.log("DESDE NUEVO COMPONENT GUARDAR PRODUCTO se ha guardado", this.producto.nombre);

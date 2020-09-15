@@ -36,21 +36,7 @@ export class ProductosService {
   productos$: BehaviorSubject<Producto[]>;
 
   private _docSub: Subscription;
-
-  tipos: string[] = [
-    "Tomate/Verdura",
-    "Manzana/Verdura",
-    "Patata/Verdura",
-    "Cebolla/Verdura",
-    "Ajo/Verdura",
-    "Pimiento/Verdura",
-    "Otros/Verdura",
-    "Cerdo/Carne",
-    "Pollo/Carne",
-    "Otros/Carne",
-    "Otros/Otros"
-  ]
-
+ 
 
   constructor(private http: HttpClient, private socket: Socket) {
     this.productos$ = new BehaviorSubject<Producto[]>([]);

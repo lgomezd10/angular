@@ -8,6 +8,7 @@ export const TIPOS: string[] = [
     "Otros/Verdura",
     "Cerdo/Carne",
     "Pollo/Carne",
+    "Tenera/Carne",
     "Otros/Carne",
     "Otros/Otros"
   ]  

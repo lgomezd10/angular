@@ -3,6 +3,7 @@ import { AppComponent } from './app.component';
 import { LogoComponent } from './logo/logo.component';
 import { ErroresComponent } from './errores/errores/errores.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 
 
@@ -14,7 +15,7 @@ describe('AppComponent', () => {
         LogoComponent,
         ErroresComponent
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
 

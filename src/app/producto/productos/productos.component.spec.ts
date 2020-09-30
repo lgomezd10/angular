@@ -15,6 +15,7 @@ import { FilterPipe } from '../filter.pipe';
 import { SortPipe } from '../sort.pipe';
 import { ProductoPipe } from '../producto.pipe';
 import { Producto } from '../producto';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 class MockActivatedRoute {
 
@@ -31,7 +32,8 @@ describe('ProductosComponent', () => {
         //{provide: ProductosService, useValue: mockProductosService},
         mockProductosService.getProviders(),
         { provide: ActivatedRoute, useValue: MockActivatedRoute }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
       //TestBed.configureTestingModule({
       //  declarations: [ ProductosComponent ]
       //})

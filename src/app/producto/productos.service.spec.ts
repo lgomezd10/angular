@@ -18,6 +18,7 @@ import { Producto } from './producto';
 import { RespuestaGet } from './repsuestaget';
 import { Socket } from 'ngx-socket-io';
 import { RespuestaPost } from './respuestapost';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 
 class MockSocket {
@@ -33,12 +34,13 @@ class MockSocket {
   }
 }
 
-fdescribe('ProductosService', () => {
+describe('ProductosService', () => {
   const mockSocket: MockSocket = new MockSocket();
   beforeEach(() => TestBed.configureTestingModule({
     imports: [HttpClientTestingModule],
     providers: [ProductosService,
-      { provide: Socket, useValue: mockSocket }]
+      { provide: Socket, useValue: mockSocket }],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
   }));
   it('should be created', () => {
     const service: ProductosService = TestBed.get(ProductosService);

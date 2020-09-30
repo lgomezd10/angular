@@ -19,7 +19,7 @@
       <table class="table is-striped">
         <thead>
           <tr>
-            <th>Producto</th>
+            <th>Product</th>
             <th>quantity</th>
             <th>price Kg</th>
             <th>price</th>
@@ -28,7 +28,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let compra of purchases">
-            <td>{{compra.producto.name}}</td>
+            <td>{{compra.product.name}}</td>
             <td>{{compra.quantity}}</td>
             <td>{{compra.price}}</td>
             <td>{{compra.quantity * compra.price | number: '1.0-2'}}</td>
@@ -39,28 +39,28 @@
 
       <h1>Total: {{totalCompra()}}</h1>
       <br><br>
-      <!--<button (click)=nuevoProducto() *ngIf ="!compraFinalizada">Nueva compra</button>-->
+      <!--<button (click)=newProduct() *ngIf ="!compraFinalizada">Nueva compra</button>-->
       <p *ngIf="compraFinalizada">Compra guardada correctamente</p>
 
     </div>
     
-    <form *ngIf="mostrarNuevo" [formGroup]="formulario" [class.error]="!formulario.valid && formulario.touched" #elementoForm>
+    <form *ngIf="mostrarNew" [formGroup]="formulario" [class.error]="!formulario.valid && formulario.touched" #elementoForm>
       
       <div class="columns">
         <div class="column">
           <label class="label">Buscar:</label>
-          <input class="input" name="buscar" type="text" (keypress)="procesarKeypress($event, producto)" #buscar
+          <input class="input" name="buscar" type="text" (keypress)="procesarKeypress($event, product)" #buscar
             [formControl]="formulario.controls['buscar']">
-          <select class="select is-multiple" id="producto" name="producto" size="5" (keypress)="procesarKeypress($event, quantity)" #producto
-            [formControl]="formulario.controls['producto']">
+          <select class="select is-multiple" id="product" name="product" size="5" (keypress)="procesarKeypress($event, quantity)" #product
+            [formControl]="formulario.controls['product']">
             <option
-              *ngFor="let producto of productos$| async | sort:'name' |filter: formulario.controls['buscar'].value"
-              [ngValue]="producto">
-              {{producto.productId}} {{producto.name}} stock: {{producto.stock}}</option>
+              *ngFor="let product of products$| async | sort:'name' |filter: formulario.controls['buscar'].value"
+              [ngValue]="product">
+              {{product.productId}} {{product.name}} stock: {{product.stock}}</option>
           </select><br>
           <div class="help is-danger"
-            *ngIf="!formulario.controls['producto'].valid && formulario.controls['producto'].touched">Seleccione un
-            producto</div>
+            *ngIf="!formulario.controls['product'].valid && formulario.controls['product'].touched">Seleccione un
+            product</div>
         </div>
         <div class="column">
           <label class="label">quantity:</label> <input class="input" type="number" id="quantity" name="quantity"
@@ -88,15 +88,15 @@
       </div>
     </form>
   
-    <div class="crear-nuevo">
+    <div class="crear-new">
       <!--<button (click) = enviarCompra() *ngIf ="purchases.length > 0 && !compraFinalizada">Enviar compra</button>-->
-      <app-nuevo *ngIf="mostrarNuevoProducto" (productoGuardado)="nuevoGuardado($event)"></app-nuevo>
+      <app-new *ngIf="mostrarNewProduct" (productGuardado)="newGuardado($event)"></app-new>
     </div>
 
   </div>
 
   <div class="column">
-    <app-lista-botones [lista]="botones" (enviarBoton)="mostrarBoton($event)"></app-lista-botones>
+    <app-button-list [lista]="botones" (enviarButtonType)="mostrarButtonType($event)"></app-button-list>
   </div>
 
 </div>

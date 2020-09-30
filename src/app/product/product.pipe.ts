@@ -1,18 +1,18 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ProductosService } from './products.service';
+import { ProductsService } from './products.service';
 
 
 @Pipe({
-    name: 'producto'
+    name: 'product'
 })
-export class ProductoPipe implements PipeTransform {    
+export class ProductPipe implements PipeTransform {    
 
-    constructor(private productosService: ProductosService){      
+    constructor(private productsService: ProductsService){      
     }
 
     transform(item: any): any {
         if (!item) return item;
-        return this.productosService.getProducto(item).name;
+        return this.productsService.getProduct(item).name;
     }
 
 }

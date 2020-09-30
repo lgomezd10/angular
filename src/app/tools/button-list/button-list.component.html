@@ -1,7 +1,7 @@
 <div class="columns">
   <div class="column">
     <ul>
-      <ng-container *ngFor="let boton of listaBotones$ | async">
+      <ng-container *ngFor="let boton of buttonList$ | async">
         <li *ngIf="boton.mostrar">
           <button class="button is-fullwidth" id="{{boton.id}}" (click)="onEnviar(boton.id)" 
           #listButton (keydown)="procesarKeydown($event, boton.id)">{{boton.name}}</button>

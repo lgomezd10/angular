@@ -14,7 +14,7 @@ export class MockPurchasesService {
 
   constructor() {
 
-    this.purchases = [{ purchaseId: 1, producto: null, quantity: 2, price: 3, date: new Date() }]
+    this.purchases = [{ purchaseId: 1, product: null, quantity: 2, price: 3, date: new Date() }]
   }
 
   purchasesPordates(desde, hasta): any {    

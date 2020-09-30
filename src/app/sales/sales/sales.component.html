@@ -21,14 +21,14 @@
       <!--
       <table class="resultados">
         <tr>
-          <th>Producto</th>
+          <th>Product</th>
           <th>quantity</th>
           <th>price Kg</th>
           <th>price</th>
           <th *ngIf="codigoSale == 0 || abierta">Eliminar</th>
         </tr>
         <tr *ngFor="let venta of ventas">
-          <td>{{venta.producto.name}}</td>
+          <td>{{venta.product.name}}</td>
           <td>{{venta.quantity}}</td>
           <td>{{venta.price}}</td>
           <td>{{venta.quantity * venta.price | number: '1.0-2'}}</td>
@@ -45,7 +45,7 @@
       <table class="table is-striped">
         <thead>
           <tr>
-            <th>Producto</th>
+            <th>Product</th>
             <th>quantity</th>
             <th>price Kg</th>
             <th>price</th>
@@ -54,7 +54,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let venta of ventas">
-            <td>{{venta.producto.name}}</td>
+            <td>{{venta.product.name}}</td>
             <td>{{venta.quantity}}</td>
             <td>{{venta.price}}</td>
             <td>{{venta.quantity * venta.price | number: '1.0-2'}}</td>
@@ -70,25 +70,25 @@
       </div>
     </div>
 
-    <form *ngIf="mostrarNuevo" [formGroup]="formulario" [class.error]="!formulario.valid && formulario.touched" #elementoForm>
+    <form *ngIf="mostrarNew" [formGroup]="formulario" [class.error]="!formulario.valid && formulario.touched" #elementoForm>
       
       <div class="columns">
       <div class="column">
-        <label class="label">Buscar producto: </label>
-        <input class="input" placeholder="Buscar producto" type="text"
-          (keypress)="procesarKeypress($event, producto)" #buscar [formControl]="formulario.controls['buscar']" />
+        <label class="label">Buscar product: </label>
+        <input class="input" placeholder="Buscar product" type="text"
+          (keypress)="procesarKeypress($event, product)" #buscar [formControl]="formulario.controls['buscar']" />
 
 
-        <select size="5"(keypress)="procesarKeypress($event, quantity)" #producto
-          [formControl]="formulario.controls['producto']">
+        <select size="5"(keypress)="procesarKeypress($event, quantity)" #product
+          [formControl]="formulario.controls['product']">
           <option
-            *ngFor="let producto of productos$| async | sort:'name' |filter: formulario.controls['buscar'].value"
-            [ngValue]="producto">
-            {{producto.productId}} {{producto.name}} {{producto.price}}</option>
+            *ngFor="let product of products$| async | sort:'name' |filter: formulario.controls['buscar'].value"
+            [ngValue]="product">
+            {{product.productId}} {{product.name}} {{product.price}}</option>
         </select>
         <div class="help is-danger"
-          *ngIf="!formulario.controls['producto'].valid && formulario.controls['producto'].touched">Seleccione un
-          producto</div>
+          *ngIf="!formulario.controls['product'].valid && formulario.controls['product'].touched">Seleccione un
+          product</div>
 
       </div>
       <div class="column">
@@ -108,7 +108,7 @@
   </div>
 
   <div class="column">
-    <app-lista-botones [lista]="botones" (enviarBoton)="mostrarBoton($event)"></app-lista-botones>
+    <app-button-list [lista]="botones" (enviarButtonType)="mostrarButtonType($event)"></app-button-list>
   </div>
 
 </div>

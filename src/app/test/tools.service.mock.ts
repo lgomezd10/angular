@@ -1,20 +1,20 @@
 import { SpyObject } from './test.helpers';
-import { ProductosService } from '../producto/productos.service';
+import { ProductsService } from '../product/products.service';
 import { toolsService } from '../tools/tools.service';
 
 export class MockToolsServices extends SpyObject {
     fakePulsado: String;
     getPulsado$Spy;
-    nuevoBotonSpy;
-    eliminarBotonSpy;
+    newButtonTypeSpy;
+    eliminarButtonTypeSpy;
     activarFocoSpy;
 
     constructor() {
-        super(ProductosService);
+        super(ProductsService);
         this.fakePulsado = "";
         this.getPulsado$Spy = this.spy('getPulsado$').and.returnValue(this);
-        this.nuevoBotonSpy = this.spy('nuevoBoton').and.callFake(() => {});
-        this.eliminarBotonSpy = this.spy('eliminarBoton').and.callFake(() => {});
+        this.newButtonTypeSpy = this.spy('newButtonType').and.callFake(() => {});
+        this.eliminarButtonTypeSpy = this.spy('eliminarButtonType').and.callFake(() => {});
         this.activarFocoSpy = this.spy('activarFoco').and.callFake(() => {});
     }
 
@@ -27,7 +27,7 @@ export class MockToolsServices extends SpyObject {
 
     }
 
-    setBoton(pulsado: string) {
+    setButtonType(pulsado: string) {
         this.fakePulsado = pulsado;
     }
 

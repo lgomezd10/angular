@@ -1,15 +1,15 @@
 import { NgModule, Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, Router, provideRoutes, ActivatedRoute } from '@angular/router';
-import { ProductoComponent } from '../producto/producto/producto.component';
+import { ProductComponent } from '../product/product/product.component';
 import { ComponentFixture, tick, TestBed } from '@angular/core/testing';
-import { MockProductosService } from './productos.service.mock';
+import { MockProductsService } from './products.service.mock';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ProductosComponent } from '../producto/productos/productos.component';
+import { ProductsComponent } from '../product/products/products.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FilterPipe } from '../producto/filter.pipe';
-import { SortPipe } from '../producto/sort.pipe';
-import { ProductoPipe } from '../producto/producto.pipe';
+import { FilterPipe } from '../product/filter.pipe';
+import { SortPipe } from '../product/sort.pipe';
+import { ProductPipe } from '../product/product.pipe';
 
 @Component({
   selector: 'blank-cmp',
@@ -27,8 +27,8 @@ export class RootCmp {
 
 export const routerConfig: Routes = [
   { path: '', component: BlankCmp },
-  { path: 'productos', component: ProductosComponent},
-  { path: 'producto/:productoId', component: ProductoComponent }
+  { path: 'products', component: ProductsComponent},
+  { path: 'product/:productId', component: ProductComponent }
   
 ];
 
@@ -46,8 +46,8 @@ export function createRoot(router: Router,
   return f;
 }
 
-export function ConfigureProductoTest() {
-  const mockSpotifyService: MockProductosService = new MockProductosService();
+export function ConfigureProductTest() {
+  const mockSpotifyService: MockProductsService = new MockProductsService();
 
   TestBed.configureTestingModule({
     imports: [
@@ -75,18 +75,18 @@ export function ConfigureProductoTest() {
   entryComponents: [
     BlankCmp,
     RootCmp,
-    ProductoComponent
+    ProductComponent
   ],
   exports: [
     BlankCmp,
     RootCmp,
-    ProductoComponent
+    ProductComponent
   ],  
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
     BlankCmp,
     RootCmp,
-    ProductoComponent
+    ProductComponent
   ]
 })
 export class TestModule { }

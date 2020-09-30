@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SalesComponent } from './sales/sales.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule }    from '@angular/common/http';
-import { ProductoModule } from '../producto/producto.module';
+import { ProductModule } from '../product/product.module';
 import { SalesDateComponent } from './sales-date/sales-date.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 
@@ -33,7 +33,7 @@ const ventasRoutes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    ProductoModule,
+    ProductModule,
     ToolsModule,
     MatDatepickerModule,
     BrowserAnimationsModule,

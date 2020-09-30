@@ -1,8 +1,8 @@
-import { Producto } from '../producto/producto';
+import { Product } from '../product/product';
 
 export class Compra {
     purchaseId: number;
-    producto: Producto;
+    product: Product;
     quantity: number;
     price: number;
     date: Date;
@@ -11,7 +11,7 @@ export class Compra {
     constructor() {
 
         this.purchaseId = 0;
-        this.producto = null;
+        this.product = null;
         this.quantity = 0;
         this.price = 0;
         this.date = new Date();

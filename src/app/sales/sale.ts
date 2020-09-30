@@ -1,13 +1,13 @@
-import { Producto } from "../producto/producto";
+import { Product } from "../product/product";
 
 export class Sale {
-    producto: Producto;
+    product: Product;
     quantity: number;
     price: number;
 
     constructor() {
         
-        this.producto = null;
+        this.product = null;
         this.quantity = 0;
         this.price= 0;
         

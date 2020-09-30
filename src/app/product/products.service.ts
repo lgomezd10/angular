@@ -1,10 +1,10 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Producto } from './product';
+import { Product } from './product';
 import { Observable, of, BehaviorSubject, Subscription } from 'rxjs';
-import { RespuestaGet } from './repsuestaget';
-import { RespuestaNuevo } from './respuestanuevo';
-import { RespuestaPost } from './respuestapost';
+import { RespuestaGet } from './responseget';
+import { RespuestaNew } from './responsenew';
+import { RespuestaPost } from './responsepost';
 
 import { Socket } from 'ngx-socket-io';
 
@@ -27,34 +27,34 @@ const httpOptions = {
   providedIn: 'root'
 })
 
-export class ProductosService {
+export class ProductsService {
 
-  actualizacion$ = this.socket.fromEvent<Producto[]>('productosActualizados');
+  actualizacion$ = this.socket.fromEvent<Product[]>('productsActualizados');
 
-  //productos: Producto[];
+  //products: Product[];
 
-  productos$: BehaviorSubject<Producto[]>;
+  products$: BehaviorSubject<Product[]>;
 
   private _docSub: Subscription;
  
 
   constructor(private http: HttpClient, private socket: Socket) {
-    this.productos$ = new BehaviorSubject<Producto[]>([]);
-    this.cargarProductos();
-    this.actualizacion$.subscribe(productos => this.productos$.next(productos),
+    this.products$ = new BehaviorSubject<Product[]>([]);
+    this.cargarProducts();
+    this.actualizacion$.subscribe(products => this.products$.next(products),
       err => console.log('error en socket', err));
 
   }
 
-  @Output() productosActualizados: EventEmitter<Producto> = new EventEmitter();
+  @Output() productsActualizados: EventEmitter<Product> = new EventEmitter();
 
   backendUrl = 'http://localhost:3000';
 
-  private cargarProductos() {
-    this._docSub = this.getProductosServidor().subscribe(respuesta => {
-      this.productos$
-      console.log("productos del servidor", respuesta.response);
-      this.productos$.next(respuesta.response);
+  private cargarProducts() {
+    this._docSub = this.getProductsServidor().subscribe(respuesta => {
+      this.products$
+      console.log("products del servidor", respuesta.response);
+      this.products$.next(respuesta.response);
     });
   }
 
@@ -62,41 +62,41 @@ export class ProductosService {
     this._docSub.unsubscribe();
   }
 
-  // repensar la comprobación de productos para ver desde donde lanzamos el error
-  getProductos$(): Observable<Producto[]> {
-    return this.productos$;
+  // repensar la comprobación de products para ver desde donde lanzamos el error
+  getProducts$(): Observable<Product[]> {
+    return this.products$;
   }
 
-  private getProductos(): Producto[] {    
-    return this.productos$.getValue();
+  private getProducts(): Product[] {    
+    return this.products$.getValue();
   }
 
-  /*private productosCargados(): boolean {
-    return (this.productos$ && this.productos$.getValue().length > 0);
+  /*private productsCargados(): boolean {
+    return (this.products$ && this.products$.getValue().length > 0);
   }*/
 
-  getProducto(id: number): Producto {
-    return this.productos$.getValue().find(producto => { return producto.productId == id });
+  getProduct(id: number): Product {
+    return this.products$.getValue().find(product => { return product.productId == id });
   }
 
-  getProductoPorname(name: string): Producto {    
+  getProductPorname(name: string): Product {    
     name = formatoname(name);
-    return this.getProductos().find(producto => { return producto.name == name });
+    return this.getProducts().find(product => { return product.name == name });
   }
 
-  private getProductosServidor(): Observable<RespuestaGet> {
-    return this.http.get<RespuestaGet>(this.backendUrl + '/productos');
+  private getProductsServidor(): Observable<RespuestaGet> {
+    return this.http.get<RespuestaGet>(this.backendUrl + '/products');
   }
 
-  postModificarProducto(producto: Producto): Observable<RespuestaPost> {
-    producto.name = formatoname(producto.name);
-    return this.http.post<RespuestaPost>(this.backendUrl + '/productos/' +
-      producto.productId, producto, httpOptions);
+  postModificarProduct(product: Product): Observable<RespuestaPost> {
+    product.name = formatoname(product.name);
+    return this.http.post<RespuestaPost>(this.backendUrl + '/products/' +
+      product.productId, product, httpOptions);
   }
 
-  postNuevoProducto(producto: Producto): Observable<RespuestaPost> {
-    producto.name = formatoname(producto.name);
-    return this.http.post<RespuestaNuevo>(this.backendUrl + '/productos/', producto, httpOptions);
+  postNewProduct(product: Product): Observable<RespuestaPost> {
+    product.name = formatoname(product.name);
+    return this.http.post<RespuestaNew>(this.backendUrl + '/products/', product, httpOptions);
       
   }
 

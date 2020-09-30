@@ -2,21 +2,21 @@ import { async, ComponentFixture, TestBed, fakeAsync, inject, tick } from '@angu
 
 import { PurchasesComponent } from './purchases.component';
 import { MockPurchasesService } from 'src/app/test/purchases.service.mock';
-import { MockProductosService } from 'src/app/test/productos.service.mock';
+import { MockProductsService } from 'src/app/test/products.service.mock';
 import { MockToolsServices } from 'src/app/test/tools.service.mock';
 import { toolsService } from 'src/app/tools/tools.service';
 import { purchasesService } from '../purchases.service';
 import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ProductoModule } from 'src/app/producto/producto.module';
-import { Boton } from 'src/app/tools/boton';
+import { ProductModule } from 'src/app/product/product.module';
+import { ButtonType } from 'src/app/tools/button-type';
 import { By } from '@angular/platform-browser';
 import {
   dispatchEvent,
   ConsoleSpy
 } from '../../test/utils';
-import { ProductosService } from 'src/app/producto/productos.service';
-import { Producto } from 'src/app/producto/producto';
+import { ProductsService } from 'src/app/product/products.service';
+import { Product } from 'src/app/product/product';
 import { Compra } from '../purchases';
 import { error } from 'protractor';
 
@@ -27,14 +27,14 @@ describe('PurchasesComponent', () => {
 
 
   beforeEach(async(() => {
-    const mockProductosService: MockProductosService = new MockProductosService();
+    const mockProductsService: MockProductsService = new MockProductsService();
     const mocktoolsServices: MockToolsServices = new MockToolsServices();
     const mockPurchasesService: MockPurchasesService = new MockPurchasesService();
     TestBed.configureTestingModule({
-      imports: [FormsModule, ReactiveFormsModule, ProductoModule],
+      imports: [FormsModule, ReactiveFormsModule, ProductModule],
       declarations: [PurchasesComponent],
       providers: [
-        mockProductosService.getProviders(),
+        mockProductsService.getProviders(),
         { provide: toolsService, useValue: mocktoolsServices },
         { provide: purchasesService, useValue: mockPurchasesService }
       ],
@@ -54,25 +54,25 @@ describe('PurchasesComponent', () => {
   });
 
   describe('mostrar elementos', () => {
-    it('No mostrar formulario para añadir Producto', () => {
+    it('No mostrar formulario para añadir Product', () => {
 
       expect(fixture.debugElement.query(By.css('form'))).toBeNull();
     });
 
-    it('Mostrar formulario para añadir producto', () => {
-      component.mostrarBoton("AddProducto");
+    it('Mostrar formulario para añadir product', () => {
+      component.mostrarButtonType("AddProduct");
       fixture.detectChanges();
       expect(fixture.debugElement.query(By.css('form'))).not.toBeNull();
     });
     
-    it('No mostrar formulario para crear producto', () => {      
-      expect(fixture.debugElement.query(By.css('app-nuevo'))).toBeNull();
+    it('No mostrar formulario para crear product', () => {      
+      expect(fixture.debugElement.query(By.css('app-new'))).toBeNull();
     });
 
-    it('Mostrar formulario para crear producto', () => {
-      component.mostrarBoton("CrearProducto");
+    it('Mostrar formulario para crear product', () => {
+      component.mostrarButtonType("CrearProduct");
       fixture.detectChanges();      
-      expect(fixture.debugElement.query(By.css('app-nuevo'))).not.toBeNull();
+      expect(fixture.debugElement.query(By.css('app-new'))).not.toBeNull();
     });
   });
 
@@ -80,31 +80,31 @@ describe('PurchasesComponent', () => {
     it('guardar compra correcta', fakeAsync(inject([purchasesService],
       (mockpurchasesService: MockPurchasesService) => {
         component.purchases.push(new Compra());
-        component.mostrarBoton('EnviarCompra');
+        component.mostrarButtonType('EnviarCompra');
         expect(mockpurchasesService.guardarpurchasespy).toHaveBeenCalled();
       })));
 
     it('guardar compra incorrecta', fakeAsync(inject([purchasesService],
       (mockpurchasesService: MockPurchasesService) => {
-        component.mostrarBoton('EnviarCompra');
+        component.mostrarButtonType('EnviarCompra');
         expect(mockpurchasesService.guardarpurchasespy).not.toHaveBeenCalled();
       })));      
   });
 
   describe('formulario', () => {
-    let producto, quantity, price, el;
-    beforeEach(fakeAsync(inject([ProductosService],
-      (mockProductosService: MockProductosService) => {
-        let p1 = new Producto();
-        p1.name = 'producto1';
-        let p2 = new Producto();
-        p2.name = 'producto2';
-        mockProductosService.setProductos([p1, p2]);
+    let product, quantity, price, el;
+    beforeEach(fakeAsync(inject([ProductsService],
+      (mockProductsService: MockProductsService) => {
+        let p1 = new Product();
+        p1.name = 'product1';
+        let p2 = new Product();
+        p2.name = 'product2';
+        mockProductsService.setProducts([p1, p2]);
         tick();
-        component.mostrarBoton("AddProducto");
+        component.mostrarButtonType("AddProduct");
         fixture.detectChanges();
         el = fixture.debugElement.nativeElement;
-        producto = fixture.debugElement.query(By.css('#producto')).nativeElement;
+        product = fixture.debugElement.query(By.css('#product')).nativeElement;
         quantity = fixture.debugElement.query(By.css('#quantity')).nativeElement;
         price = fixture.debugElement.query(By.css('#price')).nativeElement;
         fixture.detectChanges();
@@ -114,8 +114,8 @@ describe('PurchasesComponent', () => {
     describe('formulario con valores correctos', () => {
 
       beforeEach(() => {
-        producto.options[0].selected = true;
-        dispatchEvent(producto, 'change');
+        product.options[0].selected = true;
+        dispatchEvent(product, 'change');
         quantity.value = 1;
         dispatchEvent(quantity, 'input');
         price.value = 1;
@@ -129,8 +129,8 @@ describe('PurchasesComponent', () => {
           component.formulario.reset();
         });
 
-        it('campo producto', () => {
-          expect(component.formulario.controls['producto'].value.name).toBe('producto1');
+        it('campo product', () => {
+          expect(component.formulario.controls['product'].value.name).toBe('product1');
         });
         it('campo quantity', () => {
           expect(component.formulario.controls['quantity'].value).toBe(1);
@@ -156,21 +156,21 @@ describe('PurchasesComponent', () => {
       it('Enviar formulario', () => {
         component.formulario.markAllAsTouched();
         fixture.detectChanges();
-        component.mostrarBoton("Add");
+        component.mostrarButtonType("Add");
         expect(component.purchases.length).toBe(1);
       });
     });
 
     describe('Errores en formulario', () => {
 
-      it('Errores en campo producto', () => {
+      it('Errores en campo product', () => {
        
 
-        component.formulario.controls['producto'].markAsTouched();
+        component.formulario.controls['product'].markAsTouched();
         fixture.detectChanges();
         const msgs = el.querySelectorAll('.help.is-danger');
         fixture.detectChanges();
-        expect(msgs[0].innerHTML).toContain('Seleccione un producto');
+        expect(msgs[0].innerHTML).toContain('Seleccione un product');
       });
 
       it('Errores en campo quantity', () => {
@@ -226,10 +226,10 @@ describe('PurchasesComponent', () => {
       });
 
       it('Enviar formulario no válido', () => {
-        component.mostrarBoton("Add");
+        component.mostrarButtonType("Add");
         expect(expect(component.purchases.length).toBe(0));
         component.formulario.markAllAsTouched();
-        component.mostrarBoton("Add");
+        component.mostrarButtonType("Add");
         expect(expect(component.purchases.length).toBe(0));
       });
     });

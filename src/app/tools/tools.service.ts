@@ -1,29 +1,29 @@
 import { Injectable } from '@angular/core';
-import { Boton } from './boton';
+import { ButtonType } from './button-type';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ListaBotonesComponent } from './lista-botones/lista-botones.component';
+import { ButtonListComponent } from './button-list/button-list.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class toolsService {
 
-  botones: Boton[] = [];
-  botones$: BehaviorSubject<Boton[]> = new BehaviorSubject<Boton[]>(this.botones);
+  botones: ButtonType[] = [];
+  botones$: BehaviorSubject<ButtonType[]> = new BehaviorSubject<ButtonType[]>(this.botones);
   pulsado$: BehaviorSubject<string> = new BehaviorSubject<string>("");
   foco$: BehaviorSubject<string> = new BehaviorSubject<string>("");
 
   constructor() {
-    /*this.botones$ = new BehaviorSubject<Boton[]>(this.botones);
+    /*this.botones$ = new BehaviorSubject<ButtonType[]>(this.botones);
     this.pulsado$ = new BehaviorSubject<string>("");
     this.foco$ = new BehaviorSubject<string>("");*/
   }
 
-  getBotones$(): Observable<Boton[]> {
+  getButtonTypees$(): Observable<ButtonType[]> {
     return this.botones$;
   }
 
-  getBotones(): Boton[]{
+  getButtonTypees(): ButtonType[]{
     return this.botones$.getValue();
   }
 
@@ -41,32 +41,32 @@ export class toolsService {
     this.foco$.next(boton);
   }
 
-  crearBotones(lista: Boton[]) {
+  crearButtonTypees(lista: ButtonType[]) {
     this.botones = lista;
     this.botones$.next(this.botones);
   }
 
-  nuevoBoton(boton: Boton) {
+  newButtonType(boton: ButtonType) {
     this.botones.push(boton);
     this.botones$.next(this.botones);
   }
 
-  eliminarBoton(boton: Boton) {
+  eliminarButtonType(boton: ButtonType) {
     if (this.botones.find((b) => b.name === boton.name ) != undefined) {
     this.botones.splice(this.botones.indexOf(boton),1);
-    console.log("DESDE tools SERVICE. Botones en la lista:", this.botones);
+    console.log("DESDE tools SERVICE. ButtonTypees en la lista:", this.botones);
     this.botones$.next(this.botones);
     } else {
       console.log("DESDE tools SERVICE. No se ha eliminado el boton porque no existe:", boton);
     }
   }
 
-  limpiarBotones(){
+  limpiarButtonTypees(){
     this.botones = [];
     this.botones$.next(this.botones);
   }
 
-  pulsarBoton(boton: string) {
+  pulsarButtonType(boton: string) {
     this.pulsado$.next(boton);
     this.foco$.next("");
   }

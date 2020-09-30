@@ -7,42 +7,42 @@ import {
   tick,
 } from '@angular/core/testing';
 
-import { ProductosComponent } from './products.component';
-import { MockProductosService } from 'src/app/test/products.service.mock';
-import { ProductosService } from '../products.service';
+import { ProductsComponent } from './products.component';
+import { MockProductsService } from 'src/app/test/products.service.mock';
+import { ProductsService } from '../products.service';
 import { ActivatedRoute } from '@angular/router';
 import { FilterPipe } from '../filter.pipe';
 import { SortPipe } from '../sort.pipe';
-import { ProductoPipe } from '../product.pipe';
-import { Producto } from '../product';
+import { ProductPipe } from '../product.pipe';
+import { Product } from '../product';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 class MockActivatedRoute {
 
 }
-describe('ProductosComponent', () => {
-  let component: ProductosComponent;
-  let fixture: ComponentFixture<ProductosComponent>;
+describe('ProductsComponent', () => {
+  let component: ProductsComponent;
+  let fixture: ComponentFixture<ProductsComponent>;
 
   beforeEach(async(() => {
-    const mockProductosService: MockProductosService = new MockProductosService();
+    const mockProductsService: MockProductsService = new MockProductsService();
     TestBed.configureTestingModule({
-      declarations: [ProductosComponent, FilterPipe, SortPipe, ProductoPipe],
+      declarations: [ProductsComponent, FilterPipe, SortPipe, ProductPipe],
       providers: [
-        //{provide: ProductosService, useValue: mockProductosService},
-        mockProductosService.getProviders(),
+        //{provide: ProductsService, useValue: mockProductsService},
+        mockProductsService.getProviders(),
         { provide: ActivatedRoute, useValue: MockActivatedRoute }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
       //TestBed.configureTestingModule({
-      //  declarations: [ ProductosComponent ]
+      //  declarations: [ ProductsComponent ]
       //})
       //.compileComponents();
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProductosComponent);
+    fixture = TestBed.createComponent(ProductsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     
@@ -51,37 +51,37 @@ describe('ProductosComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-  it('cargar productos', fakeAsync(
-    inject([ProductosService, ActivatedRoute], (mockProductosService: MockProductosService, r) => {
+  it('cargar products', fakeAsync(
+    inject([ProductsService, ActivatedRoute], (mockProductsService: MockProductsService, r) => {
       console.log("prueba");
-      var productos;
-      const producto1 = new Producto();
-      producto1.name = "pera";
-      const producto2 = new Producto();
-      producto2.name = "platano";
-      mockProductosService.setProductos([producto1, producto2]);      
-      component.productos$.subscribe(p => {
-        productos = p;        
+      var products;
+      const product1 = new Product();
+      product1.name = "pera";
+      const product2 = new Product();
+      product2.name = "platano";
+      mockProductsService.setProducts([product1, product2]);      
+      component.products$.subscribe(p => {
+        products = p;        
       });
       tick();
-      expect(productos).toEqual([producto1, producto2]);
+      expect(products).toEqual([product1, product2]);
 
     })));
 
-    it('sin cargar productos', fakeAsync(
-      inject([ProductosService, ActivatedRoute], (mockProductosService: MockProductosService, r) => {
+    it('sin cargar products', fakeAsync(
+      inject([ProductsService, ActivatedRoute], (mockProductsService: MockProductsService, r) => {
         console.log("prueba");
-        var productos;
-        const producto1 = new Producto();
-        producto1.name = "pera";
-        const producto2 = new Producto();
-        producto2.name = "platano";
-        //mockProductosService.setProductos([producto1, producto2]);      
-        component.productos$.subscribe(p => {
-          productos = p;        
+        var products;
+        const product1 = new Product();
+        product1.name = "pera";
+        const product2 = new Product();
+        product2.name = "platano";
+        //mockProductsService.setProducts([product1, product2]);      
+        component.products$.subscribe(p => {
+          products = p;        
         });
         tick();
-        expect(productos).toEqual([]);
+        expect(products).toEqual([]);
   
       })));
 });

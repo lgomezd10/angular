@@ -1,26 +1,26 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductosComponent } from './productos/productos.component';
+import { ProductsComponent } from './products/products.component';
 import { HttpClientModule }    from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { NuevoComponent } from './nuevo/nuevo.component';
+import { NewComponent } from './new/new.component';
 import { FilterPipe } from './filter.pipe';
-import { ProductosService } from './products.service';
+import { ProductsService } from './products.service';
 import { SortPipe } from './sort.pipe';
 
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
-import { ProductoPipe } from './product.pipe';
-import { ProductoComponent } from './producto/product.component';
+import { ProductPipe } from './product.pipe';
+import { ProductComponent } from './product/product.component';
 import { RouterModule } from '@angular/router';
-import { toolsModule } from '../tools/tools.module';
+import { ToolsModule } from '../tools/tools.module';
 
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
 @NgModule({
-  declarations: [ProductosComponent, NuevoComponent, FilterPipe, SortPipe, ProductoPipe, ProductoComponent],
+  declarations: [ProductsComponent, NewComponent, FilterPipe, SortPipe, ProductPipe, ProductComponent],
   imports: [
-    toolsModule,
+    ToolsModule,
     CommonModule,
     HttpClientModule,
     FormsModule,
@@ -29,10 +29,10 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     SocketIoModule.forRoot(config)
   ],
   exports: [
-    ProductosComponent, FilterPipe, SortPipe, ProductoPipe, NuevoComponent, ProductoComponent
+    ProductsComponent, FilterPipe, SortPipe, ProductPipe, NewComponent, ProductComponent
   ], 
   providers: [
-    ProductosService
+    ProductsService
   ]
 })
-export class ProductoModule { }
+export class ProductModule { }

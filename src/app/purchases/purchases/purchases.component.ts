@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { ProductosService } from 'src/app/producto/productos.service';
+import { ProductsService } from 'src/app/product/products.service';
 import { Compra } from '../purchases';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { Producto } from 'src/app/producto/producto';
+import { Product } from 'src/app/product/product';
 import { purchasesService } from '../purchases.service';
-import { Boton } from 'src/app/tools/boton';
+import { ButtonType } from 'src/app/tools/button-type';
 import { toolsService } from 'src/app/tools/tools.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-const nameBotones = { enviarCompra: 'EnviarCompra', crearProducto: 'CrearProducto', addProducto: 'AddProducto', add: 'Add' };
+const nameButtonTypees = { enviarCompra: 'EnviarCompra', crearProduct: 'CrearProduct', addProduct: 'AddProduct', add: 'Add' };
 
 @Component({
   selector: 'app-purchases',
@@ -29,24 +29,24 @@ export class PurchasesComponent implements OnInit {
   purchases: Compra[] = [];
   compraActual: Compra;
   searchText: string;
-  productos$: Observable<Producto[]>;
-  mostrarNuevo: boolean = false;
-  mostrarNuevoProducto: boolean = false;
+  products$: Observable<Product[]>;
+  mostrarNew: boolean = false;
+  mostrarNewProduct: boolean = false;
   //total: number = 0;
   compraFinalizada: boolean = false;
   myDateValue: Date = new Date();
-  botones: Boton[] = [
-    { id: nameBotones.enviarCompra, name: "Enviar compra", mostrar: false },
-    { id: nameBotones.crearProducto, name: "Crear producto", mostrar: true },
-    { id: nameBotones.addProducto, name: "Añadir producto", mostrar: true },
-    { id: nameBotones.add, name: "Añadir", mostrar: false }
+  botones: ButtonType[] = [
+    { id: nameButtonTypees.enviarCompra, name: "Enviar compra", mostrar: false },
+    { id: nameButtonTypees.crearProduct, name: "Crear product", mostrar: true },
+    { id: nameButtonTypees.addProduct, name: "Añadir product", mostrar: true },
+    { id: nameButtonTypees.add, name: "Añadir", mostrar: false }
   ];
 
-  constructor(private productosService: ProductosService, private purchasesService: purchasesService,
+  constructor(private productsService: ProductsService, private purchasesService: purchasesService,
     private toolsServices: toolsService, formBuilder: FormBuilder) {
     this.formulario = formBuilder.group({
       'buscar': [''],
-      'producto': [null, Validators.required],
+      'product': [null, Validators.required],
       'quantity': ['', Validators.compose([Validators.required, Validators.min(0.01)])],
       'price': ['', Validators.compose([Validators.required, Validators.min(0.01)])]
 
@@ -55,47 +55,47 @@ export class PurchasesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.productos$ = this.productosService.getProductos$();
+    this.products$ = this.productsService.getProducts$();
   }
 
   
-  activarBoton(id: string) {
+  activarButtonType(id: string) {
     this.botones.find(boton => { return boton.id == id }).mostrar = true;
   }
 
-  desactivarBoton(id: string) {
+  desactivarButtonType(id: string) {
     this.botones.find(boton => { return boton.id == id }).mostrar = false;
   }
 
 
-  mostrarBoton(boton: string) {
-    if (boton == nameBotones.addProducto) {
-      this.mostrarNuevoProducto = false;
-      this.nuevoProducto();
-      this.desactivarBoton(boton);
-      this.activarBoton(nameBotones.add);
-      this.activarBoton(nameBotones.crearProducto);
+  mostrarButtonType(boton: string) {
+    if (boton == nameButtonTypees.addProduct) {
+      this.mostrarNewProduct = false;
+      this.newProduct();
+      this.desactivarButtonType(boton);
+      this.activarButtonType(nameButtonTypees.add);
+      this.activarButtonType(nameButtonTypees.crearProduct);
       //console.log("DESDE purchases COMPONENT este es el hijo autofoco", this.autoFoco);
       //setTimeout(() => this.autoFoco.nativeElement.focus(), 100);
       //this.autoFoco.nativeElement.focus();
     }
-    if (boton == nameBotones.crearProducto) {
-      this.desactivarBoton(boton);
-      this.activarBoton(nameBotones.addProducto);
-      this.desactivarBoton(nameBotones.add);
-      this.mostrarNuevoProducto = true;
-      this.mostrarNuevo = false;
+    if (boton == nameButtonTypees.crearProduct) {
+      this.desactivarButtonType(boton);
+      this.activarButtonType(nameButtonTypees.addProduct);
+      this.desactivarButtonType(nameButtonTypees.add);
+      this.mostrarNewProduct = true;
+      this.mostrarNew = false;
     }
-    if (boton == nameBotones.add) {
+    if (boton == nameButtonTypees.add) {
       this.onSubmit();
     }
-    if (boton == nameBotones.enviarCompra) {
+    if (boton == nameButtonTypees.enviarCompra) {
       this.enviarCompra();
     }
   }
 
   cargar() {
-    let compra = this.purchases.find(compra => compra.producto.name == this.compraActual.producto.name);
+    let compra = this.purchases.find(compra => compra.product.name == this.compraActual.product.name);
 
     if (compra == undefined || compra.price != this.compraActual.price) {
       this.purchases.push(this.compraActual);
@@ -103,17 +103,17 @@ export class PurchasesComponent implements OnInit {
       compra.quantity = compra.quantity + this.compraActual.quantity;
     }
     //this.total = this.totalCompra();
-    this.mostrarNuevo = false;
-    this.activarBoton(nameBotones.addProducto);
-    this.desactivarBoton(nameBotones.add);
-    this.activarBoton(nameBotones.enviarCompra);
-    this.toolsServices.activarFoco(nameBotones.addProducto);
+    this.mostrarNew = false;
+    this.activarButtonType(nameButtonTypees.addProduct);
+    this.desactivarButtonType(nameButtonTypees.add);
+    this.activarButtonType(nameButtonTypees.enviarCompra);
+    this.toolsServices.activarFoco(nameButtonTypees.addProduct);
 
   }
 
   onSubmit() {
     if (this.formulario.valid) {
-      this.compraActual.producto = this.formulario.value.producto;
+      this.compraActual.product = this.formulario.value.product;
       this.compraActual.quantity = this.formulario.value.quantity;
       this.compraActual.price = this.formulario.value.price;
       this.cargar();
@@ -123,18 +123,18 @@ export class PurchasesComponent implements OnInit {
     }
   }
 
-  nuevoProducto() {
+  newProduct() {
     this.compraActual = new Compra();
     this.formulario.reset();
-    this.mostrarNuevo = true;
+    this.mostrarNew = true;
     this.searchText = "";
   }
 
-  nuevoGuardado(producto: Producto) {
-    console.log("DESDE purchases COMPONET: Recibido evento de nuevoGuardado");
-    this.activarBoton(nameBotones.addProducto);
-    this.activarBoton(nameBotones.crearProducto);
-    this.toolsServices.activarFoco(nameBotones.addProducto);
+  newGuardado(product: Product) {
+    console.log("DESDE purchases COMPONET: Recibido evento de newGuardado");
+    this.activarButtonType(nameButtonTypees.addProduct);
+    this.activarButtonType(nameButtonTypees.crearProduct);
+    this.toolsServices.activarFoco(nameButtonTypees.addProduct);
   }
 
   totalCompra(): number {
@@ -155,19 +155,19 @@ export class PurchasesComponent implements OnInit {
   enviarCompra() {
     console.log(this.myDateValue);
     if (this.purchases.length == 0)
-      alert("No hay productos comprados");
+      alert("No hay products comprados");
     else {
       this.purchasesService.guardarCompra(this.purchases).subscribe(resp => this.compraFinalizada = true);
-      this.desactivarBoton(nameBotones.addProducto);
-      this.desactivarBoton(nameBotones.crearProducto);
-      this.desactivarBoton(nameBotones.enviarCompra);
+      this.desactivarButtonType(nameButtonTypees.addProduct);
+      this.desactivarButtonType(nameButtonTypees.crearProduct);
+      this.desactivarButtonType(nameButtonTypees.enviarCompra);
     }
   }  
 
   procesarKeypress(key: KeyboardEvent, campo: HTMLElement) {
     if (key.keyCode == 13) { // press Enter      
       if (this.pasarASummit.nativeElement == campo) {
-        this.toolsServices.activarFoco(nameBotones.add);
+        this.toolsServices.activarFoco(nameButtonTypees.add);
       } else {
         campo.focus();
       }

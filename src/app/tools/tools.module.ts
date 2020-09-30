@@ -11,12 +11,12 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { GroupByPipe } from './group-by.pipe';
 import { GroupBydatePipe } from './group-by.date.pipe';
-import { ListaBotonesComponent } from './lista-botones/lista-botones.component';
+import { ButtonListComponent } from './button-list/button-list.component';
 import { from } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
-  declarations: [SelecciondatesComponent, GroupByPipe, GroupBydatePipe, ListaBotonesComponent],
+  declarations: [SelecciondatesComponent, GroupByPipe, GroupBydatePipe, ButtonListComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -30,6 +30,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   providers: [ MatDatepickerModule, 
     { provide: MAT_DATE_LOCALE, useValue: 'es-ES' } 
   ],
-  exports:[SelecciondatesComponent, GroupByPipe, GroupBydatePipe, ListaBotonesComponent]
+  exports:[SelecciondatesComponent, GroupByPipe, GroupBydatePipe, ButtonListComponent]
 })
 export class ToolsModule { }

@@ -1,23 +1,23 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChildren, QueryList, ElementRef } from '@angular/core';
-import { Boton } from '../boton';
+import { ButtonType } from '../button-type';
 import { toolsService } from '../tools.service';
 import { Observable, Subscription, combineLatest } from 'rxjs';
 import { filter, tap, map, delay } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-lista-botones',
-  templateUrl: './lista-botones.component.html',
-  styleUrls: ['./lista-botones.component.scss']
+  selector: 'app-button-list',
+  templateUrl: './button-list.component.html',
+  styleUrls: ['./button-list.component.scss']
 })
-export class ListaBotonesComponent implements OnInit {
+export class ButtonListComponent implements OnInit {
 
-  @Input() lista: Boton[] = [];
+  @Input() lista: ButtonType[] = [];
 
   @Output()
-  enviarBoton = new EventEmitter<string>();
+  enviarButtonType = new EventEmitter<string>();
   @ViewChildren('listButton') buttons: QueryList<ElementRef>;
 
-  listaBotones$: Observable<Boton[]>;
+  buttonList$: Observable<ButtonType[]>;
   foco$: Observable<string>;
 
   viewUpdated$: Observable<any>;
@@ -29,11 +29,11 @@ export class ListaBotonesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.toolsServices.crearBotones(this.lista);
-    this.listaBotones$ = this.toolsServices.getBotones$();
+    this.toolsServices.crearButtonTypees(this.lista);
+    this.buttonList$ = this.toolsServices.getButtonTypees$();
     this.foco$ = this.toolsServices.getFoco$();
 
-    this.viewUpdated$ = combineLatest(this.foco$, this.listaBotones$)
+    this.viewUpdated$ = combineLatest(this.foco$, this.buttonList$)
 
     this._focoSub = this.foco$
       .pipe(
@@ -54,21 +54,21 @@ export class ListaBotonesComponent implements OnInit {
 
   }
 
-  procesarKeydown(key: KeyboardEvent, idBoton: string) {
-    console.log(`se va a procesa la tecla ${key} para el campo ${idBoton}`);
+  procesarKeydown(key: KeyboardEvent, idButtonType: string) {
+    console.log(`se va a procesa la tecla ${key} para el campo ${idButtonType}`);
     
     if (key.keyCode == 38 || key.keyCode == 40) { // key up || key down
            
-      let idActivar: string = idBoton;
-      let botones: Boton[] = this.toolsServices.getBotones().filter((button:Boton )=> button.mostrar);
-      let index = botones.indexOf(botones.find(button => button.id == idBoton));
+      let idActivar: string = idButtonType;
+      let botones: ButtonType[] = this.toolsServices.getButtonTypees().filter((button:ButtonType )=> button.mostrar);
+      let index = botones.indexOf(botones.find(button => button.id == idButtonType));
       if (index < botones.length - 1 && key.keyCode == 40) {
         idActivar = botones[index + 1].id;        
       }
       if (index > 0 && key.keyCode == 38) {
         idActivar = botones[index - 1].id;
       } 
-      if (idActivar != idBoton) {
+      if (idActivar != idButtonType) {
         this.buttons.forEach((button: ElementRef) => {
           if (button.nativeElement.id == idActivar) {
             button.nativeElement.focus();
@@ -79,8 +79,8 @@ export class ListaBotonesComponent implements OnInit {
   }
 
   onEnviar(boton: string) {
-    this.enviarBoton.emit(boton);
-    this.toolsServices.pulsarBoton(boton);
+    this.enviarButtonType.emit(boton);
+    this.toolsServices.pulsarButtonType(boton);
   }
 
   ngOnDestroy() {

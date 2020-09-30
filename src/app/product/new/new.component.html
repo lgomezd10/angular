@@ -6,15 +6,15 @@
                 <label class="label">name: </label>
                 <input class="input" name="name" id="name" type="text" autocomplete="off"
                     (keypress)="procesarKeypress($event, type)" #name [formControl]="formulario.controls['name']">
-                <div class="help is-danger" *ngIf="productoRepetido!='' && formulario.controls['name'].value == productoRepetido">Ya existe un producto
+                <div class="help is-danger" *ngIf="productRepetido!='' && formulario.controls['name'].value == productRepetido">Ya existe un product
                     {{formulario.controls['name'].value}}</div>
                 <div class="help is-danger"
                     *ngIf="formulario.controls['name'].hasError('required') && formulario.controls['name'].touched">
-                    Falta el name del producto</div>
-                <div id="listaProductos">
+                    Falta el name del product</div>
+                <div id="listaProducts">
                     <ul>
                         <li
-                            *ngFor="let p of productos$ | async | sort:'name' | filter: formulario.controls['name'].value">
+                            *ngFor="let p of products$ | async | sort:'name' | filter: formulario.controls['name'].value">
                             {{p.name}}
                         </li>
                     </ul>
@@ -49,5 +49,5 @@
     </div>
 </form>
 <div *ngIf="enviado">
-    <h2>Nuevo producto creado</h2>
+    <h2>New product creado</h2>
 </div>

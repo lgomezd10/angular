@@ -3,18 +3,18 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
-import { ProductoModule } from './producto/producto.module';
+import { ProductModule } from './product/product.module';
 import { HttpClientModule } from '@angular/common/http';
 import { SalesModule } from './sales/sales.module';
 import { LogoComponent } from './logo/logo.component';
 import { SalesComponent } from './sales/sales/sales.component';
-import { ProductosComponent } from './producto/productos/productos.component';
+import { ProductsComponent } from './product/products/products.component';
 import { PurchasesComponent } from './purchases/purchases/purchases.component';
 import { purchasesModule } from './purchases/purchases.module';
 import { ErroresComponent } from './errores/errores/errores.component';
 import { ErroresModule } from './errores/errores.module';
 import { ToolsModule } from './tools/tools.module';
-import { ProductoComponent } from './producto/producto/producto.component';
+import { ProductComponent } from './product/product/product.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -33,8 +33,8 @@ const appRoutes: Routes = [
     component: SalesComponent
   },
   {
-    path: 'productos',
-    component: ProductosComponent
+    path: 'products',
+    component: ProductsComponent
   },
   {
     path: 'purchases',
@@ -45,8 +45,8 @@ const appRoutes: Routes = [
     component: ErroresComponent
   },
   {
-    path: 'producto/:productoId',
-    component: ProductoComponent
+    path: 'product/:productId',
+    component: ProductComponent
   }
 ]
 
@@ -59,7 +59,7 @@ const appRoutes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     BrowserModule,
-    ProductoModule,
+    ProductModule,
     SalesModule,
     purchasesModule,
     ErroresModule,

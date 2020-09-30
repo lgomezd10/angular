@@ -12,38 +12,38 @@ import {
   HttpHandler
 } from "@angular/common/http";
 
-import { ProductosService } from './products.service';
+import { ProductsService } from './products.service';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { Producto } from './product';
-import { RespuestaGet } from './repsuestaget';
+import { Product } from './product';
+import { RespuestaGet } from './responseget';
 import { Socket } from 'ngx-socket-io';
-import { RespuestaPost } from './respuestapost';
+import { RespuestaPost } from './responsepost';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 
 class MockSocket {
 
-  datos$: BehaviorSubject<Producto[]> = new BehaviorSubject<Producto[]>([]);
+  datos$: BehaviorSubject<Product[]> = new BehaviorSubject<Product[]>([]);
 
-  fromEvent<T>(eventName: string): Observable<Producto[]> {
+  fromEvent<T>(eventName: string): Observable<Product[]> {
     return this.datos$;
   }
 
-  modificarEstado(productos: Producto[]) {
-    this.datos$.next(productos);
+  modificarEstado(products: Product[]) {
+    this.datos$.next(products);
   }
 }
 
-describe('ProductosService', () => {
+describe('ProductsService', () => {
   const mockSocket: MockSocket = new MockSocket();
   beforeEach(() => TestBed.configureTestingModule({
     imports: [HttpClientTestingModule],
-    providers: [ProductosService,
+    providers: [ProductsService,
       { provide: Socket, useValue: mockSocket }],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
   }));
   it('should be created', () => {
-    const service: ProductosService = TestBed.get(ProductosService);
+    const service: ProductsService = TestBed.get(ProductsService);
     expect(service).toBeTruthy();
   });
 
@@ -59,13 +59,13 @@ describe('ProductosService', () => {
 
     })
 
-    it("getProductos$", inject(
-      [ProductosService, HttpTestingController],
-      fakeAsync((ps: ProductosService, backend: HttpTestingController) => {
+    it("getProducts$", inject(
+      [ProductsService, HttpTestingController],
+      fakeAsync((ps: ProductsService, backend: HttpTestingController) => {
         
-        let testRequest = backend.expectOne('http://localhost:3000/productos');
+        let testRequest = backend.expectOne('http://localhost:3000/products');
         testRequest.flush(respServidor);
-        ps.getProductos$().subscribe(_respuesta => {
+        ps.getProducts$().subscribe(_respuesta => {
           respuesta = _respuesta;          
         });
         tick();
@@ -74,64 +74,64 @@ describe('ProductosService', () => {
       })
     ));
 
-    it("getProducto", inject(
-      [ProductosService, HttpTestingController],
-      fakeAsync((ps: ProductosService, backend: HttpTestingController) => {
-        let producto;                 
-        let testRequest = backend.expectOne('http://localhost:3000/productos');
+    it("getProduct", inject(
+      [ProductsService, HttpTestingController],
+      fakeAsync((ps: ProductsService, backend: HttpTestingController) => {
+        let product;                 
+        let testRequest = backend.expectOne('http://localhost:3000/products');
         testRequest.flush(respServidor);        
         tick();   
-        producto = ps.getProducto(1);
-        expect(producto.productId).toBe(1);
+        product = ps.getProduct(1);
+        expect(product.productId).toBe(1);
         backend.verify();
       })
     ));
 
-    it("getProductoPorname", inject(
-      [ProductosService, HttpTestingController],
-      fakeAsync((ps: ProductosService, backend: HttpTestingController) => {
-        let producto;                 
-        let testRequest = backend.expectOne('http://localhost:3000/productos');
+    it("getProductPorname", inject(
+      [ProductsService, HttpTestingController],
+      fakeAsync((ps: ProductsService, backend: HttpTestingController) => {
+        let product;                 
+        let testRequest = backend.expectOne('http://localhost:3000/products');
         testRequest.flush(respServidor);        
         tick();   
-        producto = ps.getProductoPorname("manzana");
-        expect(producto.productId).toBe(1);
-        expect(producto.name).toBe("Manzana");
+        product = ps.getProductPorname("manzana");
+        expect(product.productId).toBe(1);
+        expect(product.name).toBe("Manzana");
         backend.verify();
       })
     ));
 
-    it("postModificarProducto", inject(
-      [ProductosService, HttpTestingController],
-      fakeAsync((ps: ProductosService, backend: HttpTestingController) => {
-        let producto;
+    it("postModificarProduct", inject(
+      [ProductsService, HttpTestingController],
+      fakeAsync((ps: ProductsService, backend: HttpTestingController) => {
+        let product;
         let respuesta: RespuestaPost;
-        producto = { productId: 1, name: "Manzana", price: 0, type: "", stock: 0 };                     
-        ps.postModificarProducto(producto).subscribe(respuestaServ => respuesta = respuestaServ);
-        let testRequest: TestRequest = backend.expectOne('http://localhost:3000/productos/1');
+        product = { productId: 1, name: "Manzana", price: 0, type: "", stock: 0 };                     
+        ps.postModificarProduct(product).subscribe(respuestaServ => respuesta = respuestaServ);
+        let testRequest: TestRequest = backend.expectOne('http://localhost:3000/products/1');
         expect(testRequest.request.method).toBe('POST');
-        testRequest.flush({status: 200, error: null, response: producto});        
+        testRequest.flush({status: 200, error: null, response: product});        
         tick();  
         expect(respuesta.status).toBe(200);
-        expect(testRequest.request.body).toBe(producto);  
+        expect(testRequest.request.body).toBe(product);  
         //backend.verify();
       })
     ));
 
-    it("postNuevoProducto", inject(
-      [ProductosService, HttpTestingController],
-      fakeAsync((ps: ProductosService, backend: HttpTestingController) => {
-        let producto;
+    it("postNewProduct", inject(
+      [ProductsService, HttpTestingController],
+      fakeAsync((ps: ProductsService, backend: HttpTestingController) => {
+        let product;
         let respuesta: RespuestaPost;
-        producto = { productId: 1, name: "Manzana", price: 0, type: "", stock: 0 };
+        product = { productId: 1, name: "Manzana", price: 0, type: "", stock: 0 };
                      
-        ps.postNuevoProducto(producto).subscribe(respuestaServ => respuesta = respuestaServ);
-        let testRequest: TestRequest = backend.expectOne('http://localhost:3000/productos/');
+        ps.postNewProduct(product).subscribe(respuestaServ => respuesta = respuestaServ);
+        let testRequest: TestRequest = backend.expectOne('http://localhost:3000/products/');
         expect(testRequest.request.method).toBe('POST');
-        testRequest.flush({status: 200, error: null, response: producto});        
+        testRequest.flush({status: 200, error: null, response: product});        
         tick();  
         expect(respuesta.status).toBe(200);
-        expect(testRequest.request.body).toBe(producto);  
+        expect(testRequest.request.body).toBe(product);  
         //backend.verify();
       })
     ));

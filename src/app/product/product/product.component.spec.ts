@@ -1,46 +1,46 @@
 import { async, ComponentFixture, TestBed, fakeAsync, inject, tick } from '@angular/core/testing';
 
-import { ProductoComponent } from './product.component';
-import { MockProductosService } from 'src/app/test/products.service.mock';
-import { ConfigureProductoTest, createRoot, RootCmp, advance } from 'src/app/test/test.module';
+import { ProductComponent } from './product.component';
+import { MockProductsService } from 'src/app/test/products.service.mock';
+import { ConfigureProductTest, createRoot, RootCmp, advance } from 'src/app/test/test.module';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { ProductosService } from '../products.service';
-import { Producto } from '../product';
+import { ProductsService } from '../products.service';
+import { Product } from '../product';
 import { Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 
-describe('ProductoComponent', () => {
+describe('ProductComponent', () => {
 
   beforeEach(async(() => {
-    ConfigureProductoTest();
+    ConfigureProductTest();
   }));
 
   describe('uso funciones', () => {
-    let component: ProductoComponent;
-    let fixture: ComponentFixture<ProductoComponent>;
+    let component: ProductComponent;
+    let fixture: ComponentFixture<ProductComponent>;
     
     beforeEach(() => {
-      fixture = TestBed.createComponent(ProductoComponent);
+      fixture = TestBed.createComponent(ProductComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();
-      component.producto = new Producto();
+      component.product = new Product();
     });
-    it('modificar producto si price mayor que 0', fakeAsync(
-      inject([ProductosService], (mockProductosService: MockProductosService) => {
-        component.producto.price = 1;
-        component.modificarProducto();
+    it('modificar product si price mayor que 0', fakeAsync(
+      inject([ProductsService], (mockProductsService: MockProductsService) => {
+        component.product.price = 1;
+        component.modificarProduct();
         tick();
-        expect(mockProductosService.postModificarProductoSpy)
-          .toHaveBeenCalledWith(component.producto);
+        expect(mockProductsService.postModificarProductSpy)
+          .toHaveBeenCalledWith(component.product);
       })
     ));
-    it('no modificar producto si price menor que 0', fakeAsync(
-      inject([ProductosService], (mockProductosService: MockProductosService) => {
-        component.modificarProducto();
+    it('no modificar product si price menor que 0', fakeAsync(
+      inject([ProductsService], (mockProductsService: MockProductsService) => {
+        component.modificarProduct();
         tick();
-        expect(mockProductosService.postModificarProductoSpy)
+        expect(mockProductsService.postModificarProductSpy)
           .not.toHaveBeenCalled();
       })
     ));
@@ -49,16 +49,16 @@ describe('ProductoComponent', () => {
   describe('render Product', () => {
 
     let fixture;
-    let p: Producto;
+    let p: Product;
     beforeEach(fakeAsync(
-      inject([Router, ProductosService],
-        (router: Router, mockProductosService: MockProductosService) => {
+      inject([Router, ProductsService],
+        (router: Router, mockProductsService: MockProductsService) => {
           fixture = createRoot(router, RootCmp);
-          p = new Producto();
+          p = new Product();
           p.productId = 2; p.name = 'patata';
           p.price = 2; p.stock = 3; p.type = "Patata/Verdura";
-          mockProductosService.setProducto(p);
-          router.navigateByUrl('/producto/2');
+          mockProductsService.setProduct(p);
+          router.navigateByUrl('/product/2');
           advance(fixture);
 
         }
@@ -89,15 +89,15 @@ describe('ProductoComponent', () => {
 
   describe('initialization', () => {
     it('retrieves the product', fakeAsync(
-      inject([Router, ProductosService],
+      inject([Router, ProductsService],
         (router: Router,
-          mockProductosService: MockProductosService) => {
+          mockProductsService: MockProductsService) => {
           const fixture = createRoot(router, RootCmp);
 
-          router.navigateByUrl('/producto/2');
+          router.navigateByUrl('/product/2');
           advance(fixture);
 
-          expect(mockProductosService.getProductoSpy).toHaveBeenCalledWith(2);
+          expect(mockProductsService.getProductSpy).toHaveBeenCalledWith(2);
         })));
   });
 
@@ -108,11 +108,11 @@ describe('ProductoComponent', () => {
           const fixture = createRoot(router, RootCmp);
           expect(location.path()).toEqual('/');
           advance(fixture);
-          router.navigateByUrl('/producto/2');
+          router.navigateByUrl('/product/2');
           advance(fixture);
-          expect(location.path()).toEqual('/producto/2');
-          const producto = fixture.debugElement.children[1].componentInstance;
-          producto.volver();
+          expect(location.path()).toEqual('/product/2');
+          const product = fixture.debugElement.children[1].componentInstance;
+          product.volver();
           advance(fixture);
           expect(location.path()).toEqual('/');
         })));

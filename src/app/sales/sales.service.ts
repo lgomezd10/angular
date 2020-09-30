@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Sale } from './sale';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Sales, ItemSales } from './sales';
-import { ProductosService } from '../producto/productos.service';
+import { ProductsService } from '../product/products.service';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -39,7 +39,7 @@ class RespuestaSales {
 export class SalesService {
 
 
-  constructor(private http: HttpClient, private productosService: ProductosService) { }
+  constructor(private http: HttpClient, private productsService: ProductsService) { }
 
   backendUrl = 'http://localhost:3000';
 
@@ -85,7 +85,7 @@ export class SalesService {
     let cont: number = 0;
     ventas.elementos.forEach(venta => {
       let actual: Sale = new Sale;
-      actual.producto = this.productosService.getProducto(venta.productId),
+      actual.product = this.productsService.getProduct(venta.productId),
       actual.quantity = venta.quantity;
       actual.price = venta.price;
       salida[cont] = actual;

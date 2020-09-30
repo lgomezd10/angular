@@ -1,33 +1,33 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { ProductosService } from '../products.service';
-import { Producto } from '../product';
+import { ProductsService } from '../products.service';
+import { Product } from '../product';
 import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { Boton } from 'src/app/tools/boton';
+import { ButtonType } from 'src/app/tools/button-type';
 
 
 
 @Component({
-  selector: 'app-productos',
-  templateUrl: './productos.component.html',
-  styleUrls: ['./productos.component.css']
+  selector: 'app-products',
+  templateUrl: './products.component.html',
+  styleUrls: ['./products.component.css']
 })
-export class ProductosComponent implements OnInit {  
+export class ProductsComponent implements OnInit {  
   
-  productos$: Observable<Producto[]>;
-  nuevo = false;
-  botones: Boton[] = [
-    {id:"AddNuevo",name:"Añadir nuevo", mostrar:true}
+  products$: Observable<Product[]>;
+  new = false;
+  botones: ButtonType[] = [
+    {id:"AddNew",name:"Añadir new", mostrar:true}
   ];
   
-  constructor(private productosService: ProductosService, private route:ActivatedRoute) {
+  constructor(private productsService: ProductsService, private route:ActivatedRoute) {
     /*route.url.subscribe(url => {
-      if (this.productos == null) {
-        this.productos$ = this.productosService.getProductos$();
-        this.productos$.subscribe(productos => {
-          this.productos = productos;
-          this.nuevo = false;
+      if (this.products == null) {
+        this.products$ = this.productsService.getProducts$();
+        this.products$.subscribe(products => {
+          this.products = products;
+          this.new = false;
         });
       }
     })*/
@@ -35,47 +35,47 @@ export class ProductosComponent implements OnInit {
 
   ngOnInit() {
     console.log("pasa por init")
-    this.productos$ = this.productosService.getProductos$().pipe(
-      tap((value) => { this.nuevo = false; }),
+    this.products$ = this.productsService.getProducts$().pipe(
+      tap((value) => { this.new = false; }),
     );
-    this.productosService.getProductos$().subscribe(productos => {
-      console.log("peticion al servidor", productos);
+    this.productsService.getProducts$().subscribe(products => {
+      console.log("peticion al servidor", products);
     })
-    /* this.productos$.subscribe(productos => {
-      this.productos = productos;
-      this.nuevo = false;
+    /* this.products$.subscribe(products => {
+      this.products = products;
+      this.new = false;
     }); */
   }
 
-  activarBoton(id: string) {
+  activarButtonType(id: string) {
     this.botones.find(boton => { return boton.id == id}).mostrar = true;
   }
 
-  desactivarBoton(id: string) {
+  desactivarButtonType(id: string) {
     this.botones.find(boton => { return boton.id == id}).mostrar = false;
   }
 
-  mostrarBoton(boton: string) {
-    if (boton == "AddNuevo") {
-      this.nuevo=true;
-      this.desactivarBoton("AddNuevo");
-      //this.desactivarBoton("Añadir nuevo");
+  mostrarButtonType(boton: string) {
+    if (boton == "AddNew") {
+      this.new=true;
+      this.desactivarButtonType("AddNew");
+      //this.desactivarButtonType("Añadir new");
     }
     
   }
 
-  cambioprice(producto: Producto, priceAntiguo) {
-    if(producto.price <= 0) {
+  cambioprice(product: Product, priceAntiguo) {
+    if(product.price <= 0) {
       
       alert("el price debe ser mayor que 0");
     }
     else
-      this.productosService.postModificarProducto(producto).subscribe(producto => {console.log(producto);});
+      this.productsService.postModificarProduct(product).subscribe(product => {console.log(product);});
   }  
 
-  nuevoProductoGuardado(producto: Producto) {
-    console.log("DESDE PRODUCTOS: Recibido evento de nuevo producto guardado");
-    this.activarBoton("AddNuevo");
+  newProductGuardado(product: Product) {
+    console.log("DESDE PRODUCTS: Recibido evento de new product guardado");
+    this.activarButtonType("AddNew");
   }
   
 

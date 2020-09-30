@@ -1,42 +1,42 @@
 import { async, ComponentFixture, TestBed, fakeAsync, inject, tick } from '@angular/core/testing';
 
-import { NuevoComponent } from './nuevo.component';
+import { NewComponent } from './new.component';
 import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import {
   dispatchEvent,
   ConsoleSpy
 } from '../../test/utils';
 import { By } from '@angular/platform-browser';
-import { MockProductosService } from 'src/app/test/products.service.mock';
-import { ProductosService } from '../products.service';
-import { Producto } from '../product';
+import { MockProductsService } from 'src/app/test/products.service.mock';
+import { ProductsService } from '../products.service';
+import { Product } from '../product';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { toolsService } from 'src/app/tools/tools.service';
-import { MocktoolsServices } from 'src/app/test/tools.service.mock';
+import { MockToolsServices } from 'src/app/test/tools.service.mock';
 import { CommonModule } from '@angular/common';
-import { ProductoModule } from '../product.module';
+import { ProductModule } from '../product.module';
 
-describe('NuevoComponent', () => {
-  let componet: NuevoComponent;
-  let fixture: ComponentFixture<NuevoComponent>;
+describe('NewComponent', () => {
+  let componet: NewComponent;
+  let fixture: ComponentFixture<NewComponent>;
   beforeEach(async(() => {
 
-    const mockProductosService: MockProductosService = new MockProductosService();
-    const mocktoolsServices: MocktoolsServices = new MocktoolsServices();
+    const mockProductsService: MockProductsService = new MockProductsService();
+    const mocktoolsServices: MockToolsServices = new MockToolsServices();
     TestBed.configureTestingModule({
-      imports: [FormsModule, ReactiveFormsModule, ProductoModule],
+      imports: [FormsModule, ReactiveFormsModule, ProductModule],
       providers: [
-        mockProductosService.getProviders(),
+        mockProductsService.getProviders(),
         { provide: toolsService, useValue: mocktoolsServices }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      declarations: [NuevoComponent]
+      declarations: [NewComponent]
     }).compileComponents();
 
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NuevoComponent);
+    fixture = TestBed.createComponent(NewComponent);
     componet = fixture.componentInstance;
   });
 
@@ -59,7 +59,7 @@ describe('NuevoComponent', () => {
     describe('valores de campos', () => {
 
       beforeEach(fakeAsync(() => {
-        name.value = 'producto1';
+        name.value = 'product1';
         dispatchEvent(name, 'input');
         type.options[6].selected = true;
         dispatchEvent(type, 'change');
@@ -74,7 +74,7 @@ describe('NuevoComponent', () => {
       })
 
       it('campo name', () => {
-        expect(componet.formulario.controls['name'].value).toBe('producto1');
+        expect(componet.formulario.controls['name'].value).toBe('product1');
       });
       it('campo type', () => {
         expect(componet.formulario.controls['type'].value).toBe("Otros/Verdura");
@@ -105,7 +105,7 @@ describe('NuevoComponent', () => {
         fixture.detectChanges();
         const msgs = el.querySelectorAll('.help.is-danger');
         fixture.detectChanges();        
-        expect(msgs[0].innerHTML).toContain('Falta el name del producto');
+        expect(msgs[0].innerHTML).toContain('Falta el name del product');
       }));
 
       it('Errores en campo type', fakeAsync(() => {

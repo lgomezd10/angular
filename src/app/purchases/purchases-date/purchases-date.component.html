@@ -11,13 +11,13 @@
     <td>{{compra.key}}</td>
   </tr>
   <tr>
-    <th>Producto</th>
+    <th>Product</th>
     <th>quantity</th>
     <th>price Kg</th>
     <th>price</th>
   </tr>  
   <tr *ngFor = "let item of compra.value">
-    <td>{{item.productId | producto}}</td>
+    <td>{{item.productId | product}}</td>
     <td>{{item.quantity}}</td>
     <td>{{item.price}}</td>
     <td>{{item.quantity * item.price | number: '1.0-2'}}</td>

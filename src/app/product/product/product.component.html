@@ -1,28 +1,28 @@
-<div *ngIf ="producto != undefined">
+<div *ngIf ="product != undefined">
   <h2 class="title is-3">
-    Detalle {{producto.name}}
+    Detalle {{product.name}}
   </h2>
 
   <div class="columns">
     <div class="column is-three-quarters">
       <div class="formulario">
 
-        <p><label class="etiquetas">Identificador:</label> <label class="productId">{{producto.productId}}</label></p>
-        <label class="etiquetas">name:</label><input class = "input" id="name" type="text" [(ngModel)] = "producto.name"> <br>
-        <label class="etiquetas">Stock:</label><label class = "label" id="stock">  {{producto.stock}} </label> <br>
-        <label class="etiquetas">price:</label><input class= "input" id="price" type="text" [(ngModel)] = "producto.price"><br>
+        <p><label class="etiquetas">Identificador:</label> <label class="productId">{{product.productId}}</label></p>
+        <label class="etiquetas">name:</label><input class = "input" id="name" type="text" [(ngModel)] = "product.name"> <br>
+        <label class="etiquetas">Stock:</label><label class = "label" id="stock">  {{product.stock}} </label> <br>
+        <label class="etiquetas">price:</label><input class= "input" id="price" type="text" [(ngModel)] = "product.price"><br>
         <label class="etiquetas">type:</label>
-        <select class="select" id="type" [(ngModel)] = "producto.type">
+        <select class="select" id="type" [(ngModel)] = "product.type">
           <option *ngFor = "let type of types" [ngValue] = "type">{{type}}</option>
           </select>
       </div>
     </div>
     <div class="column">
-      <app-lista-botones [lista]="botones" (enviarBoton)= "mostrarBoton($event)"></app-lista-botones>
+      <app-button-list [lista]="botones" (enviarButtonType)= "mostrarButtonType($event)"></app-button-list>
     </div>
   </div>
   
 </div>
-<div *ngIf ="producto == undefined">
-  <h2>No se ha encontrado el producto</h2>
+<div *ngIf ="product == undefined">
+  <h2>No se ha encontrado el product</h2>
 </div>

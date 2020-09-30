@@ -1,4 +1,4 @@
-export class RespuestaNuevo {
+export class RespuestaNew {
     
     status: number;
     error: number;

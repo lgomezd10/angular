@@ -1,72 +1,72 @@
 import {SpyObject} from './test.helpers';
-import {ProductosService} from '../producto/products.service';
-import { Producto } from '../producto/producto';
+import {ProductsService} from '../product/products.service';
+import { Product } from '../product/product';
 import { Observable, BehaviorSubject } from 'rxjs';
 
 export class MPS {
 
 }
 
-export class MockProductosService extends SpyObject {
+export class MockProductsService extends SpyObject {
 
-    fakeProductos: Producto[] = [];
-    fakeProductos$: BehaviorSubject<Producto[]>;
-    fakeProducto: Producto;
-    getProductosSpy;
-    getProducto$Spy;
-    cargarProductosSpy;
-    getProductoSpy;
-    postModificarProductoSpy;
-    getProductoPornameSpy;
-    postNuevoProductoSpy;
+    fakeProducts: Product[] = [];
+    fakeProducts$: BehaviorSubject<Product[]>;
+    fakeProduct: Product;
+    getProductsSpy;
+    getProduct$Spy;
+    cargarProductsSpy;
+    getProductSpy;
+    postModificarProductSpy;
+    getProductPornameSpy;
+    postNewProductSpy;
 
 
     constructor() {        
-        super(ProductosService);        
-        this.fakeProductos$ = new BehaviorSubject<Producto[]>([]);
-        this.fakeProductos = [];
-        this.fakeProducto = new Producto();
-        this.fakeProducto.productId = 1;
-        this.getProducto$Spy = this.spy('getProductos$').and.returnValue(this.fakeProductos$);
-        this.getProductosSpy = this.spy('getProductos').and.returnValue(this.fakeProductos);
-        this.getProductoSpy = this.spy('getProducto').and.callFake(() => this.fakeProducto)
-        this.postModificarProductoSpy = this.spy('postModificarProducto').and.returnValue(this);
-        this.getProductoPornameSpy = this.spy('getProductoPorname').and.callFake((name)=> { 
-            let producto = new Producto();
-            producto.name = name;
+        super(ProductsService);        
+        this.fakeProducts$ = new BehaviorSubject<Product[]>([]);
+        this.fakeProducts = [];
+        this.fakeProduct = new Product();
+        this.fakeProduct.productId = 1;
+        this.getProduct$Spy = this.spy('getProducts$').and.returnValue(this.fakeProducts$);
+        this.getProductsSpy = this.spy('getProducts').and.returnValue(this.fakeProducts);
+        this.getProductSpy = this.spy('getProduct').and.callFake(() => this.fakeProduct)
+        this.postModificarProductSpy = this.spy('postModificarProduct').and.returnValue(this);
+        this.getProductPornameSpy = this.spy('getProductPorname').and.callFake((name)=> { 
+            let product = new Product();
+            product.name = name;
         })
-        this.postNuevoProductoSpy = this.spy('postNuevoProducto').and.callFake(() => {});
+        this.postNewProductSpy = this.spy('postNewProduct').and.callFake(() => {});
             }
      
     subscribe(callback) {
-        callback(this.fakeProducto);
+        callback(this.fakeProduct);
     }
 
-    setProductos(productos: Producto[]) {
-        this.fakeProductos = productos;
-        this.fakeProductos$.next(this.fakeProductos);
+    setProducts(products: Product[]) {
+        this.fakeProducts = products;
+        this.fakeProducts$.next(this.fakeProducts);
     }
     
-    setProducto(producto: Producto) {
-        this.fakeProducto = producto;
-        /*this.fakeproducto.name= producto.name;
-        this.fakeProducto.productId = producto.productId;
-        this.fakeproducto.price = producto.price;
-        this.fakeproducto.type = producto.type;*/
+    setProduct(product: Product) {
+        this.fakeProduct = product;
+        /*this.fakeproduct.name= product.name;
+        this.fakeProduct.productId = product.productId;
+        this.fakeproduct.price = product.price;
+        this.fakeproduct.type = product.type;*/
         
     }
 
     getProviders(): Array<any> {
-        return [{ provide: ProductosService, useValue: this }];
+        return [{ provide: ProductsService, useValue: this }];
       }
 
-      cargarFakeProductos() {
-          let p1 = new Producto();
-          let p2 = new Producto();
+      cargarFakeProducts() {
+          let p1 = new Product();
+          let p2 = new Product();
 
-          p1.name = "producto1";
+          p1.name = "product1";
           p1.price = 1;
-          p2.name = "producto2";
+          p2.name = "product2";
           p2.price = 2;
       }
 

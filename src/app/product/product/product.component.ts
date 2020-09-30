@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductosService } from '../productos.service';
-import { Producto } from '../producto';
+import { ProductosService } from '../products.service';
+import { Producto } from '../product';
 import { ActivatedRoute } from '@angular/router';
-import { typeS } from '../types-productos';
+import { TYPES } from '../products-types';
 import { Location } from '@angular/common';
 import { Observable } from 'rxjs';
 import { Boton } from 'src/app/tools/boton';
@@ -17,7 +17,7 @@ export class ProductoComponent {
 
   //private productos$: Observable<Producto[]>;
   producto: Producto;
-  public types = typeS;
+  public types = TYPES;
   botones: Boton[] = [
     {id:"Guardar" ,name:"Guardar", mostrar:true},
     {id:"Volver",name:"Volver", mostrar:true}

@@ -1,12 +1,12 @@
 import { async, ComponentFixture, TestBed, fakeAsync, inject, tick } from '@angular/core/testing';
 
-import { ProductoComponent } from './producto.component';
-import { MockProductosService } from 'src/app/test/productos.service.mock';
+import { ProductoComponent } from './product.component';
+import { MockProductosService } from 'src/app/test/products.service.mock';
 import { ConfigureProductoTest, createRoot, RootCmp, advance } from 'src/app/test/test.module';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { ProductosService } from '../productos.service';
-import { Producto } from '../producto';
+import { ProductosService } from '../products.service';
+import { Producto } from '../product';
 import { Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { ProductosService } from '../productos.service';
-import { Producto } from '../producto';
+import { ProductosService } from '../products.service';
+import { Producto } from '../product';
 import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';

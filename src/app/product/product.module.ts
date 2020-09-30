@@ -6,12 +6,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NuevoComponent } from './nuevo/nuevo.component';
 import { FilterPipe } from './filter.pipe';
-import { ProductosService } from './productos.service';
+import { ProductosService } from './products.service';
 import { SortPipe } from './sort.pipe';
 
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
-import { ProductoPipe } from './producto.pipe';
-import { ProductoComponent } from './producto/producto.component';
+import { ProductoPipe } from './product.pipe';
+import { ProductoComponent } from './producto/product.component';
 import { RouterModule } from '@angular/router';
 import { toolsModule } from '../tools/tools.module';
 

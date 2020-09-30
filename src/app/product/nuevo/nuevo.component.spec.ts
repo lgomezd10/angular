@@ -7,14 +7,14 @@ import {
   ConsoleSpy
 } from '../../test/utils';
 import { By } from '@angular/platform-browser';
-import { MockProductosService } from 'src/app/test/productos.service.mock';
-import { ProductosService } from '../productos.service';
-import { Producto } from '../producto';
+import { MockProductosService } from 'src/app/test/products.service.mock';
+import { ProductosService } from '../products.service';
+import { Producto } from '../product';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { toolsService } from 'src/app/tools/tools.service';
 import { MocktoolsServices } from 'src/app/test/tools.service.mock';
 import { CommonModule } from '@angular/common';
-import { ProductoModule } from '../producto.module';
+import { ProductoModule } from '../product.module';
 
 describe('NuevoComponent', () => {
   let componet: NuevoComponent;

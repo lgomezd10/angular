@@ -1,4 +1,4 @@
-import { Producto } from './producto';
+import { Producto } from './product';
 
 export class RespuestaGet {
     status: number;

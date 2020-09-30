@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, ViewChildren, QueryList } from '@angular/core';
-import { Producto } from '../producto';
-import { ProductosService } from '../productos.service';
+import { Producto } from '../product';
+import { ProductosService } from '../products.service';
 import { Observable, Subscription } from 'rxjs';
-import { typeS } from '../types-productos';
+import { TYPES } from '../products-types';
 import { toolsService } from 'src/app/tools/tools.service';
 import { Boton } from 'src/app/tools/boton';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
@@ -47,7 +47,7 @@ export class NuevoComponent implements OnInit {
 
   }
 
-  public types = typeS;
+  public types = TYPES;
   productos$: Observable<Producto[]>;
   producto: Producto;
   productoRepetido: string = "";

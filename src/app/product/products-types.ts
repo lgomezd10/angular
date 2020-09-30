@@ -1,4 +1,4 @@
-export const typeS: string[] = [
+export const TYPES: string[] = [
     "Tomate/Verdura",
     "Manzana/Verdura",
     "Patata/Verdura",

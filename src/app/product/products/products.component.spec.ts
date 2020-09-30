@@ -7,14 +7,14 @@ import {
   tick,
 } from '@angular/core/testing';
 
-import { ProductosComponent } from './productos.component';
-import { MockProductosService } from 'src/app/test/productos.service.mock';
-import { ProductosService } from '../productos.service';
+import { ProductosComponent } from './products.component';
+import { MockProductosService } from 'src/app/test/products.service.mock';
+import { ProductosService } from '../products.service';
 import { ActivatedRoute } from '@angular/router';
 import { FilterPipe } from '../filter.pipe';
 import { SortPipe } from '../sort.pipe';
-import { ProductoPipe } from '../producto.pipe';
-import { Producto } from '../producto';
+import { ProductoPipe } from '../product.pipe';
+import { Producto } from '../product';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 class MockActivatedRoute {

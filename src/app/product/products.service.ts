@@ -1,6 +1,6 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Producto } from './producto';
+import { Producto } from './product';
 import { Observable, of, BehaviorSubject, Subscription } from 'rxjs';
 import { RespuestaGet } from './repsuestaget';
 import { RespuestaNuevo } from './respuestanuevo';

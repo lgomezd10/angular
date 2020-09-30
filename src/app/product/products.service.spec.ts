@@ -12,9 +12,9 @@ import {
   HttpHandler
 } from "@angular/common/http";
 
-import { ProductosService } from './productos.service';
+import { ProductosService } from './products.service';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { Producto } from './producto';
+import { Producto } from './product';
 import { RespuestaGet } from './repsuestaget';
 import { Socket } from 'ngx-socket-io';
 import { RespuestaPost } from './respuestapost';

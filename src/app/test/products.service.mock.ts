@@ -1,5 +1,5 @@
 import {SpyObject} from './test.helpers';
-import {ProductosService} from '../producto/productos.service';
+import {ProductosService} from '../producto/products.service';
 import { Producto } from '../producto/producto';
 import { Observable, BehaviorSubject } from 'rxjs';
 

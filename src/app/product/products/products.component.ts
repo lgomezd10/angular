@@ -18,7 +18,7 @@ export class ProductsComponent implements OnInit {
   products$: Observable<Product[]>;
   new = false;
   botones: ButtonType[] = [
-    {id:"AddNew",name:"Añadir new", mostrar:true}
+    {id:"AddNew",name:"Añadir new", show:true}
   ];
   
   constructor(private productsService: ProductsService, private route:ActivatedRoute) {
@@ -48,14 +48,14 @@ export class ProductsComponent implements OnInit {
   }
 
   activarButtonType(id: string) {
-    this.botones.find(boton => { return boton.id == id}).mostrar = true;
+    this.botones.find(boton => { return boton.id == id}).show = true;
   }
 
   desactivarButtonType(id: string) {
-    this.botones.find(boton => { return boton.id == id}).mostrar = false;
+    this.botones.find(boton => { return boton.id == id}).show = false;
   }
 
-  mostrarButtonType(boton: string) {
+  showButtonType(boton: string) {
     if (boton == "AddNew") {
       this.new=true;
       this.desactivarButtonType("AddNew");

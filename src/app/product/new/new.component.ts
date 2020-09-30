@@ -55,7 +55,7 @@ export class NewComponent implements OnInit {
   botones$: Observable<ButtonType[]>;
   _pulsadoSub: Subscription;
 
-  boton: ButtonType = { id: "GuardarNew", name: "Guardar new", mostrar: true };
+  boton: ButtonType = { id: "GuardarNew", name: "Guardar new", show: true };
 
   ngOnInit() {
     this.product = new Product();

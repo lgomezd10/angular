@@ -1,4 +1,4 @@
-table.mostrar td {
+table.show td {
     vertical-align: top;   
 
 }
@@ -41,7 +41,7 @@ table.compra {
     }
 
     @media (max-width: 600px) {
-      .compra-venta{
+      .compra-sale{
         display: grid;
         grid-template-columns: auto;
         background-color: yellow;

@@ -19,8 +19,8 @@ export class ProductComponent {
   product: Product;
   public types = TYPES;
   botones: ButtonType[] = [
-    {id:"Guardar" ,name:"Guardar", mostrar:true},
-    {id:"Volver",name:"Volver", mostrar:true}
+    {id:"Guardar" ,name:"Guardar", show:true},
+    {id:"Volver",name:"Volver", show:true}
   ];
 
   constructor(private productsService: ProductsService, private route: ActivatedRoute, private location: Location) {
@@ -32,14 +32,14 @@ export class ProductComponent {
    }
   
   activarButtonType(id: string) {
-    this.botones.find(boton => { return boton.id == id}).mostrar = true;
+    this.botones.find(boton => { return boton.id == id}).show = true;
   }
 
   desactivarButtonType(id: string) {
-    this.botones.find(boton => { return boton.id == id}).mostrar = false;
+    this.botones.find(boton => { return boton.id == id}).show = false;
   }
 
-  mostrarButtonType(boton: string) {
+  showButtonType(boton: string) {
     if (boton == "Volver") {
       this.volver();
     }

@@ -1,6 +1,6 @@
 <nav>
   <a routerLink="/sales" routerLinkActive="active">sales</a>
-  <a routerLink="/sales-dates" routerLinkActive="active">Buscar ventas</a>
+  <a routerLink="/sales-dates" routerLinkActive="active">Buscar sales</a>
 </nav>
 <router-outlet></router-outlet>
 
@@ -27,19 +27,19 @@
           <th>price</th>
           <th *ngIf="codigoSale == 0 || abierta">Eliminar</th>
         </tr>
-        <tr *ngFor="let venta of ventas">
-          <td>{{venta.product.name}}</td>
-          <td>{{venta.quantity}}</td>
-          <td>{{venta.price}}</td>
-          <td>{{venta.quantity * venta.price | number: '1.0-2'}}</td>
-          <td *ngIf="codigoSale == 0 || abierta"> <button (click)=eliminarSale(venta)>Eliminar</button></td>
+        <tr *ngFor="let sale of sales">
+          <td>{{sale.product.name}}</td>
+          <td>{{sale.quantity}}</td>
+          <td>{{sale.price}}</td>
+          <td>{{sale.quantity * sale.price | number: '1.0-2'}}</td>
+          <td *ngIf="codigoSale == 0 || abierta"> <button (click)=eliminarSale(sale)>Eliminar</button></td>
         </tr>
       </table>
       <h2>Total : {{total}}</h2>
       <br>
 
       <div *ngIf="codigoSale == 0 || abierta">
-        <input type="checkbox" [(ngModel)]="tarjeta" /> Pago con tarjeta
+        <input type="checkbox" [(ngModel)]="creditCard" /> Pago con creditCard
       </div>
       -->
       <table class="table is-striped">
@@ -53,12 +53,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let venta of ventas">
-            <td>{{venta.product.name}}</td>
-            <td>{{venta.quantity}}</td>
-            <td>{{venta.price}}</td>
-            <td>{{venta.quantity * venta.price | number: '1.0-2'}}</td>
-            <td *ngIf="codigoSale == 0 || abierta"> <button (click)=eliminarSale(venta)>Eliminar</button></td>
+          <tr *ngFor="let sale of sales">
+            <td>{{sale.product.name}}</td>
+            <td>{{sale.quantity}}</td>
+            <td>{{sale.price}}</td>
+            <td>{{sale.quantity * sale.price | number: '1.0-2'}}</td>
+            <td *ngIf="codigoSale == 0 || abierta"> <button (click)=eliminarSale(sale)>Eliminar</button></td>
           </tr>
         </tbody>
       </table>
@@ -66,11 +66,11 @@
       <br>
 
       <div *ngIf="codigoSale == 0 || abierta">
-        <input type="checkbox" [(ngModel)]="tarjeta" /> Pago con tarjeta
+        <input type="checkbox" [(ngModel)]="creditCard" /> Pago con creditCard
       </div>
     </div>
 
-    <form *ngIf="mostrarNew" [formGroup]="formulario" [class.error]="!formulario.valid && formulario.touched" #elementoForm>
+    <form *ngIf="showNew" [formGroup]="formulario" [class.error]="!formulario.valid && formulario.touched" #elementoForm>
       
       <div class="columns">
       <div class="column">
@@ -108,7 +108,7 @@
   </div>
 
   <div class="column">
-    <app-button-list [lista]="botones" (enviarButtonType)="mostrarButtonType($event)"></app-button-list>
+    <app-button-list [lista]="botones" (enviarButtonType)="showButtonType($event)"></app-button-list>
   </div>
 
 </div>

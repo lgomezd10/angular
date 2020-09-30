@@ -2,14 +2,14 @@
 
 Desde: 
 <mat-form-field>
-  <input matInput [matDatepicker]="SelecciondateInicio" [(ngModel)]="desde">
+  <input matInput [matDatepicker]="SelecciondateInicio" [(ngModel)]="from">
   <mat-datepicker-toggle matSuffix [for]="SelecciondateInicio"></mat-datepicker-toggle>
   <mat-datepicker #SelecciondateInicio></mat-datepicker>
 </mat-form-field>
 
 Hasta: 
 <mat-form-field>
-  <input matInput [matDatepicker]="SelecciondateFin" [(ngModel)]="hasta">
+  <input matInput [matDatepicker]="SelecciondateFin" [(ngModel)]="to">
   <mat-datepicker-toggle matSuffix [for]="SelecciondateFin"></mat-datepicker-toggle>
   <mat-datepicker #SelecciondateFin></mat-datepicker>
 </mat-form-field>

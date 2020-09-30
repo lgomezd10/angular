@@ -10,14 +10,14 @@ export class ItemSales {
 export class Sales {
     salesId: number;
     date: Date;
-    tarjeta: boolean;
+    creditCard: boolean;
     elementos: ItemSales[];
     
     constructor() {
         
         this.salesId = 0;
         this.date = null;
-        this.tarjeta = false;
+        this.creditCard = false;
         this.elementos= [];
         
     }

@@ -17,7 +17,7 @@ export class MockPurchasesService {
     this.purchases = [{ purchaseId: 1, product: null, quantity: 2, price: 3, date: new Date() }]
   }
 
-  purchasesPordates(desde, hasta): any {    
+  purchasesPordates(from, to): any {    
     return this;
   }
 
@@ -55,7 +55,7 @@ describe('PurchasesDateComponent', () => {
 
   it('buscarpurchases', fakeAsync(inject([purchasesService], (mockPurchasesService: MockPurchasesService) => {
     let compra;
-    component.buscarPurchases({ desde: "date1", hasta: "date2" });
+    component.buscarPurchases({ from: "date1", to: "date2" });
     tick();
     expect(component.purchases[0].purchaseId).toBe(1);
   })))

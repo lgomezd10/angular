@@ -9,10 +9,10 @@ import { DatePipe } from '@angular/common';
 })
 export class SelecciondatesComponent implements OnInit {
 
-  desde: Date;
-  hasta: Date;
-  desdeString: string;
-  hastaString: string;
+  from: Date;
+  to: Date;
+  fromString: string;
+  toString: string;
 
   @Output()
   enviardates: EventEmitter<dates> = new EventEmitter<dates>();
@@ -20,23 +20,23 @@ export class SelecciondatesComponent implements OnInit {
   constructor(private datePipe: DatePipe) { }
 
   ngOnInit() {
-    this.desde = new Date();
-    this.hasta = new Date();
-    this.desdeString = "";
-    this.hastaString = "";
+    this.from = new Date();
+    this.to = new Date();
+    this.fromString = "";
+    this.toString = "";
   }
   
   onEnviar() {
-    this.desde.setHours(0,0,0);
-    this.hasta.setHours(23,59,59);
-    if (this.desde > this.hasta) {
+    this.from.setHours(0,0,0);
+    this.to.setHours(23,59,59);
+    if (this.from > this.to) {
       alert("La segunda date debe ser igual o mayor");
     } else {
-      this.desdeString = this.datePipe.transform(this.desde, 'yyyy-MM-dd HH:mm:ss');
-      this.hastaString = this.datePipe.transform(this.hasta, 'yyyy-MM-dd HH:mm:ss');      
+      this.fromString = this.datePipe.transform(this.from, 'yyyy-MM-dd HH:mm:ss');
+      this.toString = this.datePipe.transform(this.to, 'yyyy-MM-dd HH:mm:ss');      
       let dates: dates = {
-        desde: this.desdeString,
-        hasta: this.hastaString
+        from: this.fromString,
+        to: this.toString
       }
       this.enviardates.emit(dates);
     }

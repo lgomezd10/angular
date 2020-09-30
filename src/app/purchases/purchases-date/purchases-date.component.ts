@@ -27,7 +27,7 @@ export class PurchasesDateComponent implements OnInit {
 
   buscarPurchases(dates: dates) {
     
-    this.purchasesService.purchasesPordates(dates.desde, dates.hasta).subscribe(purchases => {
+    this.purchasesService.purchasesPordates(dates.from, dates.to).subscribe(purchases => {
       this.purchases = purchases;
     });
 

@@ -37,8 +37,8 @@ export class purchasesService {
     return this.http.post<RespuestaCompra>(this.backendUrl + '/compra/', purchases, httpOptions);
   }
 
-  purchasesPordates(desde: string, hasta: string): BehaviorSubject<Compra[]> {
-    let dates = {desde: desde, hasta: hasta};
+  purchasesPordates(from: string, to: string): BehaviorSubject<Compra[]> {
+    let dates = {from: from, to: to};
     let respuesta: BehaviorSubject<Compra[]> = new BehaviorSubject([]);
     this.http.post<Respuestapurchases>(this.backendUrl + '/purchases/', dates, httpOptions).subscribe(resp => {
       respuesta.next(resp.response);

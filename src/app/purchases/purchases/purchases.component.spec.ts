@@ -53,24 +53,24 @@ describe('PurchasesComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('mostrar elementos', () => {
-    it('No mostrar formulario para añadir Product', () => {
+  describe('show elementos', () => {
+    it('No show formulario para añadir Product', () => {
 
       expect(fixture.debugElement.query(By.css('form'))).toBeNull();
     });
 
     it('Mostrar formulario para añadir product', () => {
-      component.mostrarButtonType("AddProduct");
+      component.showButtonType("AddProduct");
       fixture.detectChanges();
       expect(fixture.debugElement.query(By.css('form'))).not.toBeNull();
     });
     
-    it('No mostrar formulario para crear product', () => {      
+    it('No show formulario para crear product', () => {      
       expect(fixture.debugElement.query(By.css('app-new'))).toBeNull();
     });
 
     it('Mostrar formulario para crear product', () => {
-      component.mostrarButtonType("CrearProduct");
+      component.showButtonType("CrearProduct");
       fixture.detectChanges();      
       expect(fixture.debugElement.query(By.css('app-new'))).not.toBeNull();
     });
@@ -80,13 +80,13 @@ describe('PurchasesComponent', () => {
     it('guardar compra correcta', fakeAsync(inject([purchasesService],
       (mockpurchasesService: MockPurchasesService) => {
         component.purchases.push(new Compra());
-        component.mostrarButtonType('EnviarCompra');
+        component.showButtonType('EnviarCompra');
         expect(mockpurchasesService.guardarpurchasespy).toHaveBeenCalled();
       })));
 
     it('guardar compra incorrecta', fakeAsync(inject([purchasesService],
       (mockpurchasesService: MockPurchasesService) => {
-        component.mostrarButtonType('EnviarCompra');
+        component.showButtonType('EnviarCompra');
         expect(mockpurchasesService.guardarpurchasespy).not.toHaveBeenCalled();
       })));      
   });
@@ -101,7 +101,7 @@ describe('PurchasesComponent', () => {
         p2.name = 'product2';
         mockProductsService.setProducts([p1, p2]);
         tick();
-        component.mostrarButtonType("AddProduct");
+        component.showButtonType("AddProduct");
         fixture.detectChanges();
         el = fixture.debugElement.nativeElement;
         product = fixture.debugElement.query(By.css('#product')).nativeElement;
@@ -156,7 +156,7 @@ describe('PurchasesComponent', () => {
       it('Enviar formulario', () => {
         component.formulario.markAllAsTouched();
         fixture.detectChanges();
-        component.mostrarButtonType("Add");
+        component.showButtonType("Add");
         expect(component.purchases.length).toBe(1);
       });
     });
@@ -226,10 +226,10 @@ describe('PurchasesComponent', () => {
       });
 
       it('Enviar formulario no válido', () => {
-        component.mostrarButtonType("Add");
+        component.showButtonType("Add");
         expect(expect(component.purchases.length).toBe(0));
         component.formulario.markAllAsTouched();
-        component.mostrarButtonType("Add");
+        component.showButtonType("Add");
         expect(expect(component.purchases.length).toBe(0));
       });
     });

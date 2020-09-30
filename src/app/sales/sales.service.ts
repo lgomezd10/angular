@@ -43,51 +43,51 @@ export class SalesService {
 
   backendUrl = 'http://localhost:3000';
 
-  guardarSale(ventas: Sale[], tarjeta: boolean): Observable<number> {
+  guardarSale(sales: Sale[], creditCard: boolean): Observable<number> {
     let envio = {
-      tarjeta:  tarjeta?1:0,
-      ventas: ventas
+      creditCard:  creditCard?1:0,
+      sales: sales
     }
     var respuesta: BehaviorSubject<number> = new BehaviorSubject(0);
-    this.http.post<RespuestaSale>(this.backendUrl + '/venta/', envio, httpOptions).subscribe(resp => {
+    this.http.post<RespuestaSale>(this.backendUrl + '/sale/', envio, httpOptions).subscribe(resp => {
       respuesta.next(resp.response.actualizados[0]);
-      console.log("Respuesta después de una venta", respuesta);
+      console.log("Respuesta después de una sale", respuesta);
     });
     return respuesta;
   }
 
 
-  actualizarSale(salesId: number, ventas: Sale[], tarjeta: boolean): Observable<number> {
+  actualizarSale(salesId: number, sales: Sale[], creditCard: boolean): Observable<number> {
     let envio = {
       salesId: salesId,
-      tarjeta:  tarjeta?1:0,
-      ventas: ventas
+      creditCard:  creditCard?1:0,
+      sales: sales
     }
     var respuesta: BehaviorSubject<number> = new BehaviorSubject(0);
-    this.http.post<RespuestaSale>(this.backendUrl + '/venta/' + salesId, envio, httpOptions).subscribe(resp => {
+    this.http.post<RespuestaSale>(this.backendUrl + '/sale/' + salesId, envio, httpOptions).subscribe(resp => {
       respuesta.next(resp.response.actualizados[0]); // aquí hay que modificar la respuesta para que devuelva la lista
-      console.log("Respuesta después de una venta", respuesta);
+      console.log("Respuesta después de una sale", respuesta);
     });
     return respuesta;
   }
 
   obtenerSale(salesId: number) : BehaviorSubject<Sales> {
     let respuesta: BehaviorSubject<Sales> = new BehaviorSubject(new Sales());
-    this.http.get<ObtenerSales>(this.backendUrl + '/venta/' + salesId).subscribe(resp => {
+    this.http.get<ObtenerSales>(this.backendUrl + '/sale/' + salesId).subscribe(resp => {
       respuesta.next(resp.response);
     });
 
     return respuesta;
   }
 
-  ventasAListaSale(ventas: Sales): Sale[] {
+  salesAListaSale(sales: Sales): Sale[] {
     let salida: Sale[] = [];
     let cont: number = 0;
-    ventas.elementos.forEach(venta => {
+    sales.elementos.forEach(sale => {
       let actual: Sale = new Sale;
-      actual.product = this.productsService.getProduct(venta.productId),
-      actual.quantity = venta.quantity;
-      actual.price = venta.price;
+      actual.product = this.productsService.getProduct(sale.productId),
+      actual.quantity = sale.quantity;
+      actual.price = sale.price;
       salida[cont] = actual;
       cont++;
     });
@@ -95,10 +95,10 @@ export class SalesService {
   }
 
 
-  ventasPordates(desde: string, hasta: string): BehaviorSubject<Sales[]> {
-    let dates = {desde: desde, hasta: hasta};
+  salesPordates(from: string, to: string): BehaviorSubject<Sales[]> {
+    let dates = {from: from, to: to};
     let respuesta: BehaviorSubject<Sales[]> = new BehaviorSubject([]);
-    this.http.post<RespuestaSales>(this.backendUrl + '/ventas/', dates, httpOptions).subscribe(resp => {
+    this.http.post<RespuestaSales>(this.backendUrl + '/sales/', dates, httpOptions).subscribe(resp => {
       console.log(resp.response);
       respuesta.next(resp.response);
     });

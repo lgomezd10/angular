@@ -8,7 +8,7 @@
 
 <!--Prueba de botones
 <ul>
-  <li *ngFor="let prueba of botones">{{prueba.name}}, {{prueba.mostrar}}</li>
+  <li *ngFor="let prueba of botones">{{prueba.name}}, {{prueba.show}}</li>
 </ul>
 -->
 
@@ -44,7 +44,7 @@
 
     </div>
     
-    <form *ngIf="mostrarNew" [formGroup]="formulario" [class.error]="!formulario.valid && formulario.touched" #elementoForm>
+    <form *ngIf="showNew" [formGroup]="formulario" [class.error]="!formulario.valid && formulario.touched" #elementoForm>
       
       <div class="columns">
         <div class="column">
@@ -90,13 +90,13 @@
   
     <div class="crear-new">
       <!--<button (click) = enviarCompra() *ngIf ="purchases.length > 0 && !compraFinalizada">Enviar compra</button>-->
-      <app-new *ngIf="mostrarNewProduct" (productGuardado)="newGuardado($event)"></app-new>
+      <app-new *ngIf="showNewProduct" (productGuardado)="newGuardado($event)"></app-new>
     </div>
 
   </div>
 
   <div class="column">
-    <app-button-list [lista]="botones" (enviarButtonType)="mostrarButtonType($event)"></app-button-list>
+    <app-button-list [lista]="botones" (enviarButtonType)="showButtonType($event)"></app-button-list>
   </div>
 
 </div>

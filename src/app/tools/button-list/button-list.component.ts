@@ -60,7 +60,7 @@ export class ButtonListComponent implements OnInit {
     if (key.keyCode == 38 || key.keyCode == 40) { // key up || key down
            
       let idActivar: string = idButtonType;
-      let botones: ButtonType[] = this.toolsServices.getButtonTypees().filter((button:ButtonType )=> button.mostrar);
+      let botones: ButtonType[] = this.toolsServices.getButtonTypees().filter((button:ButtonType )=> button.show);
       let index = botones.indexOf(botones.find(button => button.id == idButtonType));
       if (index < botones.length - 1 && key.keyCode == 40) {
         idActivar = botones[index + 1].id;        

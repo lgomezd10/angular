@@ -29,24 +29,24 @@ export class SalesComponent implements OnInit {
   @ViewChild('elementoForm') elementoForm: ElementRef;
 
   formulario: FormGroup;
-  ventas: Sale[] = [];
+  sales: Sale[] = [];
   abierta: boolean = false;
   buscarSale: number = 0;
-  ventaActual: Sale;
+  saleActual: Sale;
   searchText: string;
-  mostrarNew: boolean = false;
+  showNew: boolean = false;
   products$: Observable<Product[]>;
   seleccionado: Product;
   //total: number=0;
   codigoSale: number = 0;
-  tarjeta: boolean = false;
+  creditCard: boolean = false;
 
   botones: ButtonType[] = [
-    { id: nameButtonTypees.nuevaSale, name: "Nueva venta", mostrar: false },
-    { id: nameButtonTypees.finalizarSale, name: "Finalizar venta", mostrar: false },
-    { id: nameButtonTypees.addProduct, name: "Añadir product", mostrar: true },
-    { id: nameButtonTypees.add, name: "Añadir", mostrar: false },
-    { id: nameButtonTypees.reabrirTicket, name: "Reabrir ticket", mostrar: false }
+    { id: nameButtonTypees.nuevaSale, name: "Nueva sale", show: false },
+    { id: nameButtonTypees.finalizarSale, name: "Finalizar sale", show: false },
+    { id: nameButtonTypees.addProduct, name: "Añadir product", show: true },
+    { id: nameButtonTypees.add, name: "Añadir", show: false },
+    { id: nameButtonTypees.reabrirTicket, name: "Reabrir ticket", show: false }
   ];
 
   constructor(private productsService: ProductsService, private salesService: SalesService,
@@ -64,14 +64,14 @@ export class SalesComponent implements OnInit {
   }
 
   activarButtonType(id: string) {
-    this.botones.find(boton => { return boton.id == id }).mostrar = true;
+    this.botones.find(boton => { return boton.id == id }).show = true;
   }
 
   desactivarButtonType(id: string) {
-    this.botones.find(boton => { return boton.id == id }).mostrar = false;
+    this.botones.find(boton => { return boton.id == id }).show = false;
   }
 
-  mostrarButtonType(boton: string) {
+  showButtonType(boton: string) {
     console.log("DESDE sales COMPONENT se activa el boton", boton);
     if (boton == nameButtonTypees.addProduct) {
       this.newProduct();
@@ -99,40 +99,40 @@ export class SalesComponent implements OnInit {
   }
 
   newProduct() {
-    this.ventaActual = new Sale();
+    this.saleActual = new Sale();
     this.formulario.reset();
-    this.mostrarNew = true;
+    this.showNew = true;
     this.activarButtonType(nameButtonTypees.nuevaSale);
   }
 
   totalSale(): number {
     let suma = 0;
-    this.ventas.forEach(venta => {
-      let quantity = venta.price * venta.quantity;
+    this.sales.forEach(sale => {
+      let quantity = sale.price * sale.quantity;
       quantity = Math.round(quantity * 100) / 100;
       suma = Math.round((suma + quantity) * 100) / 100;
     });
     return suma;
   }
 
-  eliminarSale(venta: Sale) {
-    this.ventas.splice(this.ventas.indexOf(venta), 1);
+  eliminarSale(sale: Sale) {
+    this.sales.splice(this.sales.indexOf(sale), 1);
     //this.totalSale = this.totalSale();
 
   }
 
   cargar() {
-    console.log(this.ventaActual.product);
+    console.log(this.saleActual.product);
 
-    let venta = this.ventas.find(venta => venta.product.name == this.ventaActual.product.name);
+    let sale = this.sales.find(sale => sale.product.name == this.saleActual.product.name);
 
-    if (venta == undefined) {
-      this.ventaActual.price = this.ventaActual.product.price;
-      this.ventas.push(this.ventaActual);
+    if (sale == undefined) {
+      this.saleActual.price = this.saleActual.product.price;
+      this.sales.push(this.saleActual);
     } else {
-      venta.quantity = this.ventaActual.quantity + venta.quantity;
+      sale.quantity = this.saleActual.quantity + sale.quantity;
     }
-    this.mostrarNew = false;
+    this.showNew = false;
     //this.totalSale = this.totalSale();
     this.activarButtonType(nameButtonTypees.finalizarSale);
     this.activarButtonType(nameButtonTypees.addProduct);
@@ -144,8 +144,8 @@ export class SalesComponent implements OnInit {
 
   onSubmit() {
     if (this.formulario.valid) {
-      this.ventaActual.product = this.formulario.value.product;
-      this.ventaActual.quantity = this.formulario.value.quantity;
+      this.saleActual.product = this.formulario.value.product;
+      this.saleActual.quantity = this.formulario.value.quantity;
       this.cargar();
     } else {
       this.elementoForm.nativeElement.querySelector('.ng-invalid').focus();
@@ -154,36 +154,36 @@ export class SalesComponent implements OnInit {
 
   finalizarSale(): void {
     if (this.codigoSale == 0)
-      this.salesService.guardarSale(this.ventas, this.tarjeta).subscribe(cod => this.codigoSale = cod);
+      this.salesService.guardarSale(this.sales, this.creditCard).subscribe(cod => this.codigoSale = cod);
     else
-      this.salesService.actualizarSale(this.codigoSale, this.ventas, this.tarjeta).subscribe(cod => this.codigoSale = cod);
-    this.mostrarNew = false;
+      this.salesService.actualizarSale(this.codigoSale, this.sales, this.creditCard).subscribe(cod => this.codigoSale = cod);
+    this.showNew = false;
     this.abierta = false;
     this.desactivarButtonType(nameButtonTypees.finalizarSale);
     this.desactivarButtonType(nameButtonTypees.add);
     this.desactivarButtonType(nameButtonTypees.addProduct);
     this.activarButtonType(nameButtonTypees.reabrirTicket);
-    console.log("Desde finalizar venta", this.codigoSale);
+    console.log("Desde finalizar sale", this.codigoSale);
 
   }
 
   abrirSale(salesId: number) {
-    this.salesService.obtenerSale(salesId).subscribe(ventas => {
-      console.log("elementos recibidos", ventas.elementos);
-      this.ventas = [];
-      this.ventas = this.salesService.ventasAListaSale(ventas);
-      this.codigoSale = ventas.salesId;
-      this.tarjeta = ventas.tarjeta;
+    this.salesService.obtenerSale(salesId).subscribe(sales => {
+      console.log("elementos recibidos", sales.elementos);
+      this.sales = [];
+      this.sales = this.salesService.salesAListaSale(sales);
+      this.codigoSale = sales.salesId;
+      this.creditCard = sales.creditCard;
       //this.totalSale = this.totalSale();
       this.abierta = true;
     });
-    console.log("lo guardado en ventas", this.ventas);
+    console.log("lo guardado en sales", this.sales);
 
   }
 
   reiniciar() {
-    this.ventas = [];
-    this.mostrarNew = false;
+    this.sales = [];
+    this.showNew = false;
     //this.totalSale =0;
     this.codigoSale = 0;
     this.activarButtonType(nameButtonTypees.nuevaSale);
@@ -195,8 +195,8 @@ export class SalesComponent implements OnInit {
   }
 
   nuevaSale(): void {
-    if (this.codigoSale == 0 && this.ventas.length > 0) {
-      var statusConfirm = confirm("¿Desea crear una nueva venta? La venta actual no se ha guardado");
+    if (this.codigoSale == 0 && this.sales.length > 0) {
+      var statusConfirm = confirm("¿Desea crear una nueva sale? La sale actual no se ha guardado");
       if (statusConfirm) this.reiniciar();
     } else {
       this.reiniciar();

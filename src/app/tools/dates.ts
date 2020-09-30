@@ -1,4 +1,4 @@
 export class dates {
-    desde: string;
-    hasta: string;
+    from: string;
+    to: string;
 }

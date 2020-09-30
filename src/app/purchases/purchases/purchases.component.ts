@@ -30,16 +30,16 @@ export class PurchasesComponent implements OnInit {
   compraActual: Compra;
   searchText: string;
   products$: Observable<Product[]>;
-  mostrarNew: boolean = false;
-  mostrarNewProduct: boolean = false;
+  showNew: boolean = false;
+  showNewProduct: boolean = false;
   //total: number = 0;
   compraFinalizada: boolean = false;
   myDateValue: Date = new Date();
   botones: ButtonType[] = [
-    { id: nameButtonTypees.enviarCompra, name: "Enviar compra", mostrar: false },
-    { id: nameButtonTypees.crearProduct, name: "Crear product", mostrar: true },
-    { id: nameButtonTypees.addProduct, name: "Añadir product", mostrar: true },
-    { id: nameButtonTypees.add, name: "Añadir", mostrar: false }
+    { id: nameButtonTypees.enviarCompra, name: "Enviar compra", show: false },
+    { id: nameButtonTypees.crearProduct, name: "Crear product", show: true },
+    { id: nameButtonTypees.addProduct, name: "Añadir product", show: true },
+    { id: nameButtonTypees.add, name: "Añadir", show: false }
   ];
 
   constructor(private productsService: ProductsService, private purchasesService: purchasesService,
@@ -60,17 +60,17 @@ export class PurchasesComponent implements OnInit {
 
   
   activarButtonType(id: string) {
-    this.botones.find(boton => { return boton.id == id }).mostrar = true;
+    this.botones.find(boton => { return boton.id == id }).show = true;
   }
 
   desactivarButtonType(id: string) {
-    this.botones.find(boton => { return boton.id == id }).mostrar = false;
+    this.botones.find(boton => { return boton.id == id }).show = false;
   }
 
 
-  mostrarButtonType(boton: string) {
+  showButtonType(boton: string) {
     if (boton == nameButtonTypees.addProduct) {
-      this.mostrarNewProduct = false;
+      this.showNewProduct = false;
       this.newProduct();
       this.desactivarButtonType(boton);
       this.activarButtonType(nameButtonTypees.add);
@@ -83,8 +83,8 @@ export class PurchasesComponent implements OnInit {
       this.desactivarButtonType(boton);
       this.activarButtonType(nameButtonTypees.addProduct);
       this.desactivarButtonType(nameButtonTypees.add);
-      this.mostrarNewProduct = true;
-      this.mostrarNew = false;
+      this.showNewProduct = true;
+      this.showNew = false;
     }
     if (boton == nameButtonTypees.add) {
       this.onSubmit();
@@ -103,7 +103,7 @@ export class PurchasesComponent implements OnInit {
       compra.quantity = compra.quantity + this.compraActual.quantity;
     }
     //this.total = this.totalCompra();
-    this.mostrarNew = false;
+    this.showNew = false;
     this.activarButtonType(nameButtonTypees.addProduct);
     this.desactivarButtonType(nameButtonTypees.add);
     this.activarButtonType(nameButtonTypees.enviarCompra);
@@ -126,7 +126,7 @@ export class PurchasesComponent implements OnInit {
   newProduct() {
     this.compraActual = new Compra();
     this.formulario.reset();
-    this.mostrarNew = true;
+    this.showNew = true;
     this.searchText = "";
   }
 

@@ -13,7 +13,7 @@ import { dates } from 'src/app/tools/dates';
 export class SalesDateComponent implements OnInit {
 
  
-  ventas: Sales[] =[];
+  sales: Sales[] =[];
   total: number;
 
   constructor(private datePipe: DatePipe, private salesService: SalesService) { 
@@ -28,11 +28,11 @@ export class SalesDateComponent implements OnInit {
 
   buscarpurchases(dates: dates) {
     this.total = 0;
-    console.log("buscar ventas");
+    console.log("buscar sales");
 
-    this.salesService.ventasPordates(dates.desde, dates.hasta).subscribe(ventas => {
-      this.ventas = ventas;
-      this.ventas.forEach(element => {
+    this.salesService.salesPordates(dates.from, dates.to).subscribe(sales => {
+      this.sales = sales;
+      this.sales.forEach(element => {
         element.elementos.forEach(e => {
           this.total += e.price * e.quantity;
         });

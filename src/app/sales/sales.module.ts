@@ -14,7 +14,7 @@ import { ToolsModule } from '../tools/tools.module';
 import { Routes, RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-const ventasRoutes: Routes = [
+const salesRoutes: Routes = [
   {
     path: 'sales-dates',
     component: SalesDateComponent
@@ -38,7 +38,7 @@ const ventasRoutes: Routes = [
     MatDatepickerModule,
     BrowserAnimationsModule,
     RouterModule.forRoot(
-      ventasRoutes,
+      salesRoutes,
       { enableTracing: true }
     )
   ],

@@ -62,7 +62,7 @@ export class ProductsService {
     this._docSub.unsubscribe();
   }
 
-  // repensar la comprobación de products para ver desde donde lanzamos el error
+  // repensar la comprobación de products para ver from donde lanzamos el error
   getProducts$(): Observable<Product[]> {
     return this.products$;
   }

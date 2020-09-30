@@ -56,9 +56,9 @@ describe('ProductosComponent', () => {
       console.log("prueba");
       var productos;
       const producto1 = new Producto();
-      producto1.nombre = "pera";
+      producto1.name = "pera";
       const producto2 = new Producto();
-      producto2.nombre = "platano";
+      producto2.name = "platano";
       mockProductosService.setProductos([producto1, producto2]);      
       component.productos$.subscribe(p => {
         productos = p;        
@@ -73,9 +73,9 @@ describe('ProductosComponent', () => {
         console.log("prueba");
         var productos;
         const producto1 = new Producto();
-        producto1.nombre = "pera";
+        producto1.name = "pera";
         const producto2 = new Producto();
-        producto2.nombre = "platano";
+        producto2.name = "platano";
         //mockProductosService.setProductos([producto1, producto2]);      
         component.productos$.subscribe(p => {
           productos = p;        

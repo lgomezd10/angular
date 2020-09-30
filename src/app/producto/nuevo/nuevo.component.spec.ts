@@ -11,8 +11,8 @@ import { MockProductosService } from 'src/app/test/productos.service.mock';
 import { ProductosService } from '../productos.service';
 import { Producto } from '../producto';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { HerramientasService } from 'src/app/herramientas/herramientas.service';
-import { MockHerramientasServices } from 'src/app/test/herramientas.service.mock';
+import { toolsService } from 'src/app/tools/tools.service';
+import { MocktoolsServices } from 'src/app/test/tools.service.mock';
 import { CommonModule } from '@angular/common';
 import { ProductoModule } from '../producto.module';
 
@@ -22,12 +22,12 @@ describe('NuevoComponent', () => {
   beforeEach(async(() => {
 
     const mockProductosService: MockProductosService = new MockProductosService();
-    const mockHerramientasServices: MockHerramientasServices = new MockHerramientasServices();
+    const mocktoolsServices: MocktoolsServices = new MocktoolsServices();
     TestBed.configureTestingModule({
       imports: [FormsModule, ReactiveFormsModule, ProductoModule],
       providers: [
         mockProductosService.getProviders(),
-        { provide: HerramientasService, useValue: mockHerramientasServices }
+        { provide: toolsService, useValue: mocktoolsServices }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [NuevoComponent]
@@ -45,13 +45,13 @@ describe('NuevoComponent', () => {
   });
 
   describe('formulario', () => {
-    let nombre, tipo, precio, el;
+    let name, type, price, el;
     beforeEach(fakeAsync(() => {
       fixture.detectChanges();
       el = fixture.debugElement.nativeElement;
-      nombre = fixture.debugElement.query(By.css('#nombre')).nativeElement;
-      tipo = fixture.debugElement.query(By.css('#tipo')).nativeElement;
-      precio = fixture.debugElement.query(By.css('#precio')).nativeElement;
+      name = fixture.debugElement.query(By.css('#name')).nativeElement;
+      type = fixture.debugElement.query(By.css('#type')).nativeElement;
+      price = fixture.debugElement.query(By.css('#price')).nativeElement;
       fixture.detectChanges();
     }));
 
@@ -59,12 +59,12 @@ describe('NuevoComponent', () => {
     describe('valores de campos', () => {
 
       beforeEach(fakeAsync(() => {
-        nombre.value = 'producto1';
-        dispatchEvent(nombre, 'input');
-        tipo.options[6].selected = true;
-        dispatchEvent(tipo, 'change');
-        precio.value = 1;
-        dispatchEvent(precio, 'input');
+        name.value = 'producto1';
+        dispatchEvent(name, 'input');
+        type.options[6].selected = true;
+        dispatchEvent(type, 'change');
+        price.value = 1;
+        dispatchEvent(price, 'input');
         fixture.detectChanges();
         
       }));
@@ -73,15 +73,15 @@ describe('NuevoComponent', () => {
         componet.formulario.reset();
       })
 
-      it('campo nombre', () => {
-        expect(componet.formulario.controls['nombre'].value).toBe('producto1');
+      it('campo name', () => {
+        expect(componet.formulario.controls['name'].value).toBe('producto1');
       });
-      it('campo tipo', () => {
-        expect(componet.formulario.controls['tipo'].value).toBe("Otros/Verdura");
+      it('campo type', () => {
+        expect(componet.formulario.controls['type'].value).toBe("Otros/Verdura");
       });
 
-      it('campo precio', () => {
-        expect(componet.formulario.controls['precio'].value).toBe(1);
+      it('campo price', () => {
+        expect(componet.formulario.controls['price'].value).toBe(1);
       });
 
       it('No lanza errores',fakeAsync(() => { 
@@ -98,44 +98,44 @@ describe('NuevoComponent', () => {
 
       afterEach(() => componet.formulario.reset());
 
-      it('Errores en campo nombre', fakeAsync(() => {
-        nombre.value = '';
-        dispatchEvent(nombre, 'input');
-        componet.formulario.controls['nombre'].markAsTouched();        
+      it('Errores en campo name', fakeAsync(() => {
+        name.value = '';
+        dispatchEvent(name, 'input');
+        componet.formulario.controls['name'].markAsTouched();        
         fixture.detectChanges();
         const msgs = el.querySelectorAll('.help.is-danger');
         fixture.detectChanges();        
-        expect(msgs[0].innerHTML).toContain('Falta el nombre del producto');
+        expect(msgs[0].innerHTML).toContain('Falta el name del producto');
       }));
 
-      it('Errores en campo tipo', fakeAsync(() => {
-        tipo.value = '';
-        dispatchEvent(tipo, 'input');
-        componet.formulario.controls['tipo'].markAsTouched();        
+      it('Errores en campo type', fakeAsync(() => {
+        type.value = '';
+        dispatchEvent(type, 'input');
+        componet.formulario.controls['type'].markAsTouched();        
         fixture.detectChanges();
         const msgs = el.querySelectorAll('.help.is-danger');
         fixture.detectChanges();        
-        expect(msgs[0].innerHTML).toContain('Seleccione un tipo');
+        expect(msgs[0].innerHTML).toContain('Seleccione un type');
       }));
 
-      it('Error precio invalido', fakeAsync(() => {
-        precio.value = '';
-        dispatchEvent(precio, 'input');
-        componet.formulario.controls['precio'].markAsTouched();        
+      it('Error price invalido', fakeAsync(() => {
+        price.value = '';
+        dispatchEvent(price, 'input');
+        componet.formulario.controls['price'].markAsTouched();        
         fixture.detectChanges();
         const msgs = el.querySelectorAll('.help.is-danger');
         fixture.detectChanges();        
-        expect(msgs[0].innerHTML).toContain('Introduzca el precio');        
+        expect(msgs[0].innerHTML).toContain('Introduzca el price');        
       }));
 
-      it('Error precio menor que 0,1', fakeAsync(() => {
-        precio.value = 0;
-        dispatchEvent(precio, 'input');
-        componet.formulario.controls['precio'].markAsTouched();        
+      it('Error price menor que 0,1', fakeAsync(() => {
+        price.value = 0;
+        dispatchEvent(price, 'input');
+        componet.formulario.controls['price'].markAsTouched();        
         fixture.detectChanges();
         const msgs = el.querySelectorAll('.help.is-danger');
         fixture.detectChanges();     
-        expect(msgs[0].innerHTML).toContain('El precio debe ser mayor que 0');        
+        expect(msgs[0].innerHTML).toContain('El price debe ser mayor que 0');        
       }));
     });
 

@@ -1,19 +1,19 @@
 <div *ngIf ="producto != undefined">
   <h2 class="title is-3">
-    Detalle {{producto.nombre}}
+    Detalle {{producto.name}}
   </h2>
 
   <div class="columns">
     <div class="column is-three-quarters">
       <div class="formulario">
 
-        <p><label class="etiquetas">Identificador:</label> <label class="id_producto">{{producto.id_producto}}</label></p>
-        <label class="etiquetas">Nombre:</label><input class = "input" id="nombre" type="text" [(ngModel)] = "producto.nombre"> <br>
+        <p><label class="etiquetas">Identificador:</label> <label class="productId">{{producto.productId}}</label></p>
+        <label class="etiquetas">name:</label><input class = "input" id="name" type="text" [(ngModel)] = "producto.name"> <br>
         <label class="etiquetas">Stock:</label><label class = "label" id="stock">  {{producto.stock}} </label> <br>
-        <label class="etiquetas">Precio:</label><input class= "input" id="precio" type="text" [(ngModel)] = "producto.precio"><br>
-        <label class="etiquetas">Tipo:</label>
-        <select class="select" id="tipo" [(ngModel)] = "producto.tipo">
-          <option *ngFor = "let tipo of tipos" [ngValue] = "tipo">{{tipo}}</option>
+        <label class="etiquetas">price:</label><input class= "input" id="price" type="text" [(ngModel)] = "producto.price"><br>
+        <label class="etiquetas">type:</label>
+        <select class="select" id="type" [(ngModel)] = "producto.type">
+          <option *ngFor = "let type of types" [ngValue] = "type">{{type}}</option>
           </select>
       </div>
     </div>

@@ -1,0 +1,52 @@
+<nav>
+  <a routerLink="/sales" routerLinkActive="active">sales</a>
+  <a routerLink="/sales-dates" routerLinkActive="active">Buscar ventas</a>
+</nav>
+<router-outlet></router-outlet>
+
+<h2 class="title is-3">Buscador de ventas</h2>
+
+<app-select-dates (enviardates)="buscarpurchases($event)"></app-select-dates>
+
+<table class="table table is-striped" *ngFor="let venta of ventas">
+  <thead>
+    <tr>
+      <th>Id compra</th>
+      <td>{{venta.salesId}} </td>
+    </tr>
+    <tr>
+      <th>date</th>
+      <td>{{venta.date | date: 'dd-MM-yy'}}</td>
+    </tr>
+  </thead>
+  <thead>
+    <tr>
+      <th>Producto</th>
+      <th>quantity</th>
+      <th>price Kg</th>
+      <th>price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of venta.elementos">
+      <td>{{item.productId | producto}}</td>
+      <td>{{item.quantity}}</td>
+      <td>{{item.price}}</td>
+      <td>{{item.quantity * item.price | number: '1.0-2'}}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<!--
+<ul>
+  <li *ngFor = "let venta of ventas">{{venta.salesId}} {{venta.date | date: 'dd-MM-yy'}}
+    <ul>
+      <li *ngFor = "let item of venta.elementos">
+        {{item.productId | producto}} {{item.quantity}} {{item.price}}
+      </li>
+    </ul>
+  </li>
+</ul>-->
+<br>
+{{total}}

@@ -27,16 +27,16 @@ describe('ProductoComponent', () => {
       fixture.detectChanges();
       component.producto = new Producto();
     });
-    it('modificar producto si precio mayor que 0', fakeAsync(
+    it('modificar producto si price mayor que 0', fakeAsync(
       inject([ProductosService], (mockProductosService: MockProductosService) => {
-        component.producto.precio = 1;
+        component.producto.price = 1;
         component.modificarProducto();
         tick();
         expect(mockProductosService.postModificarProductoSpy)
           .toHaveBeenCalledWith(component.producto);
       })
     ));
-    it('no modificar producto si precio menor que 0', fakeAsync(
+    it('no modificar producto si price menor que 0', fakeAsync(
       inject([ProductosService], (mockProductosService: MockProductosService) => {
         component.modificarProducto();
         tick();
@@ -55,8 +55,8 @@ describe('ProductoComponent', () => {
         (router: Router, mockProductosService: MockProductosService) => {
           fixture = createRoot(router, RootCmp);
           p = new Producto();
-          p.id_producto = 2; p.nombre = 'patata';
-          p.precio = 2; p.stock = 3; p.tipo = "Patata/Verdura";
+          p.productId = 2; p.name = 'patata';
+          p.price = 2; p.stock = 3; p.type = "Patata/Verdura";
           mockProductosService.setProducto(p);
           router.navigateByUrl('/producto/2');
           advance(fixture);
@@ -65,25 +65,25 @@ describe('ProductoComponent', () => {
       )))
 
     it('se muestra el id en la vista', () => {
-      const de: DebugElement = fixture.debugElement.query(By.css('.id_producto'));
-      expect(de.nativeElement.innerHTML).toContain(p.id_producto);
+      const de: DebugElement = fixture.debugElement.query(By.css('.productId'));
+      expect(de.nativeElement.innerHTML).toContain(p.productId);
     })
 
-    it('se muestra el nombre en la vista', () => {
-      const de: DebugElement = fixture.debugElement.query(By.css('#nombre'));
-      expect(de.properties.outerHTML).toContain(p.nombre);
+    it('se muestra el name en la vista', () => {
+      const de: DebugElement = fixture.debugElement.query(By.css('#name'));
+      expect(de.properties.outerHTML).toContain(p.name);
     })
     it('se muestra el stock en la vista', () => {
       const de: DebugElement = fixture.debugElement.query(By.css('#stock'));
       expect(de.nativeElement.innerHTML).toContain(p.stock);
     })
-    it('se muestra el nombre en la vista', () => {
-      const de: DebugElement = fixture.debugElement.query(By.css('#precio'));
-      expect(de.properties.outerHTML).toContain(p.precio);
+    it('se muestra el name en la vista', () => {
+      const de: DebugElement = fixture.debugElement.query(By.css('#price'));
+      expect(de.properties.outerHTML).toContain(p.price);
     })
     it('se muestra el stock en la vista', () => {
-      const de: DebugElement = fixture.debugElement.query(By.css('#tipo'));
-      expect(de.nativeElement.innerHTML).toContain(p.tipo);
+      const de: DebugElement = fixture.debugElement.query(By.css('#type'));
+      expect(de.nativeElement.innerHTML).toContain(p.type);
     })
   })
 

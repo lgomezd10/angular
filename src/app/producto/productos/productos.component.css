@@ -6,7 +6,7 @@
     
 }
 
-span.id_producto, span.stock {
+span.productId, span.stock {
     width: 10%;
     max-width: 40px;
     background: #288033;
@@ -14,7 +14,7 @@ span.id_producto, span.stock {
     text-align: center;
 }
 
-span.nombre {        
+span.name {        
     width: 50%;
     max-width: 200px;
     background: #9CFFA9;
@@ -27,7 +27,7 @@ li {
 }
 
 
-input.precio {
+input.price {
     width: 10%;
     max-width: 60px;
 }

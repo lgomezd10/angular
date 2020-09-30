@@ -12,7 +12,7 @@ export class ProductoPipe implements PipeTransform {
 
     transform(item: any): any {
         if (!item) return item;
-        return this.productosService.getProducto(item).nombre;
+        return this.productosService.getProducto(item).name;
     }
 
 }

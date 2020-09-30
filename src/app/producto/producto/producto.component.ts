@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ProductosService } from '../productos.service';
 import { Producto } from '../producto';
 import { ActivatedRoute } from '@angular/router';
-import { TIPOS } from '../tipos-productos';
+import { typeS } from '../types-productos';
 import { Location } from '@angular/common';
 import { Observable } from 'rxjs';
-import { Boton } from 'src/app/herramientas/boton';
+import { Boton } from 'src/app/tools/boton';
 
 
 @Component({
@@ -17,10 +17,10 @@ export class ProductoComponent {
 
   //private productos$: Observable<Producto[]>;
   producto: Producto;
-  public tipos = TIPOS;
+  public types = typeS;
   botones: Boton[] = [
-    {id:"Guardar" ,nombre:"Guardar", mostrar:true},
-    {id:"Volver",nombre:"Volver", mostrar:true}
+    {id:"Guardar" ,name:"Guardar", mostrar:true},
+    {id:"Volver",name:"Volver", mostrar:true}
   ];
 
   constructor(private productosService: ProductosService, private route: ActivatedRoute, private location: Location) {
@@ -49,8 +49,8 @@ export class ProductoComponent {
   }
 
   modificarProducto() {
-    if(this.producto.precio <= 0)
-      alert("el precio debe ser mayor que 0");
+    if(this.producto.price <= 0)
+      alert("el price debe ser mayor que 0");
     else 
       this.productosService.postModificarProducto(this.producto).subscribe(producto => {console.log("Respuesta tras guardar producto", producto);})
   }

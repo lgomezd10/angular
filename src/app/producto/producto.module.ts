@@ -13,14 +13,14 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { ProductoPipe } from './producto.pipe';
 import { ProductoComponent } from './producto/producto.component';
 import { RouterModule } from '@angular/router';
-import { HerramientasModule } from '../herramientas/herramientas.module';
+import { toolsModule } from '../tools/tools.module';
 
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
 @NgModule({
   declarations: [ProductosComponent, NuevoComponent, FilterPipe, SortPipe, ProductoPipe, ProductoComponent],
   imports: [
-    HerramientasModule,
+    toolsModule,
     CommonModule,
     HttpClientModule,
     FormsModule,

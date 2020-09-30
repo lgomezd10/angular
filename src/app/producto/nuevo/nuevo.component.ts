@@ -2,14 +2,14 @@ import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, ViewChi
 import { Producto } from '../producto';
 import { ProductosService } from '../productos.service';
 import { Observable, Subscription } from 'rxjs';
-import { TIPOS } from '../tipos-productos';
-import { HerramientasService } from 'src/app/herramientas/herramientas.service';
-import { Boton } from 'src/app/herramientas/boton';
+import { typeS } from '../types-productos';
+import { toolsService } from 'src/app/tools/tools.service';
+import { Boton } from 'src/app/tools/boton';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 
 /*function productoValidator(control: FormControl): {[s: string]: boolean} {
-  if(this.productosService.getProductoPorNombre(control.value) != undefined) {
-    return {nombreRepetido: true};
+  if(this.productosService.getProductoPorname(control.value) != undefined) {
+    return {nameRepetido: true};
   }
 }*/
 
@@ -22,12 +22,12 @@ export class NuevoComponent implements OnInit {
 
   @Output() productoGuardado = new EventEmitter<Producto>();
 
-  botonNombre: ElementRef;
+  botonname: ElementRef;
 
-  @ViewChild('nombre', { static: false }) set content(content: ElementRef) {
+  @ViewChild('name', { static: false }) set content(content: ElementRef) {
     if (content) {
       content.nativeElement.focus();
-      this.botonNombre = content;
+      this.botonname = content;
     }
   }
   @ViewChild('enviar', { static: false }) pasarASummit: ElementRef;
@@ -36,18 +36,18 @@ export class NuevoComponent implements OnInit {
 
   formulario: FormGroup;
 
-  constructor(private productosService: ProductosService, private herramientasServices: HerramientasService, 
+  constructor(private productosService: ProductosService, private toolsServices: toolsService, 
     formBuilder: FormBuilder) {
     this.formulario = formBuilder.group({
-      'nombre': ['', Validators.required],
-      'tipo': ['', Validators.required],
-      'precio': ['', Validators.compose([Validators.required, Validators.min(0.01)])]
+      'name': ['', Validators.required],
+      'type': ['', Validators.required],
+      'price': ['', Validators.compose([Validators.required, Validators.min(0.01)])]
 
     });
 
   }
 
-  public tipos = TIPOS;
+  public types = typeS;
   productos$: Observable<Producto[]>;
   producto: Producto;
   productoRepetido: string = "";
@@ -55,13 +55,13 @@ export class NuevoComponent implements OnInit {
   botones$: Observable<Boton[]>;
   _pulsadoSub: Subscription;
 
-  boton: Boton = { id: "GuardarNuevo", nombre: "Guardar nuevo", mostrar: true };
+  boton: Boton = { id: "GuardarNuevo", name: "Guardar nuevo", mostrar: true };
 
   ngOnInit() {
     this.producto = new Producto();
     this.productos$ = this.productosService.getProductos$();
-    this.herramientasServices.nuevoBoton(this.boton);
-    this._pulsadoSub = this.herramientasServices.getPulsado$().subscribe(boton => {
+    this.toolsServices.nuevoBoton(this.boton);
+    this._pulsadoSub = this.toolsServices.getPulsado$().subscribe(boton => {
       if (boton == "GuardarNuevo") {
         this.onSubmit(this.formulario.value);
       }
@@ -69,8 +69,8 @@ export class NuevoComponent implements OnInit {
   }
 
   darFormato() {
-    this.producto.nombre = this.producto.nombre.toLowerCase();
-    this.producto.nombre = this.producto.nombre[0].toUpperCase() + this.producto.nombre.slice(1);
+    this.producto.name = this.producto.name.toLowerCase();
+    this.producto.name = this.producto.name[0].toUpperCase() + this.producto.name.slice(1);
   }
 
   // JSON.parse (JSON.stringif para pasar el objeto por referencia
@@ -78,8 +78,8 @@ export class NuevoComponent implements OnInit {
     //this.productosService.postNuevoProducto(JSON.parse(JSON.stringify(this.producto)));
     this.productosService.postNuevoProducto(this.producto).subscribe(respuesta => console.log("Se ha guardado el producto", respuesta));
     this.enviado = true;
-    this.herramientasServices.eliminarBoton(this.boton);
-    console.log("DESDE NUEVO COMPONENT GUARDAR PRODUCTO se ha guardado", this.producto.nombre);
+    this.toolsServices.eliminarBoton(this.boton);
+    console.log("DESDE NUEVO COMPONENT GUARDAR PRODUCTO se ha guardado", this.producto.name);
     this.producto = new Producto();
     this.productoGuardado.emit(this.producto)
   }
@@ -88,7 +88,7 @@ export class NuevoComponent implements OnInit {
     if (key.keyCode == 13) { // press Enter      
       if (this.pasarASummit.nativeElement == campo) {
         console.log("DESDE NUEVO COMPONENT Se va a enviar el foco a lista-botones", this.boton.id);
-        this.herramientasServices.activarFoco(this.boton.id);
+        this.toolsServices.activarFoco(this.boton.id);
       } else {
         campo.focus();
       }
@@ -100,20 +100,20 @@ export class NuevoComponent implements OnInit {
     this.productoRepetido = "";
     
     if (this.formulario.valid) {
-      if(this.productosService.getProductoPorNombre(value.nombre) != undefined) {
-        this.productoRepetido = value.nombre;
-        this.botonNombre.nativeElement.focus();
+      if(this.productosService.getProductoPorname(value.name) != undefined) {
+        this.productoRepetido = value.name;
+        this.botonname.nativeElement.focus();
       } else {
-        this.producto.nombre = value.nombre;
-        this.producto.tipo = value.tipo;
-        this.producto.precio = value.precio;
+        this.producto.name = value.name;
+        this.producto.type = value.type;
+        this.producto.price = value.price;
         this.guardarProducto();
       }
-    } else if(value.nombre != "" && this.productosService.getProductoPorNombre(value.nombre) != undefined) {
-      this.productoRepetido = value.nombre;
-      this.botonNombre.nativeElement.focus();
+    } else if(value.name != "" && this.productosService.getProductoPorname(value.name) != undefined) {
+      this.productoRepetido = value.name;
+      this.botonname.nativeElement.focus();
     } else {
-      //this.botonNombre.nativeElement.focus();
+      //this.botonname.nativeElement.focus();
       this.elementoForm.nativeElement.querySelector('.ng-invalid').focus();
     }
   }
@@ -124,7 +124,7 @@ export class NuevoComponent implements OnInit {
 
   ngOnDestroy() {
     if (this._pulsadoSub) this._pulsadoSub.unsubscribe();
-    this.herramientasServices.eliminarBoton(this.boton);
+    this.toolsServices.eliminarBoton(this.boton);
   }
 
 

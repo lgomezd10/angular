@@ -4,7 +4,7 @@ import { Producto } from '../producto';
 import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { Boton } from 'src/app/herramientas/boton';
+import { Boton } from 'src/app/tools/boton';
 
 
 
@@ -18,7 +18,7 @@ export class ProductosComponent implements OnInit {
   productos$: Observable<Producto[]>;
   nuevo = false;
   botones: Boton[] = [
-    {id:"AddNuevo",nombre:"Añadir nuevo", mostrar:true}
+    {id:"AddNuevo",name:"Añadir nuevo", mostrar:true}
   ];
   
   constructor(private productosService: ProductosService, private route:ActivatedRoute) {
@@ -64,10 +64,10 @@ export class ProductosComponent implements OnInit {
     
   }
 
-  cambioPrecio(producto: Producto, precioAntiguo) {
-    if(producto.precio <= 0) {
+  cambioprice(producto: Producto, priceAntiguo) {
+    if(producto.price <= 0) {
       
-      alert("el precio debe ser mayor que 0");
+      alert("el price debe ser mayor que 0");
     }
     else
       this.productosService.postModificarProducto(producto).subscribe(producto => {console.log(producto);});

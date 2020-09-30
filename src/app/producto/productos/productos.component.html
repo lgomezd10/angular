@@ -8,13 +8,13 @@
     <input class="input" type="text" [(ngModel)]="searchText"> <br>
     <div id="listaProductos">
       <ul class="productos">
-        <li *ngFor="let producto of productos$ | async | sort:'nombre' | filter: searchText">
-          <span class="id_producto">{{producto.id_producto}}</span>
-          <input class="nombre" type="text" [(ngModel)]="producto.nombre">
+        <li *ngFor="let producto of productos$ | async | sort:'name' | filter: searchText">
+          <span class="productId">{{producto.productId}}</span>
+          <input class="name" type="text" [(ngModel)]="producto.name">
           <span class="stock"> {{producto.stock}} </span>
-          <input class="precio" type="number" [(ngModel)]="producto.precio">
-          <button (click)="cambioPrecio(producto, precioAntiguo)">Guardar</button>
-          <a [title]="producto.nombre + ' details'" [routerLink]="['/producto', producto.id_producto]">
+          <input class="price" type="number" [(ngModel)]="producto.price">
+          <button (click)="cambioprice(producto, priceAntiguo)">Guardar</button>
+          <a [title]="producto.name + ' details'" [routerLink]="['/producto', producto.productId]">
             Detalle
           </a>
         </li>

@@ -8,12 +8,12 @@ import { RespuestaPost } from './respuestapost';
 
 import { Socket } from 'ngx-socket-io';
 
-function formatoNombre(nombre: string): string {
-  nombre = nombre.trim();
-  nombre = nombre.replace(/\s+/g, ' ');
-  nombre = nombre.toLowerCase();
-  nombre = nombre[0].toUpperCase() + nombre.slice(1);
-  return nombre;
+function formatoname(name: string): string {
+  name = name.trim();
+  name = name.replace(/\s+/g, ' ');
+  name = name.toLowerCase();
+  name = name[0].toUpperCase() + name.slice(1);
+  return name;
 }
 
 const httpOptions = {
@@ -76,12 +76,12 @@ export class ProductosService {
   }*/
 
   getProducto(id: number): Producto {
-    return this.productos$.getValue().find(producto => { return producto.id_producto == id });
+    return this.productos$.getValue().find(producto => { return producto.productId == id });
   }
 
-  getProductoPorNombre(nombre: string): Producto {    
-    nombre = formatoNombre(nombre);
-    return this.getProductos().find(producto => { return producto.nombre == nombre });
+  getProductoPorname(name: string): Producto {    
+    name = formatoname(name);
+    return this.getProductos().find(producto => { return producto.name == name });
   }
 
   private getProductosServidor(): Observable<RespuestaGet> {
@@ -89,13 +89,13 @@ export class ProductosService {
   }
 
   postModificarProducto(producto: Producto): Observable<RespuestaPost> {
-    producto.nombre = formatoNombre(producto.nombre);
+    producto.name = formatoname(producto.name);
     return this.http.post<RespuestaPost>(this.backendUrl + '/productos/' +
-      producto.id_producto, producto, httpOptions);
+      producto.productId, producto, httpOptions);
   }
 
   postNuevoProducto(producto: Producto): Observable<RespuestaPost> {
-    producto.nombre = formatoNombre(producto.nombre);
+    producto.name = formatoname(producto.name);
     return this.http.post<RespuestaNuevo>(this.backendUrl + '/productos/', producto, httpOptions);
       
   }

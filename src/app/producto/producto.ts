@@ -1,16 +1,16 @@
 export class Producto {
-    id_producto: number;
-    nombre: string;
-    precio: number;
-    tipo: string;
+    productId: number;
+    name: string;
+    price: number;
+    type: string;
     stock: number;
 
     constructor() {
         
-        this.id_producto = 0;
-        this.nombre = "";
-        this.precio = 0;
-        this.tipo = "";
+        this.productId = 0;
+        this.name = "";
+        this.price = 0;
+        this.type = "";
         this.stock = 0;
         
     }

@@ -26,7 +26,7 @@ export class SalesDateComponent implements OnInit {
 
   //2019-05-09 00:00:00
 
-  buscarpurchases(dates: dates) {
+  findPurchases(dates: dates) {
     this.total = 0;
     console.log("buscar sales");
 

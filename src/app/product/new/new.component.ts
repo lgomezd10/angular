@@ -3,12 +3,12 @@ import { Product } from '../product';
 import { ProductsService } from '../products.service';
 import { Observable, Subscription } from 'rxjs';
 import { TYPES } from '../products-types';
-import { toolsService } from 'src/app/tools/tools.service';
+import { ToolsService } from 'src/app/tools/tools.service';
 import { ButtonType } from 'src/app/tools/button-type';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 
 /*function productValidator(control: FormControl): {[s: string]: boolean} {
-  if(this.productsService.getProductPorname(control.value) != undefined) {
+  if(this.productsService.getProductByName(control.value) != undefined) {
     return {nameRepetido: true};
   }
 }*/
@@ -20,25 +20,26 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 })
 export class NewComponent implements OnInit {
 
-  @Output() productGuardado = new EventEmitter<Product>();
+  @Output() savedProduct = new EventEmitter<Product>();
 
-  botonname: ElementRef;
+  buttonName: ElementRef;
 
+  // set focus when init the component
   @ViewChild('name', { static: false }) set content(content: ElementRef) {
     if (content) {
       content.nativeElement.focus();
-      this.botonname = content;
+      this.buttonName = content;
     }
   }
-  @ViewChild('enviar', { static: false }) pasarASummit: ElementRef;
+  @ViewChild('send', { static: false }) goToSummit: ElementRef;
 
-  @ViewChild('elementoForm') elementoForm: ElementRef;
+  @ViewChild('elementForm') elementForm: ElementRef;
 
-  formulario: FormGroup;
+  formGroup: FormGroup;
 
-  constructor(private productsService: ProductsService, private toolsServices: toolsService, 
+  constructor(private productsService: ProductsService, private toolsServices: ToolsService, 
     formBuilder: FormBuilder) {
-    this.formulario = formBuilder.group({
+    this.formGroup = formBuilder.group({
       'name': ['', Validators.required],
       'type': ['', Validators.required],
       'price': ['', Validators.compose([Validators.required, Validators.min(0.01)])]
@@ -50,45 +51,45 @@ export class NewComponent implements OnInit {
   public types = TYPES;
   products$: Observable<Product[]>;
   product: Product;
-  productRepetido: string = "";
-  enviado: boolean = false;
-  botones$: Observable<ButtonType[]>;
-  _pulsadoSub: Subscription;
+  repeatedProduct: string = "";
+  sent: boolean = false;
+  buttons: Observable<ButtonType[]>;
+  _pressSub: Subscription;
 
-  boton: ButtonType = { id: "GuardarNew", name: "Guardar new", show: true };
+  boton: ButtonType = { id: "SaveNew", name: "Guardar nuevo", show: true };
 
   ngOnInit() {
     this.product = new Product();
     this.products$ = this.productsService.getProducts$();
     this.toolsServices.newButtonType(this.boton);
-    this._pulsadoSub = this.toolsServices.getPulsado$().subscribe(boton => {
-      if (boton == "GuardarNew") {
-        this.onSubmit(this.formulario.value);
+    this._pressSub = this.toolsServices.getPulsado$().subscribe(boton => {
+      if (boton == "SaveNew") {
+        this.onSubmit(this.formGroup.value);
       }
     });
   }
 
-  darFormato() {
+  format() {
     this.product.name = this.product.name.toLowerCase();
     this.product.name = this.product.name[0].toUpperCase() + this.product.name.slice(1);
   }
 
   // JSON.parse (JSON.stringif para pasar el objeto por referencia
-  guardarProduct() {    
+  saveProduct() {    
     //this.productsService.postNewProduct(JSON.parse(JSON.stringify(this.product)));
     this.productsService.postNewProduct(this.product).subscribe(respuesta => console.log("Se ha guardado el product", respuesta));
-    this.enviado = true;
-    this.toolsServices.eliminarButtonType(this.boton);
+    this.sent = true;
+    this.toolsServices.deleteButtonType(this.boton);
     console.log("DESDE NEW COMPONENT GUARDAR PRODUCT se ha guardado", this.product.name);
     this.product = new Product();
-    this.productGuardado.emit(this.product)
+    this.savedProduct.emit(this.product)
   }
 
-  procesarKeypress(key: KeyboardEvent, campo: HTMLElement) {
+  keyPress(key: KeyboardEvent, campo: HTMLElement) {
     if (key.keyCode == 13) { // press Enter      
-      if (this.pasarASummit.nativeElement == campo) {
-        console.log("DESDE NEW COMPONENT Se va a enviar el foco a button-list", this.boton.id);
-        this.toolsServices.activarFoco(this.boton.id);
+      if (this.goToSummit.nativeElement == campo) {
+        console.log("DESDE NEW COMPONENT Se va a send el foco a button-list", this.boton.id);
+        this.toolsServices.activateFocus(this.boton.id);
       } else {
         campo.focus();
       }
@@ -96,25 +97,25 @@ export class NewComponent implements OnInit {
   }
 
   onSubmit(value: any) {
-    console.log("Lo devuelto por el formulario", value);
-    this.productRepetido = "";
+    console.log("Lo devuelto por el formGroup", value);
+    this.repeatedProduct = "";
     
-    if (this.formulario.valid) {
-      if(this.productsService.getProductPorname(value.name) != undefined) {
-        this.productRepetido = value.name;
-        this.botonname.nativeElement.focus();
+    if (this.formGroup.valid) {
+      if(this.productsService.getProductByName(value.name) != undefined) {
+        this.repeatedProduct = value.name;
+        this.buttonName.nativeElement.focus();
       } else {
         this.product.name = value.name;
         this.product.type = value.type;
         this.product.price = value.price;
-        this.guardarProduct();
+        this.saveProduct();
       }
-    } else if(value.name != "" && this.productsService.getProductPorname(value.name) != undefined) {
-      this.productRepetido = value.name;
-      this.botonname.nativeElement.focus();
+    } else if(value.name != "" && this.productsService.getProductByName(value.name) != undefined) {
+      this.repeatedProduct = value.name;
+      this.buttonName.nativeElement.focus();
     } else {
-      //this.botonname.nativeElement.focus();
-      this.elementoForm.nativeElement.querySelector('.ng-invalid').focus();
+      //this.buttonName.nativeElement.focus();
+      this.elementForm.nativeElement.querySelector('.ng-invalid').focus();
     }
   }
 
@@ -123,8 +124,8 @@ export class NewComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if (this._pulsadoSub) this._pulsadoSub.unsubscribe();
-    this.toolsServices.eliminarButtonType(this.boton);
+    if (this._pressSub) this._pressSub.unsubscribe();
+    this.toolsServices.deleteButtonType(this.boton);
   }
 
 

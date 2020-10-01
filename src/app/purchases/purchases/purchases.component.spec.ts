@@ -5,7 +5,7 @@ import { MockPurchasesService } from 'src/app/test/purchases.service.mock';
 import { MockProductsService } from 'src/app/test/products.service.mock';
 import { MockToolsServices } from 'src/app/test/tools.service.mock';
 import { toolsService } from 'src/app/tools/tools.service';
-import { purchasesService } from '../purchases.service';
+import { PurchasesService } from '../purchases.service';
 import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProductModule } from 'src/app/product/product.module';
@@ -17,7 +17,7 @@ import {
 } from '../../test/utils';
 import { ProductsService } from 'src/app/product/products.service';
 import { Product } from 'src/app/product/product';
-import { Compra } from '../purchases';
+import { Purchase } from '../purchases';
 import { error } from 'protractor';
 
 
@@ -36,7 +36,7 @@ describe('PurchasesComponent', () => {
       providers: [
         mockProductsService.getProviders(),
         { provide: toolsService, useValue: mocktoolsServices },
-        { provide: purchasesService, useValue: mockPurchasesService }
+        { provide: PurchasesService, useValue: mockPurchasesService }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
@@ -77,16 +77,16 @@ describe('PurchasesComponent', () => {
   });
 
   describe('funciones', () => {
-    it('guardar compra correcta', fakeAsync(inject([purchasesService],
+    it('guardar compra correcta', fakeAsync(inject([PurchasesService],
       (mockpurchasesService: MockPurchasesService) => {
-        component.purchases.push(new Compra());
-        component.showButtonType('EnviarCompra');
+        component.purchases.push(new Purchase());
+        component.showButtonType('EnviarPurchase');
         expect(mockpurchasesService.guardarpurchasespy).toHaveBeenCalled();
       })));
 
-    it('guardar compra incorrecta', fakeAsync(inject([purchasesService],
+    it('guardar compra incorrecta', fakeAsync(inject([PurchasesService],
       (mockpurchasesService: MockPurchasesService) => {
-        component.showButtonType('EnviarCompra');
+        component.showButtonType('EnviarPurchase');
         expect(mockpurchasesService.guardarpurchasespy).not.toHaveBeenCalled();
       })));      
   });

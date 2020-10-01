@@ -15,9 +15,9 @@ import {
 import { ProductsService } from './products.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Product } from './product';
-import { RespuestaGet } from './responseget';
+import { ResponseGet } from './responseget';
 import { Socket } from 'ngx-socket-io';
-import { RespuestaPost } from './responsepost';
+import { ResponsePost } from './responsepost';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 
@@ -49,10 +49,10 @@ describe('ProductsService', () => {
 
   describe("Obtener Produtos", () => {
     let respuesta;
-    let respServidor: RespuestaGet;
+    let respServidor: ResponseGet;
 
     beforeAll(() => {
-      respServidor = { status: 200, error: 0, response: [{ productId: 1, name: "Manzana", price: 0, type: "", stock: 0 }] };
+      respServidor = { status: 200, error: 0, response: [{ id: 1, name: "Manzana", price: 0, type: "", stock: 0 }] };
     })
 
     afterEach(() => {
@@ -82,32 +82,32 @@ describe('ProductsService', () => {
         testRequest.flush(respServidor);        
         tick();   
         product = ps.getProduct(1);
-        expect(product.productId).toBe(1);
+        expect(product.id).toBe(1);
         backend.verify();
       })
     ));
 
-    it("getProductPorname", inject(
+    it("getProductByName", inject(
       [ProductsService, HttpTestingController],
       fakeAsync((ps: ProductsService, backend: HttpTestingController) => {
         let product;                 
         let testRequest = backend.expectOne('http://localhost:3000/products');
         testRequest.flush(respServidor);        
         tick();   
-        product = ps.getProductPorname("manzana");
-        expect(product.productId).toBe(1);
+        product = ps.getProductByName("manzana");
+        expect(product.id).toBe(1);
         expect(product.name).toBe("Manzana");
         backend.verify();
       })
     ));
 
-    it("postModificarProduct", inject(
+    it("postEditProduct", inject(
       [ProductsService, HttpTestingController],
       fakeAsync((ps: ProductsService, backend: HttpTestingController) => {
         let product;
-        let respuesta: RespuestaPost;
-        product = { productId: 1, name: "Manzana", price: 0, type: "", stock: 0 };                     
-        ps.postModificarProduct(product).subscribe(respuestaServ => respuesta = respuestaServ);
+        let respuesta: ResponsePost;
+        product = { id: 1, name: "Manzana", price: 0, type: "", stock: 0 };                     
+        ps.postEditProduct(product).subscribe(respuestaServ => respuesta = respuestaServ);
         let testRequest: TestRequest = backend.expectOne('http://localhost:3000/products/1');
         expect(testRequest.request.method).toBe('POST');
         testRequest.flush({status: 200, error: null, response: product});        
@@ -122,8 +122,8 @@ describe('ProductsService', () => {
       [ProductsService, HttpTestingController],
       fakeAsync((ps: ProductsService, backend: HttpTestingController) => {
         let product;
-        let respuesta: RespuestaPost;
-        product = { productId: 1, name: "Manzana", price: 0, type: "", stock: 0 };
+        let respuesta: ResponsePost;
+        product = { id: 1, name: "Manzana", price: 0, type: "", stock: 0 };
                      
         ps.postNewProduct(product).subscribe(respuestaServ => respuesta = respuestaServ);
         let testRequest: TestRequest = backend.expectOne('http://localhost:3000/products/');

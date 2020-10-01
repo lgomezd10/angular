@@ -45,4 +45,4 @@ const purchasesRoutes: Routes = [
     PurchasesDateComponent
   ]  
 })
-export class purchasesModule { }
+export class PurchasesModule { }

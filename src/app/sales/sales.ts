@@ -2,7 +2,7 @@
 import { Sale } from './sale';
 
 export class ItemSales {
-    productId: number;
+    id: number;
     quantity: number;
     price: number;
 }

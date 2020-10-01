@@ -11,7 +11,7 @@ import {
   HttpHandler
 } from "@angular/common/http";
 
-import { purchasesService } from './purchases.service';
+import { PurchasesService } from './purchases.service';
 
 /*describe('purchasesService', () => {
   beforeEach(() => TestBed.configureTestingModule({

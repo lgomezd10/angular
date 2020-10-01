@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { ButtonType } from '../button-type';
-import { toolsService } from '../tools.service';
+import { ToolsService } from '../tools.service';
 import { Observable, Subscription, combineLatest } from 'rxjs';
 import { filter, tap, map, delay } from 'rxjs/operators';
 
@@ -14,7 +14,7 @@ export class ButtonListComponent implements OnInit {
   @Input() lista: ButtonType[] = [];
 
   @Output()
-  enviarButtonType = new EventEmitter<string>();
+  sendButtonType = new EventEmitter<string>();
   @ViewChildren('listButton') buttons: QueryList<ElementRef>;
 
   buttonList$: Observable<ButtonType[]>;
@@ -24,7 +24,7 @@ export class ButtonListComponent implements OnInit {
 
   _focoSub: Subscription;
 
-  constructor(private toolsServices: toolsService) {
+  constructor(private toolsServices: ToolsService) {
 
   }
 
@@ -78,8 +78,8 @@ export class ButtonListComponent implements OnInit {
     }
   }
 
-  onEnviar(boton: string) {
-    this.enviarButtonType.emit(boton);
+  onSend(boton: string) {
+    this.sendButtonType.emit(boton);
     this.toolsServices.pulsarButtonType(boton);
   }
 

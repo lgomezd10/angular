@@ -1,7 +1,7 @@
-export class RespuestaNew {
+export class ResponseNew {
     
     status: number;
     error: number;
-    response: {productId: number;}   
+    response: {id: number;}   
 
 }

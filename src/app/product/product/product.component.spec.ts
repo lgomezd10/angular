@@ -30,17 +30,17 @@ describe('ProductComponent', () => {
     it('modificar product si price mayor que 0', fakeAsync(
       inject([ProductsService], (mockProductsService: MockProductsService) => {
         component.product.price = 1;
-        component.modificarProduct();
+        component.editProduct();
         tick();
-        expect(mockProductsService.postModificarProductSpy)
+        expect(mockProductsService.postEditProductSpy)
           .toHaveBeenCalledWith(component.product);
       })
     ));
     it('no modificar product si price menor que 0', fakeAsync(
       inject([ProductsService], (mockProductsService: MockProductsService) => {
-        component.modificarProduct();
+        component.editProduct();
         tick();
-        expect(mockProductsService.postModificarProductSpy)
+        expect(mockProductsService.postEditProductSpy)
           .not.toHaveBeenCalled();
       })
     ));
@@ -55,7 +55,7 @@ describe('ProductComponent', () => {
         (router: Router, mockProductsService: MockProductsService) => {
           fixture = createRoot(router, RootCmp);
           p = new Product();
-          p.productId = 2; p.name = 'patata';
+          p.id = 2; p.name = 'patata';
           p.price = 2; p.stock = 3; p.type = "Patata/Verdura";
           mockProductsService.setProduct(p);
           router.navigateByUrl('/product/2');
@@ -65,8 +65,8 @@ describe('ProductComponent', () => {
       )))
 
     it('se muestra el id en la vista', () => {
-      const de: DebugElement = fixture.debugElement.query(By.css('.productId'));
-      expect(de.nativeElement.innerHTML).toContain(p.productId);
+      const de: DebugElement = fixture.debugElement.query(By.css('.id'));
+      expect(de.nativeElement.innerHTML).toContain(p.id);
     })
 
     it('se muestra el name en la vista', () => {
@@ -112,7 +112,7 @@ describe('ProductComponent', () => {
           advance(fixture);
           expect(location.path()).toEqual('/product/2');
           const product = fixture.debugElement.children[1].componentInstance;
-          product.volver();
+          product.return();
           advance(fixture);
           expect(location.path()).toEqual('/');
         })));

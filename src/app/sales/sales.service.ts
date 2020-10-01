@@ -12,7 +12,7 @@ const httpOptions = {
   })
 };
 
-class RespuestaSale {
+class ResponseSale {
   status: number;
   error: number;
   response: {
@@ -26,7 +26,7 @@ class ObtenerSales {
   response: Sales;
 }
 
-class RespuestaSales {
+class ResponseSales {
   status: number;
   error: number;
   response: Sales[];
@@ -49,9 +49,9 @@ export class SalesService {
       sales: sales
     }
     var respuesta: BehaviorSubject<number> = new BehaviorSubject(0);
-    this.http.post<RespuestaSale>(this.backendUrl + '/sale/', envio, httpOptions).subscribe(resp => {
+    this.http.post<ResponseSale>(this.backendUrl + '/sale/', envio, httpOptions).subscribe(resp => {
       respuesta.next(resp.response.actualizados[0]);
-      console.log("Respuesta después de una sale", respuesta);
+      console.log("Response después de una sale", respuesta);
     });
     return respuesta;
   }
@@ -64,9 +64,9 @@ export class SalesService {
       sales: sales
     }
     var respuesta: BehaviorSubject<number> = new BehaviorSubject(0);
-    this.http.post<RespuestaSale>(this.backendUrl + '/sale/' + salesId, envio, httpOptions).subscribe(resp => {
+    this.http.post<ResponseSale>(this.backendUrl + '/sale/' + salesId, envio, httpOptions).subscribe(resp => {
       respuesta.next(resp.response.actualizados[0]); // aquí hay que modificar la respuesta para que devuelva la lista
-      console.log("Respuesta después de una sale", respuesta);
+      console.log("Response después de una sale", respuesta);
     });
     return respuesta;
   }
@@ -85,7 +85,7 @@ export class SalesService {
     let cont: number = 0;
     sales.elementos.forEach(sale => {
       let actual: Sale = new Sale;
-      actual.product = this.productsService.getProduct(sale.productId),
+      actual.product = this.productsService.getProduct(sale.id),
       actual.quantity = sale.quantity;
       actual.price = sale.price;
       salida[cont] = actual;
@@ -98,7 +98,7 @@ export class SalesService {
   salesPordates(from: string, to: string): BehaviorSubject<Sales[]> {
     let dates = {from: from, to: to};
     let respuesta: BehaviorSubject<Sales[]> = new BehaviorSubject([]);
-    this.http.post<RespuestaSales>(this.backendUrl + '/sales/', dates, httpOptions).subscribe(resp => {
+    this.http.post<ResponseSales>(this.backendUrl + '/sales/', dates, httpOptions).subscribe(resp => {
       console.log(resp.response);
       respuesta.next(resp.response);
     });

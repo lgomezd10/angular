@@ -26,7 +26,7 @@ export class SelecciondatesComponent implements OnInit {
     this.toString = "";
   }
   
-  onEnviar() {
+  onSend() {
     this.from.setHours(0,0,0);
     this.to.setHours(23,59,59);
     if (this.from > this.to) {

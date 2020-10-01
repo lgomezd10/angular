@@ -13,15 +13,15 @@ import { ButtonType } from 'src/app/tools/button-type';
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css']
 })
-export class ProductsComponent implements OnInit {  
-  
+export class ProductsComponent implements OnInit {
+
   products$: Observable<Product[]>;
   new = false;
   botones: ButtonType[] = [
-    {id:"AddNew",name:"Añadir new", show:true}
+    { id: "AddNew", name: "Añadir nuevo", show: true }
   ];
-  
-  constructor(private productsService: ProductsService, private route:ActivatedRoute) {
+
+  constructor(private productsService: ProductsService, private route: ActivatedRoute) {
     /*route.url.subscribe(url => {
       if (this.products == null) {
         this.products$ = this.productsService.getProducts$();
@@ -36,7 +36,10 @@ export class ProductsComponent implements OnInit {
   ngOnInit() {
     console.log("pasa por init")
     this.products$ = this.productsService.getProducts$().pipe(
-      tap((value) => { this.new = false; }),
+      tap((value) => {
+        this.new = false;
+        console.log("desde productsComponent", value)
+      })
     );
     this.productsService.getProducts$().subscribe(products => {
       console.log("peticion al servidor", products);
@@ -47,38 +50,38 @@ export class ProductsComponent implements OnInit {
     }); */
   }
 
-  activarButtonType(id: string) {
-    this.botones.find(boton => { return boton.id == id}).show = true;
+  activateButtonType(id: string) {
+    this.botones.find(boton => { return boton.id == id }).show = true;
   }
 
-  desactivarButtonType(id: string) {
-    this.botones.find(boton => { return boton.id == id}).show = false;
+  disableButtonType(id: string) {
+    this.botones.find(boton => { return boton.id == id }).show = false;
   }
 
   showButtonType(boton: string) {
     if (boton == "AddNew") {
-      this.new=true;
-      this.desactivarButtonType("AddNew");
-      //this.desactivarButtonType("Añadir new");
+      this.new = true;
+      this.disableButtonType("AddNew");
+      //this.disableButtonType("Añadir new");
     }
-    
+
   }
 
-  cambioprice(product: Product, priceAntiguo) {
-    if(product.price <= 0) {
-      
+  changePrice(product: Product, oldPrice) {
+    if (product.price <= 0) {
+
       alert("el price debe ser mayor que 0");
     }
     else
-      this.productsService.postModificarProduct(product).subscribe(product => {console.log(product);});
-  }  
-
-  newProductGuardado(product: Product) {
-    console.log("DESDE PRODUCTS: Recibido evento de new product guardado");
-    this.activarButtonType("AddNew");
+      this.productsService.postEditProduct(product).subscribe(product => { console.log(product); });
   }
-  
 
-  
+  savedNewProduct(product: Product) {
+    console.log("DESDE PRODUCTS: Recibido evento de new product guardado");
+    this.activateButtonType("AddNew");
+  }
+
+
+
 
 }

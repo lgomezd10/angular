@@ -10,7 +10,7 @@ import { LogoComponent } from './logo/logo.component';
 import { SalesComponent } from './sales/sales/sales.component';
 import { ProductsComponent } from './product/products/products.component';
 import { PurchasesComponent } from './purchases/purchases/purchases.component';
-import { purchasesModule } from './purchases/purchases.module';
+import { PurchasesModule } from './purchases/purchases.module';
 import { ErroresComponent } from './errores/errores/errores.component';
 import { ErroresModule } from './errores/errores.module';
 import { ToolsModule } from './tools/tools.module';
@@ -45,7 +45,7 @@ const appRoutes: Routes = [
     component: ErroresComponent
   },
   {
-    path: 'product/:productId',
+    path: 'product/:id',
     component: ProductComponent
   }
 ]
@@ -61,7 +61,7 @@ const appRoutes: Routes = [
     BrowserModule,
     ProductModule,
     SalesModule,
-    purchasesModule,
+    PurchasesModule,
     ErroresModule,
     ToolsModule,
     HttpClientModule,

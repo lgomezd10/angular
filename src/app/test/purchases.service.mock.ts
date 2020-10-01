@@ -1,5 +1,5 @@
 import { SpyObject } from './test.helpers';
-import { purchasesService } from '../purchases/purchases.service';
+import { PurchasesService } from '../purchases/purchases.service';
 
 export class MockPurchasesService extends SpyObject {
 
@@ -9,9 +9,9 @@ export class MockPurchasesService extends SpyObject {
 
 
     constructor() {
-        super(purchasesService);
+        super(PurchasesService);
         this.respuesta = [];
-        this.guardarpurchasespy = this.spy('guardarCompra').and.returnValue(this);
+        this.guardarpurchasespy = this.spy('guardarPurchase').and.returnValue(this);
         this.purchasesPordateSpy = this.spy('purchasesPordate').and.returnValue(this);
         
     }
@@ -20,7 +20,7 @@ export class MockPurchasesService extends SpyObject {
         callback(this.respuesta);
     }
 
-    setRespuesta(respuesta) {
+    setResponse(respuesta) {
         this.respuesta = respuesta;
     }
     

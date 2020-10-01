@@ -1,7 +1,7 @@
 import { Product } from '../product/product';
 
-export class Compra {
-    purchaseId: number;
+export class Purchase {
+    id: number;
     product: Product;
     quantity: number;
     price: number;
@@ -10,7 +10,7 @@ export class Compra {
 
     constructor() {
 
-        this.purchaseId = 0;
+        this.id = 0;
         this.product = null;
         this.quantity = 0;
         this.price = 0;

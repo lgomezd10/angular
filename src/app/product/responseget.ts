@@ -1,6 +1,6 @@
 import { Product } from './product';
 
-export class RespuestaGet {
+export class ResponseGet {
     status: number;
     error: number;
     response: Product[];

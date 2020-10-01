@@ -2,9 +2,9 @@ import { Injectable, Output, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Product } from './product';
 import { Observable, of, BehaviorSubject, Subscription } from 'rxjs';
-import { RespuestaGet } from './responseget';
-import { RespuestaNew } from './responsenew';
-import { RespuestaPost } from './responsepost';
+import { ResponseGet } from './responseget';
+import { ResponseNew } from './responsenew';
+import { ResponsePost } from './responsepost';
 
 import { Socket } from 'ngx-socket-io';
 
@@ -29,7 +29,7 @@ const httpOptions = {
 
 export class ProductsService {
 
-  actualizacion$ = this.socket.fromEvent<Product[]>('productsActualizados');
+  updateProducts$ = this.socket.fromEvent<Product[]>('updateProducts');
 
   //products: Product[];
 
@@ -40,21 +40,21 @@ export class ProductsService {
 
   constructor(private http: HttpClient, private socket: Socket) {
     this.products$ = new BehaviorSubject<Product[]>([]);
-    this.cargarProducts();
-    this.actualizacion$.subscribe(products => this.products$.next(products),
+    this.loadProducts();
+    this.updateProducts$.subscribe(products => this.products$.next(products),
       err => console.log('error en socket', err));
 
   }
 
-  @Output() productsActualizados: EventEmitter<Product> = new EventEmitter();
+  //@Output() updateProducts: EventEmitter<Product> = new EventEmitter();
 
   backendUrl = 'http://localhost:3000';
 
-  private cargarProducts() {
-    this._docSub = this.getProductsServidor().subscribe(respuesta => {
-      this.products$
-      console.log("products del servidor", respuesta.response);
-      this.products$.next(respuesta.response);
+  private loadProducts() {
+    this._docSub = this.getProductsServer().subscribe(response => {      
+      
+      this.products$.next(response);
+      console.log("Desde ProductService GUARDADO EN PRODUCT$", this.products$.getValue())
     });
   }
 
@@ -76,27 +76,27 @@ export class ProductsService {
   }*/
 
   getProduct(id: number): Product {
-    return this.products$.getValue().find(product => { return product.productId == id });
+    return this.products$.getValue().find(product => { return product.id == id });
   }
 
-  getProductPorname(name: string): Product {    
+  getProductByName(name: string): Product {    
     name = formatoname(name);
     return this.getProducts().find(product => { return product.name == name });
   }
 
-  private getProductsServidor(): Observable<RespuestaGet> {
-    return this.http.get<RespuestaGet>(this.backendUrl + '/products');
+  private getProductsServer(): Observable<Product[]> {
+    return this.http.get<Product[]>(this.backendUrl + '/products');
   }
 
-  postModificarProduct(product: Product): Observable<RespuestaPost> {
+  postEditProduct(product: Product): Observable<ResponsePost> {
     product.name = formatoname(product.name);
-    return this.http.post<RespuestaPost>(this.backendUrl + '/products/' +
-      product.productId, product, httpOptions);
+    return this.http.post<ResponsePost>(this.backendUrl + '/products/' +
+      product.id, product, httpOptions);
   }
 
-  postNewProduct(product: Product): Observable<RespuestaPost> {
+  postNewProduct(product: Product): Observable<ResponsePost> {
     product.name = formatoname(product.name);
-    return this.http.post<RespuestaNew>(this.backendUrl + '/products/', product, httpOptions);
+    return this.http.post<ResponseNew>(this.backendUrl + '/products/', product, httpOptions);
       
   }
 

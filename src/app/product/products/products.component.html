@@ -1,20 +1,20 @@
-<h2 class="title is-3">Products</h2>
+<h2 class="title is-3">Productos</h2>
 
 <div class="columns">
   <div class="column is-three-quarters">
-    <app-new *ngIf="new" (productGuardado)="newProductGuardado(event$)"></app-new>
+    <app-new *ngIf="new" (savedProduct)="savedNewProduct(event$)"></app-new>
 
-    <label class="label">Buscar products: </label>
+    <label class="label">Buscar productos: </label>
     <input class="input" type="text" [(ngModel)]="searchText"> <br>
     <div id="listaProducts">
       <ul class="products">
         <li *ngFor="let product of products$ | async | sort:'name' | filter: searchText">
-          <span class="productId">{{product.productId}}</span>
+          <span class="id">{{product.id}}</span>
           <input class="name" type="text" [(ngModel)]="product.name">
           <span class="stock"> {{product.stock}} </span>
           <input class="price" type="number" [(ngModel)]="product.price">
-          <button (click)="cambioprice(product, priceAntiguo)">Guardar</button>
-          <a [title]="product.name + ' details'" [routerLink]="['/product', product.productId]">
+          <button (click)="changePrice(product, oldPrice)">Guardar</button>
+          <a [title]="product.name + ' details'" [routerLink]="['/product', product.id]">
             Detalle
           </a>
         </li>
@@ -23,7 +23,7 @@
   </div>
 
   <div class="column">
-    <app-button-list [lista]="botones" (enviarButtonType)= "showButtonType($event)"></app-button-list>
+    <app-button-list [lista]="botones" (sendButtonType)= "showButtonType($event)"></app-button-list>
   </div>
 </div>
 

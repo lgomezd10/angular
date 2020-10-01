@@ -4,10 +4,10 @@
 </nav>
 <router-outlet></router-outlet>
 
-<h2 class="title is-3">sales</h2>
+<h2 class="title is-3">Caja</h2>
 
-<input type="text" [(ngModel)]="buscarSale">
-<button (click)=abrirSale(buscarSale)>Buscar</button>
+<input type="text" [(ngModel)]="findSale">
+<button (click)=openSale(findSale)>Buscar</button>
 <br><br>
 
 <div *ngIf="codigoSale > 0 && !abierta">
@@ -70,36 +70,36 @@
       </div>
     </div>
 
-    <form *ngIf="showNew" [formGroup]="formulario" [class.error]="!formulario.valid && formulario.touched" #elementoForm>
+    <form *ngIf="showNew" [formGroup]="formGroup" [class.error]="!formGroup.valid && formGroup.touched" #elementForm>
       
       <div class="columns">
       <div class="column">
         <label class="label">Buscar product: </label>
         <input class="input" placeholder="Buscar product" type="text"
-          (keypress)="procesarKeypress($event, product)" #buscar [formControl]="formulario.controls['buscar']" />
+          (keypress)="procesarKeypress($event, product)" #find [formControl]="formGroup.controls['find']" />
 
 
         <select size="5"(keypress)="procesarKeypress($event, quantity)" #product
-          [formControl]="formulario.controls['product']">
+          [formControl]="formGroup.controls['product']">
           <option
-            *ngFor="let product of products$| async | sort:'name' |filter: formulario.controls['buscar'].value"
+            *ngFor="let product of products$| async | sort:'name' |filter: formGroup.controls['find'].value"
             [ngValue]="product">
-            {{product.productId}} {{product.name}} {{product.price}}</option>
+            {{product.id}} {{product.name}} {{product.price}}</option>
         </select>
         <div class="help is-danger"
-          *ngIf="!formulario.controls['product'].valid && formulario.controls['product'].touched">Seleccione un
+          *ngIf="!formGroup.controls['product'].valid && formGroup.controls['product'].touched">Seleccione un
           product</div>
 
       </div>
       <div class="column">
         <label class="label"> quantity</label>
         <input class="input" type="number" (keypress)="procesarKeypress($event, enviar)" #quantity
-          [formControl]="formulario.controls['quantity']">
+          [formControl]="formGroup.controls['quantity']">
         <div class="help is-danger"
-          *ngIf="formulario.controls['quantity'].hasError('required') && formulario.controls['quantity'].touched">
+          *ngIf="formGroup.controls['quantity'].hasError('required') && formGroup.controls['quantity'].touched">
           Introduzca la quantity</div>
         <div class="help is-danger"
-          *ngIf="formulario.controls['quantity'].hasError('min') && formulario.controls['quantity'].touched">La quantity
+          *ngIf="formGroup.controls['quantity'].hasError('min') && formGroup.controls['quantity'].touched">La quantity
           debe ser mayor que 0</div>
         <div id="enviar" #enviar></div>
       </div>
@@ -108,7 +108,7 @@
   </div>
 
   <div class="column">
-    <app-button-list [lista]="botones" (enviarButtonType)="showButtonType($event)"></app-button-list>
+    <app-button-list [lista]="botones" (sendButtonType)="showButtonType($event)"></app-button-list>
   </div>
 
 </div>

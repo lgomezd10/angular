@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { purchasesService } from '../purchases.service';
-import { Compra } from '../purchases';
+import { PurchasesService } from '../purchases.service';
+import { Purchase } from '../purchases';
 import { dates } from 'src/app/tools/dates';
 
 @Component({
@@ -13,9 +13,9 @@ import { dates } from 'src/app/tools/dates';
 export class PurchasesDateComponent implements OnInit {
 
 
-  purchases: Compra[];
+  purchases: Purchase[];
 
-  constructor(private datePipe: DatePipe, private purchasesService: purchasesService) {
+  constructor(private datePipe: DatePipe, private purchasesService: PurchasesService) {
 
   }
 
@@ -23,12 +23,16 @@ export class PurchasesDateComponent implements OnInit {
     this.purchases = [];
   }
 
+  escribirDatos(datos) {
+    console.log(datos);
+  }
   //2019-05-09 00:00:00
 
-  buscarPurchases(dates: dates) {
+  findPurchases(dates: dates) {
     
-    this.purchasesService.purchasesPordates(dates.from, dates.to).subscribe(purchases => {
+    this.purchasesService.purchasesByDate(dates.from, dates.to).subscribe(purchases => {
       this.purchases = purchases;
+      console.log("Desde fechas compras ", this.purchases);
     });
 
   }

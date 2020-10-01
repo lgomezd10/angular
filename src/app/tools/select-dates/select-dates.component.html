@@ -1,18 +1,18 @@
-<h2>Selecciones las dates:</h2>
+<h2>Seleccione las fechas:</h2>
 
 Desde: 
 <mat-form-field>
-  <input matInput [matDatepicker]="SelecciondateInicio" [(ngModel)]="from">
-  <mat-datepicker-toggle matSuffix [for]="SelecciondateInicio"></mat-datepicker-toggle>
-  <mat-datepicker #SelecciondateInicio></mat-datepicker>
+  <input matInput [matDatepicker]="SelectInitDate" [(ngModel)]="from">
+  <mat-datepicker-toggle matSuffix [for]="SelectInitDate"></mat-datepicker-toggle>
+  <mat-datepicker #SelectInitDate></mat-datepicker>
 </mat-form-field>
 
 Hasta: 
 <mat-form-field>
-  <input matInput [matDatepicker]="SelecciondateFin" [(ngModel)]="to">
-  <mat-datepicker-toggle matSuffix [for]="SelecciondateFin"></mat-datepicker-toggle>
-  <mat-datepicker #SelecciondateFin></mat-datepicker>
+  <input matInput [matDatepicker]="SelectFinalDate" [(ngModel)]="to">
+  <mat-datepicker-toggle matSuffix [for]="SelectFinalDate"></mat-datepicker-toggle>
+  <mat-datepicker #SelectFinalDate></mat-datepicker>
 </mat-form-field>
 
 
-<button (click) = "onEnviar()">Buscar</button>
+<button (click) = "onSend()">Buscar</button>

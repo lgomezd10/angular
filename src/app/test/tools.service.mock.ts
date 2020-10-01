@@ -6,16 +6,16 @@ export class MockToolsServices extends SpyObject {
     fakePulsado: String;
     getPulsado$Spy;
     newButtonTypeSpy;
-    eliminarButtonTypeSpy;
-    activarFocoSpy;
+    deleteButtonTypeSpy;
+    activateFocusSpy;
 
     constructor() {
         super(ProductsService);
         this.fakePulsado = "";
         this.getPulsado$Spy = this.spy('getPulsado$').and.returnValue(this);
         this.newButtonTypeSpy = this.spy('newButtonType').and.callFake(() => {});
-        this.eliminarButtonTypeSpy = this.spy('eliminarButtonType').and.callFake(() => {});
-        this.activarFocoSpy = this.spy('activarFoco').and.callFake(() => {});
+        this.deleteButtonTypeSpy = this.spy('deleteButtonType').and.callFake(() => {});
+        this.activateFocusSpy = this.spy('activateFocus').and.callFake(() => {});
     }
 
     subscribe(callback) {

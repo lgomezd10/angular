@@ -1,8 +1,8 @@
 import { async, ComponentFixture, fakeAsync, TestBed, inject, tick } from '@angular/core/testing';
 
 import { PurchasesDateComponent } from './purchases-date.component';
-import { purchasesService } from '../purchases.service';
-import { Compra } from '../purchases';
+import { PurchasesService } from '../purchases.service';
+import { Purchase } from '../purchases';
 import { DatePipe } from '@angular/common';
 import { GroupBydatePipe } from 'src/app/tools/group-by.date.pipe';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -10,14 +10,14 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 export class MockPurchasesService {
 
-  purchases: Compra[];
+  purchases: Purchase[];
 
   constructor() {
 
-    this.purchases = [{ purchaseId: 1, product: null, quantity: 2, price: 3, date: new Date() }]
+    this.purchases = [{ id: 1, product: null, quantity: 2, price: 3, date: new Date() }]
   }
 
-  purchasesPordates(from, to): any {    
+  purchasesByDate(from, to): any {    
     return this;
   }
 
@@ -36,7 +36,7 @@ describe('PurchasesDateComponent', () => {
     TestBed.configureTestingModule({
       declarations: [PurchasesDateComponent, DatePipe, GroupBydatePipe],
       providers: [
-        { provide: purchasesService, useValue: MockPurchasesService }
+        { provide: PurchasesService, useValue: MockPurchasesService }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
@@ -53,11 +53,11 @@ describe('PurchasesDateComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('buscarpurchases', fakeAsync(inject([purchasesService], (mockPurchasesService: MockPurchasesService) => {
+  it('findPurchases', fakeAsync(inject([PurchasesService], (mockPurchasesService: MockPurchasesService) => {
     let compra;
-    component.buscarPurchases({ from: "date1", to: "date2" });
+    component.findPurchases({ from: "date1", to: "date2" });
     tick();
-    expect(component.purchases[0].purchaseId).toBe(1);
+    expect(component.purchases[0].id).toBe(1);
   })))
 
 });

@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { ProductsService } from 'src/app/product/products.service';
 import { SalesService } from '../sales.service';
 import { ButtonType } from 'src/app/tools/button-type';
-import { toolsService } from 'src/app/tools/tools.service';
+import { ToolsService } from 'src/app/tools/tools.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 const nameButtonTypees = { nuevaSale: 'NuevaSale', finalizarSale: 'FinalizarSale', addProduct: 'AddProduct', add: 'Add', reabrirTicket: 'ReabrirTicket' };
@@ -19,19 +19,19 @@ const nameButtonTypees = { nuevaSale: 'NuevaSale', finalizarSale: 'FinalizarSale
 
 export class SalesComponent implements OnInit {
 
-  @ViewChild('buscar', { static: false }) set content(content: ElementRef) {
+  @ViewChild('find', { static: false }) set content(content: ElementRef) {
     if (content) {
       content.nativeElement.focus();
     }
   }
-  @ViewChild('enviar', { static: false }) pasarASummit: ElementRef;
+  @ViewChild('enviar', { static: false }) goToSummit: ElementRef;
 
-  @ViewChild('elementoForm') elementoForm: ElementRef;
+  @ViewChild('elementForm') elementForm: ElementRef;
 
-  formulario: FormGroup;
+  formGroup: FormGroup;
   sales: Sale[] = [];
   abierta: boolean = false;
-  buscarSale: number = 0;
+  findSale: number = 0;
   saleActual: Sale;
   searchText: string;
   showNew: boolean = false;
@@ -50,9 +50,9 @@ export class SalesComponent implements OnInit {
   ];
 
   constructor(private productsService: ProductsService, private salesService: SalesService,
-    private toolsService: toolsService, formBuilder: FormBuilder) {
-    this.formulario = formBuilder.group({
-      'buscar': [''],
+    private toolsService: ToolsService, formBuilder: FormBuilder) {
+    this.formGroup = formBuilder.group({
+      'find': [''],
       'product': [null, Validators.required],
       'quantity': ['', Validators.compose([Validators.required, Validators.min(0.01)])]
     });
@@ -63,11 +63,11 @@ export class SalesComponent implements OnInit {
     this.products$ = this.productsService.getProducts$();
   }
 
-  activarButtonType(id: string) {
+  activateButtonType(id: string) {
     this.botones.find(boton => { return boton.id == id }).show = true;
   }
 
-  desactivarButtonType(id: string) {
+  disableButtonType(id: string) {
     this.botones.find(boton => { return boton.id == id }).show = false;
   }
 
@@ -76,8 +76,8 @@ export class SalesComponent implements OnInit {
     if (boton == nameButtonTypees.addProduct) {
       this.newProduct();
       this.searchText = "";
-      this.desactivarButtonType(boton);
-      this.activarButtonType(nameButtonTypees.add);
+      this.disableButtonType(boton);
+      this.activateButtonType(nameButtonTypees.add);
     }
 
     if (boton == nameButtonTypees.add) {
@@ -92,17 +92,17 @@ export class SalesComponent implements OnInit {
     }
     if (boton == nameButtonTypees.reabrirTicket) {
       this.abierta = true;
-      this.activarButtonType(nameButtonTypees.addProduct);
-      this.desactivarButtonType(nameButtonTypees.reabrirTicket);
-      this.activarButtonType(nameButtonTypees.finalizarSale);
+      this.activateButtonType(nameButtonTypees.addProduct);
+      this.disableButtonType(nameButtonTypees.reabrirTicket);
+      this.activateButtonType(nameButtonTypees.finalizarSale);
     }
   }
 
   newProduct() {
     this.saleActual = new Sale();
-    this.formulario.reset();
+    this.formGroup.reset();
     this.showNew = true;
-    this.activarButtonType(nameButtonTypees.nuevaSale);
+    this.activateButtonType(nameButtonTypees.nuevaSale);
   }
 
   totalSale(): number {
@@ -134,21 +134,21 @@ export class SalesComponent implements OnInit {
     }
     this.showNew = false;
     //this.totalSale = this.totalSale();
-    this.activarButtonType(nameButtonTypees.finalizarSale);
-    this.activarButtonType(nameButtonTypees.addProduct);
-    this.desactivarButtonType(nameButtonTypees.add);
-    this.toolsService.activarFoco(nameButtonTypees.addProduct);
+    this.activateButtonType(nameButtonTypees.finalizarSale);
+    this.activateButtonType(nameButtonTypees.addProduct);
+    this.disableButtonType(nameButtonTypees.add);
+    this.toolsService.activateFocus(nameButtonTypees.addProduct);
 
 
   }
 
   onSubmit() {
-    if (this.formulario.valid) {
-      this.saleActual.product = this.formulario.value.product;
-      this.saleActual.quantity = this.formulario.value.quantity;
+    if (this.formGroup.valid) {
+      this.saleActual.product = this.formGroup.value.product;
+      this.saleActual.quantity = this.formGroup.value.quantity;
       this.cargar();
     } else {
-      this.elementoForm.nativeElement.querySelector('.ng-invalid').focus();
+      this.elementForm.nativeElement.querySelector('.ng-invalid').focus();
     }
   }
 
@@ -159,15 +159,15 @@ export class SalesComponent implements OnInit {
       this.salesService.actualizarSale(this.codigoSale, this.sales, this.creditCard).subscribe(cod => this.codigoSale = cod);
     this.showNew = false;
     this.abierta = false;
-    this.desactivarButtonType(nameButtonTypees.finalizarSale);
-    this.desactivarButtonType(nameButtonTypees.add);
-    this.desactivarButtonType(nameButtonTypees.addProduct);
-    this.activarButtonType(nameButtonTypees.reabrirTicket);
+    this.disableButtonType(nameButtonTypees.finalizarSale);
+    this.disableButtonType(nameButtonTypees.add);
+    this.disableButtonType(nameButtonTypees.addProduct);
+    this.activateButtonType(nameButtonTypees.reabrirTicket);
     console.log("Desde finalizar sale", this.codigoSale);
 
   }
 
-  abrirSale(salesId: number) {
+  openSale(salesId: number) {
     this.salesService.obtenerSale(salesId).subscribe(sales => {
       console.log("elementos recibidos", sales.elementos);
       this.sales = [];
@@ -186,11 +186,11 @@ export class SalesComponent implements OnInit {
     this.showNew = false;
     //this.totalSale =0;
     this.codigoSale = 0;
-    this.activarButtonType(nameButtonTypees.nuevaSale);
-    this.desactivarButtonType(nameButtonTypees.finalizarSale);
-    this.activarButtonType(nameButtonTypees.addProduct);
-    this.desactivarButtonType(nameButtonTypees.add);
-    this.desactivarButtonType(nameButtonTypees.reabrirTicket);
+    this.activateButtonType(nameButtonTypees.nuevaSale);
+    this.disableButtonType(nameButtonTypees.finalizarSale);
+    this.activateButtonType(nameButtonTypees.addProduct);
+    this.disableButtonType(nameButtonTypees.add);
+    this.disableButtonType(nameButtonTypees.reabrirTicket);
 
   }
 
@@ -203,16 +203,16 @@ export class SalesComponent implements OnInit {
     }
   }
 
-  // envento enviado por router-outlet al activar la pagina
+  // envento sent por router-outlet al activar la pagina
   /* onActivate(elementRef) {
      this.ngOnInit();
    }*/
 
   procesarKeypress(key: KeyboardEvent, campo: HTMLElement) {
     if (key.keyCode == 13) { // press Enter      
-      if (this.pasarASummit.nativeElement == campo) {
+      if (this.goToSummit.nativeElement == campo) {
         console.log("DESDE sales COMPONENTE TS: Se va a enviar el foco a button-list", "Add");
-        this.toolsService.activarFoco("Add");
+        this.toolsService.activateFocus("Add");
       } else {
         console.log("El atributo de campo es", campo.getAttributeNames());
         campo.focus();

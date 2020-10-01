@@ -1,53 +1,53 @@
-{{enviar}}
-<form *ngIf="!enviado" [formGroup]="formulario" [class.error]="!formulario.valid && formulario.touched" #elementoForm>
+{{send}}
+<form *ngIf="!sent" [formGroup]="formGroup" [class.error]="!formGroup.valid && formGroup.touched" #elementForm>
     <div>
         <div class="columns">
             <div class="column">
-                <label class="label">name: </label>
+                <label class="label">Nombre: </label>
                 <input class="input" name="name" id="name" type="text" autocomplete="off"
-                    (keypress)="procesarKeypress($event, type)" #name [formControl]="formulario.controls['name']">
-                <div class="help is-danger" *ngIf="productRepetido!='' && formulario.controls['name'].value == productRepetido">Ya existe un product
-                    {{formulario.controls['name'].value}}</div>
+                    (keypress)="keyPress($event, type)" #name [formControl]="formGroup.controls['name']">
+                <div class="help is-danger" *ngIf="repeatedProduct!='' && formGroup.controls['name'].value == repeatedProduct">Ya existe un producto
+                    {{formGroup.controls['name'].value}}</div>
                 <div class="help is-danger"
-                    *ngIf="formulario.controls['name'].hasError('required') && formulario.controls['name'].touched">
-                    Falta el name del product</div>
+                    *ngIf="formGroup.controls['name'].hasError('required') && formGroup.controls['name'].touched">
+                    Falta el name del producto</div>
                 <div id="listaProducts">
                     <ul>
                         <li
-                            *ngFor="let p of products$ | async | sort:'name' | filter: formulario.controls['name'].value">
+                            *ngFor="let p of products$ | async | sort:'name' | filter: formGroup.controls['name'].value">
                             {{p.name}}
                         </li>
                     </ul>
                 </div>
             </div>
             <div class="column">
-                <label class="label">type: </label>
+                <label class="label">Tipo: </label>
                 <div class="select">
-                    <select class="select" name="type"  id="type" [formControl]="formulario.controls['type']" #type
+                    <select class="select" name="type"  id="type" [formControl]="formGroup.controls['type']" #type
                         (change)="onChange($event,price)">
                         <option *ngFor="let type of types" [ngValue]="type">{{type}}</option>
                     </select>
-                    <div #enviar id="enviar"></div>
+                    <div #send id="send"></div>
                 </div>
                 <div class="help is-danger"
-                    *ngIf="!formulario.controls['type'].valid && formulario.controls['type'].touched">Seleccione un type
+                    *ngIf="!formGroup.controls['type'].valid && formGroup.controls['type'].touched">Seleccione un tipo
                 </div>
-                <label class="label">price: </label>
-                <input class="input" id="price" type="number" #price (keypress)="procesarKeypress($event, enviar)"
-                    [formControl]="formulario.controls['price']">
+                <label class="label">Precio: </label>
+                <input class="input" id="price" type="number" #price (keypress)="keyPress($event, send)"
+                    [formControl]="formGroup.controls['price']">
 
                 <div class="help is-danger"
-                    *ngIf="formulario.controls['price'].hasError('required') && formulario.controls['price'].touched">
-                    Introduzca el price</div>
+                    *ngIf="formGroup.controls['price'].hasError('required') && formGroup.controls['price'].touched">
+                    Introduzca el precio</div>
                 <div class="help is-danger"
-                    *ngIf="formulario.controls['price'].hasError('min') && formulario.controls['price'].touched">El
-                    price debe ser mayor que 0</div>
+                    *ngIf="formGroup.controls['price'].hasError('min') && formGroup.controls['price'].touched">El
+                    precio debe ser mayor que 0</div>
 
             </div>
 
         </div>
     </div>
 </form>
-<div *ngIf="enviado">
+<div *ngIf="sent">
     <h2>New product creado</h2>
 </div>

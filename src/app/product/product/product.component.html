@@ -7,7 +7,7 @@
     <div class="column is-three-quarters">
       <div class="formulario">
 
-        <p><label class="etiquetas">Identificador:</label> <label class="productId">{{product.productId}}</label></p>
+        <p><label class="etiquetas">Identificador:</label> <label class="id">{{product.id}}</label></p>
         <label class="etiquetas">name:</label><input class = "input" id="name" type="text" [(ngModel)] = "product.name"> <br>
         <label class="etiquetas">Stock:</label><label class = "label" id="stock">  {{product.stock}} </label> <br>
         <label class="etiquetas">price:</label><input class= "input" id="price" type="text" [(ngModel)] = "product.price"><br>
@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="column">
-      <app-button-list [lista]="botones" (enviarButtonType)= "showButtonType($event)"></app-button-list>
+      <app-button-list [lista]="botones" (sendButtonType)= "showButtonType($event)"></app-button-list>
     </div>
   </div>
   

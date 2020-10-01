@@ -14,10 +14,10 @@ export class MockProductsService extends SpyObject {
     fakeProduct: Product;
     getProductsSpy;
     getProduct$Spy;
-    cargarProductsSpy;
+    loadProductsSpy;
     getProductSpy;
-    postModificarProductSpy;
-    getProductPornameSpy;
+    postEditProductSpy;
+    getProductByNameSpy;
     postNewProductSpy;
 
 
@@ -26,12 +26,12 @@ export class MockProductsService extends SpyObject {
         this.fakeProducts$ = new BehaviorSubject<Product[]>([]);
         this.fakeProducts = [];
         this.fakeProduct = new Product();
-        this.fakeProduct.productId = 1;
+        this.fakeProduct.id = 1;
         this.getProduct$Spy = this.spy('getProducts$').and.returnValue(this.fakeProducts$);
         this.getProductsSpy = this.spy('getProducts').and.returnValue(this.fakeProducts);
         this.getProductSpy = this.spy('getProduct').and.callFake(() => this.fakeProduct)
-        this.postModificarProductSpy = this.spy('postModificarProduct').and.returnValue(this);
-        this.getProductPornameSpy = this.spy('getProductPorname').and.callFake((name)=> { 
+        this.postEditProductSpy = this.spy('postEditProduct').and.returnValue(this);
+        this.getProductByNameSpy = this.spy('getProductByName').and.callFake((name)=> { 
             let product = new Product();
             product.name = name;
         })
@@ -50,7 +50,7 @@ export class MockProductsService extends SpyObject {
     setProduct(product: Product) {
         this.fakeProduct = product;
         /*this.fakeproduct.name= product.name;
-        this.fakeProduct.productId = product.productId;
+        this.fakeProduct.id = product.id;
         this.fakeproduct.price = product.price;
         this.fakeproduct.type = product.type;*/
         

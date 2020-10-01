@@ -1,4 +1,4 @@
-export class RespuestaPost {
+export class ResponsePost {
     
     status: number;
     error: number;

@@ -19,43 +19,43 @@ export class ProductComponent {
   product: Product;
   public types = TYPES;
   botones: ButtonType[] = [
-    {id:"Guardar" ,name:"Guardar", show:true},
-    {id:"Volver",name:"Volver", show:true}
+    {id:"Save" ,name:"Guardar", show:true},
+    {id:"Return",name:"Volver", show:true}
   ];
 
   constructor(private productsService: ProductsService, private route: ActivatedRoute, private location: Location) {
     this.route.paramMap.subscribe(params => {
       this.productsService.getProducts$().subscribe(products => {
-        this.product = this.productsService.getProduct(+params.get('productId')); 
+        this.product = this.productsService.getProduct(+params.get('id')); 
       });      
     });
    }
   
-  activarButtonType(id: string) {
+  activateButtonType(id: string) {
     this.botones.find(boton => { return boton.id == id}).show = true;
   }
 
-  desactivarButtonType(id: string) {
+  disableButtonType(id: string) {
     this.botones.find(boton => { return boton.id == id}).show = false;
   }
 
   showButtonType(boton: string) {
-    if (boton == "Volver") {
-      this.volver();
+    if (boton == "Return") {
+      this.return();
     }
-    if (boton == "Guardar") {
-      this.modificarProduct();
+    if (boton == "Save") {
+      this.editProduct();
     }    
   }
 
-  modificarProduct() {
+  editProduct() {
     if(this.product.price <= 0)
       alert("el price debe ser mayor que 0");
     else 
-      this.productsService.postModificarProduct(this.product).subscribe(product => {console.log("Respuesta tras guardar product", product);})
+      this.productsService.postEditProduct(this.product).subscribe(product => {console.log("Response tras guardar product", product);})
   }
 
-  volver(){
+  return(){
     this.location.back();
   }
 

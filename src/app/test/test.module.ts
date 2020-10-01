@@ -28,7 +28,7 @@ export class RootCmp {
 export const routerConfig: Routes = [
   { path: '', component: BlankCmp },
   { path: 'products', component: ProductsComponent},
-  { path: 'product/:productId', component: ProductComponent }
+  { path: 'product/:id', component: ProductComponent }
   
 ];
 

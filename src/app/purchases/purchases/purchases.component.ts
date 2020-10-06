@@ -56,6 +56,7 @@ export class PurchasesComponent implements OnInit {
 
   ngOnInit() {
     this.products$ = this.productsService.getProducts$();
+    this.toolsServices.activateFocus(nameButtonTypes.addProduct);
   }
 
   

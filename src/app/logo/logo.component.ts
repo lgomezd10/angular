@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LogoComponent implements OnInit {
 
+  nombre: string = "Nombre de tu tienda";
+
   constructor() { }
 
   ngOnInit() {

@@ -30,10 +30,10 @@ export class SalesDateComponent implements OnInit {
     this.total = 0;
     console.log("buscar sales");
 
-    this.salesService.salesPordates(dates.from, dates.to).subscribe(sales => {
+    this.salesService.salesByDate(dates.from, dates.to).subscribe(sales => {
       this.sales = sales;
       this.sales.forEach(element => {
-        element.elementos.forEach(e => {
+        element.sale.forEach(e => {
           this.total += e.price * e.quantity;
         });
       });

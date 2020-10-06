@@ -1,28 +1,32 @@
-<div *ngIf ="product != undefined">
+<div *ngIf="product != undefined">
   <h2 class="title is-3">
-    Detalle {{product.name}}
+    Detalles de {{product.name}}
   </h2>
 
   <div class="columns">
     <div class="column is-three-quarters">
-      <div class="formulario">
-
-        <p><label class="etiquetas">Identificador:</label> <label class="id">{{product.id}}</label></p>
-        <label class="etiquetas">name:</label><input class = "input" id="name" type="text" [(ngModel)] = "product.name"> <br>
-        <label class="etiquetas">Stock:</label><label class = "label" id="stock">  {{product.stock}} </label> <br>
-        <label class="etiquetas">price:</label><input class= "input" id="price" type="text" [(ngModel)] = "product.price"><br>
-        <label class="etiquetas">type:</label>
-        <select class="select" id="type" [(ngModel)] = "product.type">
-          <option *ngFor = "let type of types" [ngValue] = "type">{{type}}</option>
+      
+        <h3 *ngIf="updatedProduct.show">Se ha actualizado el producto: {{updatedProduct.product.name}}</h3>
+        <label class="label is-medium">Identificador:</label> <label class="label">{{product.id}}</label>
+        <label class="label is-medium">Nombre:</label><input class="input" id="name" type="text" [(ngModel)]="product.name">
+        
+        <label class="label is-medium">Stock:</label><label class="label" id="stock"> {{product.stock}} </label> <br>
+        <label class="label is-medium">Precio:</label><input class="input" id="price" type="number"
+          [(ngModel)]="product.price">
+        <label class="label is-medium">Tipo:</label>
+        <div class="select">
+          <select id="type" [(ngModel)]="product.type">
+            <option *ngFor="let type of types" [ngValue]="type">{{type}}</option>
           </select>
-      </div>
+        </div>
+      
     </div>
     <div class="column">
-      <app-button-list [lista]="botones" (sendButtonType)= "showButtonType($event)"></app-button-list>
+      <app-button-list [lista]="buttons" (sendButtonType)="showButtonType($event)"></app-button-list>
     </div>
   </div>
-  
+
 </div>
-<div *ngIf ="product == undefined">
-  <h2>No se ha encontrado el product</h2>
+<div *ngIf="product == undefined">
+  <h2 class="title is-4">No se ha encontrado el producto</h2>
 </div>

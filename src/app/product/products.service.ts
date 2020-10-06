@@ -2,7 +2,6 @@ import { Injectable, Output, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Product } from './product';
 import { Observable, of, BehaviorSubject, Subscription } from 'rxjs';
-import { ResponseGet } from './responseget';
 import { ResponseNew } from './responsenew';
 import { ResponsePost } from './responsepost';
 
@@ -88,9 +87,10 @@ export class ProductsService {
     return this.http.get<Product[]>(this.backendUrl + '/products');
   }
 
-  postEditProduct(product: Product): Observable<ResponsePost> {
+  postEditProduct(product: Product): Observable<Product> {
     product.name = formatoname(product.name);
-    return this.http.post<ResponsePost>(this.backendUrl + '/products/' +
+    console.log("DESDE PRODUCT SERVICE se va a actualizar el producto", product)
+    return this.http.post<Product>(this.backendUrl + '/products/' +
       product.id, product, httpOptions);
   }
 

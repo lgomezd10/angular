@@ -19,11 +19,11 @@ export class ToolsService {
     this.foco$ = new BehaviorSubject<string>("");*/
   }
 
-  getButtonTypees$(): Observable<ButtonType[]> {
+  getButtonTypes$(): Observable<ButtonType[]> {
     return this.buttons;
   }
 
-  getButtonTypees(): ButtonType[]{
+  getButtonTypes(): ButtonType[]{
     return this.buttons.getValue();
   }
 
@@ -61,12 +61,8 @@ export class ToolsService {
     }
   }
 
-  limpiarButtonTypees(){
-    this.botones = [];
-    this.buttons.next(this.botones);
-  }
-
-  pulsarButtonType(boton: string) {
+ 
+  pushButtonType(boton: string) {
     this.pulsado$.next(boton);
     this.foco$.next("");
   }

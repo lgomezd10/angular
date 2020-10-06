@@ -26,7 +26,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         }else {
           // backend error
           if (error.error.message != undefined) {
-            errorMessage = `Server-side error: ${error.status} ${error.error.message}`;
+            errorMessage = `Server-side error: ${error.status} ${error.message} ${error.error.message}`;
           } else {
             errorMessage = `Server-side error: ${error.status} ${error.message}`;
           }

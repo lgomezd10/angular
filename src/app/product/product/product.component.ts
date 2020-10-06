@@ -6,6 +6,7 @@ import { TYPES } from '../products-types';
 import { Location } from '@angular/common';
 import { Observable } from 'rxjs';
 import { ButtonType } from 'src/app/tools/button-type';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({
@@ -18,7 +19,11 @@ export class ProductComponent {
   //private products$: Observable<Product[]>;
   product: Product;
   public types = TYPES;
-  botones: ButtonType[] = [
+  updatedProduct = {
+    show: false,
+    product: null
+  }
+  buttons: ButtonType[] = [
     {id:"Save" ,name:"Guardar", show:true},
     {id:"Return",name:"Volver", show:true}
   ];
@@ -32,18 +37,18 @@ export class ProductComponent {
    }
   
   activateButtonType(id: string) {
-    this.botones.find(boton => { return boton.id == id}).show = true;
+    this.buttons.find(button => { return button.id == id}).show = true;
   }
 
   disableButtonType(id: string) {
-    this.botones.find(boton => { return boton.id == id}).show = false;
+    this.buttons.find(button => { return button.id == id}).show = false;
   }
 
-  showButtonType(boton: string) {
-    if (boton == "Return") {
+  showButtonType(button: string) {
+    if (button == "Return") {
       this.return();
     }
-    if (boton == "Save") {
+    if (button == "Save") {
       this.editProduct();
     }    
   }
@@ -52,7 +57,11 @@ export class ProductComponent {
     if(this.product.price <= 0)
       alert("el price debe ser mayor que 0");
     else 
-      this.productsService.postEditProduct(this.product).subscribe(product => {console.log("Response tras guardar product", product);})
+      this.productsService.postEditProduct(this.product).subscribe(response => {
+        this.updatedProduct.show = true;
+        this.updatedProduct.product = response; 
+        setTimeout(() => {this.updatedProduct.show = false}, 5000);
+      })
   }
 
   return(){

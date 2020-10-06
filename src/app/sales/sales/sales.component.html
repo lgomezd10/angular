@@ -1,6 +1,6 @@
 <nav>
-  <a routerLink="/sales" routerLinkActive="active">sales</a>
-  <a routerLink="/sales-dates" routerLinkActive="active">Buscar sales</a>
+  <a routerLink="/sales" routerLinkActive="active">Caja</a>
+  <a routerLink="/sales-dates" routerLinkActive="active">Buscar ventas</a>
 </nav>
 <router-outlet></router-outlet>
 
@@ -10,9 +10,9 @@
 <button (click)=openSale(findSale)>Buscar</button>
 <br><br>
 
-<div *ngIf="codigoSale > 0 && !abierta">
-  <p>Sale finalizada</p>
-  <p>Código Sale: {{codigoSale}}</p>
+<div *ngIf="saleId > 0 && !open">
+  <p>Compra finalizada</p>
+  <p>Código Venta: {{saleId}}</p>
 </div>
 
 <div class="columns">
@@ -25,31 +25,31 @@
           <th>quantity</th>
           <th>price Kg</th>
           <th>price</th>
-          <th *ngIf="codigoSale == 0 || abierta">Eliminar</th>
+          <th *ngIf="saleId == 0 || open">Eliminar</th>
         </tr>
         <tr *ngFor="let sale of sales">
           <td>{{sale.product.name}}</td>
           <td>{{sale.quantity}}</td>
           <td>{{sale.price}}</td>
           <td>{{sale.quantity * sale.price | number: '1.0-2'}}</td>
-          <td *ngIf="codigoSale == 0 || abierta"> <button (click)=eliminarSale(sale)>Eliminar</button></td>
+          <td *ngIf="saleId == 0 || open"> <button (click)=eliminarSale(sale)>Eliminar</button></td>
         </tr>
       </table>
       <h2>Total : {{total}}</h2>
       <br>
 
-      <div *ngIf="codigoSale == 0 || abierta">
+      <div *ngIf="saleId == 0 || open">
         <input type="checkbox" [(ngModel)]="creditCard" /> Pago con creditCard
       </div>
       -->
       <table class="table is-striped">
         <thead>
           <tr>
-            <th>Product</th>
-            <th>quantity</th>
-            <th>price Kg</th>
-            <th>price</th>
-            <th *ngIf="codigoSale == 0 || abierta">Eliminar</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio Kg</th>
+            <th>Precio</th>
+            <th *ngIf="saleId == 0 || open">Eliminar</th>
           </tr>
         </thead>
         <tbody>
@@ -58,15 +58,15 @@
             <td>{{sale.quantity}}</td>
             <td>{{sale.price}}</td>
             <td>{{sale.quantity * sale.price | number: '1.0-2'}}</td>
-            <td *ngIf="codigoSale == 0 || abierta"> <button (click)=eliminarSale(sale)>Eliminar</button></td>
+            <td *ngIf="saleId == 0 || open"> <button (click)=eliminarSale(sale)>Eliminar</button></td>
           </tr>
         </tbody>
       </table>
       <h2>Total : {{totalSale()}}</h2>
       <br>
 
-      <div *ngIf="codigoSale == 0 || abierta">
-        <input type="checkbox" [(ngModel)]="creditCard" /> Pago con creditCard
+      <div *ngIf="saleId == 0 || open">
+        <input type="checkbox" name="checkCreditCard" [(ngModel)]="creditCard"/> Pago con Tarjeta
       </div>
     </div>
 
@@ -76,10 +76,10 @@
       <div class="column">
         <label class="label">Buscar product: </label>
         <input class="input" placeholder="Buscar product" type="text"
-          (keypress)="procesarKeypress($event, product)" #find [formControl]="formGroup.controls['find']" />
+          (keypress)="keyPress($event, product)" #find [formControl]="formGroup.controls['find']" />
 
 
-        <select size="5"(keypress)="procesarKeypress($event, quantity)" #product
+        <select size="5"(keypress)="keyPress($event, quantity)" #product
           [formControl]="formGroup.controls['product']">
           <option
             *ngFor="let product of products$| async | sort:'name' |filter: formGroup.controls['find'].value"
@@ -88,27 +88,27 @@
         </select>
         <div class="help is-danger"
           *ngIf="!formGroup.controls['product'].valid && formGroup.controls['product'].touched">Seleccione un
-          product</div>
+          producto</div>
 
       </div>
       <div class="column">
         <label class="label"> quantity</label>
-        <input class="input" type="number" (keypress)="procesarKeypress($event, enviar)" #quantity
+        <input class="input" type="number" (keypress)="keyPress($event, send)" #quantity
           [formControl]="formGroup.controls['quantity']">
         <div class="help is-danger"
           *ngIf="formGroup.controls['quantity'].hasError('required') && formGroup.controls['quantity'].touched">
           Introduzca la quantity</div>
         <div class="help is-danger"
-          *ngIf="formGroup.controls['quantity'].hasError('min') && formGroup.controls['quantity'].touched">La quantity
+          *ngIf="formGroup.controls['quantity'].hasError('min') && formGroup.controls['quantity'].touched">La cantidad
           debe ser mayor que 0</div>
-        <div id="enviar" #enviar></div>
+        <div id="send" #send></div>
       </div>
     </div>
     </form>
   </div>
 
   <div class="column">
-    <app-button-list [lista]="botones" (sendButtonType)="showButtonType($event)"></app-button-list>
+    <app-button-list [lista]="buttons" (sendButtonType)="showButtonType($event)"></app-button-list>
   </div>
 
 </div>

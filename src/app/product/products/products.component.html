@@ -6,6 +6,7 @@
 
     <label class="label">Buscar productos: </label>
     <input class="input" type="text" [(ngModel)]="searchText"> <br>
+    <h3 *ngIf="updatedProduct.show">Se ha actualizado el producto: {{updatedProduct.product.name}}</h3>
     <div id="listaProducts">
       <ul class="products">
         <li *ngFor="let product of products$ | async | sort:'name' | filter: searchText">

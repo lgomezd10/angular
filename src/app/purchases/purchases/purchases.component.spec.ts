@@ -4,7 +4,7 @@ import { PurchasesComponent } from './purchases.component';
 import { MockPurchasesService } from 'src/app/test/purchases.service.mock';
 import { MockProductsService } from 'src/app/test/products.service.mock';
 import { MockToolsServices } from 'src/app/test/tools.service.mock';
-import { toolsService } from 'src/app/tools/tools.service';
+import { ToolsService } from 'src/app/tools/tools.service';
 import { PurchasesService } from '../purchases.service';
 import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -17,7 +17,7 @@ import {
 } from '../../test/utils';
 import { ProductsService } from 'src/app/product/products.service';
 import { Product } from 'src/app/product/product';
-import { Purchase } from '../purchases';
+import { Purchase } from '../purchase';
 import { error } from 'protractor';
 
 
@@ -35,7 +35,7 @@ describe('PurchasesComponent', () => {
       declarations: [PurchasesComponent],
       providers: [
         mockProductsService.getProviders(),
-        { provide: toolsService, useValue: mocktoolsServices },
+        { provide: ToolsService, useValue: mocktoolsServices },
         { provide: PurchasesService, useValue: mockPurchasesService }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -54,22 +54,22 @@ describe('PurchasesComponent', () => {
   });
 
   describe('show elementos', () => {
-    it('No show formulario para añadir Product', () => {
+    it('No show formGroup para añadir Product', () => {
 
       expect(fixture.debugElement.query(By.css('form'))).toBeNull();
     });
 
-    it('Mostrar formulario para añadir product', () => {
+    it('Mostrar formGroup para añadir product', () => {
       component.showButtonType("AddProduct");
       fixture.detectChanges();
       expect(fixture.debugElement.query(By.css('form'))).not.toBeNull();
     });
     
-    it('No show formulario para crear product', () => {      
+    it('No show formGroup para crear product', () => {      
       expect(fixture.debugElement.query(By.css('app-new'))).toBeNull();
     });
 
-    it('Mostrar formulario para crear product', () => {
+    it('Mostrar formGroup para crear product', () => {
       component.showButtonType("CrearProduct");
       fixture.detectChanges();      
       expect(fixture.debugElement.query(By.css('app-new'))).not.toBeNull();
@@ -91,7 +91,7 @@ describe('PurchasesComponent', () => {
       })));      
   });
 
-  describe('formulario', () => {
+  describe('formGroup', () => {
     let product, quantity, price, el;
     beforeEach(fakeAsync(inject([ProductsService],
       (mockProductsService: MockProductsService) => {
@@ -111,7 +111,7 @@ describe('PurchasesComponent', () => {
       })));
 
     
-    describe('formulario con valores correctos', () => {
+    describe('formGroup con valores correctos', () => {
 
       beforeEach(() => {
         product.options[0].selected = true;
@@ -123,50 +123,50 @@ describe('PurchasesComponent', () => {
         fixture.detectChanges();
       });
 
-      describe('campos de formulario', () => {
+      describe('campos de formGroup', () => {
 
         afterAll(() => {
-          component.formulario.reset();
+          component.formGroup.reset();
         });
 
         it('campo product', () => {
-          expect(component.formulario.controls['product'].value.name).toBe('product1');
+          expect(component.formGroup.controls['product'].value.name).toBe('product1');
         });
         it('campo quantity', () => {
-          expect(component.formulario.controls['quantity'].value).toBe(1);
+          expect(component.formGroup.controls['quantity'].value).toBe(1);
         });
 
         it('campo price', () => {
-          expect(component.formulario.controls['price'].value).toBe(1);
+          expect(component.formGroup.controls['price'].value).toBe(1);
         });
 
       });
 
       it('No lanza errores', () => {
         
-        expect(component.formulario.valid).toBeTruthy();
+        expect(component.formGroup.valid).toBeTruthy();
 
-        component.formulario.markAllAsTouched();        
+        component.formGroup.markAllAsTouched();        
         fixture.detectChanges(); 
         const msgs = el.querySelectorAll('.help.is-danger');
         fixture.detectChanges();
         expect(msgs.length).toBe(0);
       });
 
-      it('Enviar formulario', () => {
-        component.formulario.markAllAsTouched();
+      it('Enviar formGroup', () => {
+        component.formGroup.markAllAsTouched();
         fixture.detectChanges();
         component.showButtonType("Add");
         expect(component.purchases.length).toBe(1);
       });
     });
 
-    describe('Errores en formulario', () => {
+    describe('Errores en formGroup', () => {
 
       it('Errores en campo product', () => {
        
 
-        component.formulario.controls['product'].markAsTouched();
+        component.formGroup.controls['product'].markAsTouched();
         fixture.detectChanges();
         const msgs = el.querySelectorAll('.help.is-danger');
         fixture.detectChanges();
@@ -177,7 +177,7 @@ describe('PurchasesComponent', () => {
 
         
         
-        component.formulario.controls['quantity'].markAsTouched();
+        component.formGroup.controls['quantity'].markAsTouched();
         fixture.detectChanges();
         const msgs = el.querySelectorAll('.help.is-danger');
         fixture.detectChanges();
@@ -186,7 +186,7 @@ describe('PurchasesComponent', () => {
 
       it('Errores quantity menor que 0.1', () => {
         // Otra forma de controlar los errores
-        let fquantity = component.formulario.controls['quantity'];
+        let fquantity = component.formGroup.controls['quantity'];
         let errors = {};
         errors = fquantity.errors || {};        
         expect(errors['required']).toBeTruthy();
@@ -199,7 +199,7 @@ describe('PurchasesComponent', () => {
         //////////////////////////////////////////
         quantity.value = 0;
         dispatchEvent(quantity, 'input');
-        component.formulario.controls['quantity'].markAsTouched();
+        component.formGroup.controls['quantity'].markAsTouched();
         fixture.detectChanges();
         const msgs = el.querySelectorAll('.help.is-danger');
         fixture.detectChanges();
@@ -208,7 +208,7 @@ describe('PurchasesComponent', () => {
 
       it('Error price invalido', () => {
         
-        component.formulario.controls['price'].markAsTouched();
+        component.formGroup.controls['price'].markAsTouched();
         fixture.detectChanges();
         const msgs = el.querySelectorAll('.help.is-danger');
         fixture.detectChanges();
@@ -218,17 +218,17 @@ describe('PurchasesComponent', () => {
       it('Error price menor que 0,1', () => {
         price.value = 0;
         dispatchEvent(price, 'input');
-        component.formulario.controls['price'].markAsTouched();
+        component.formGroup.controls['price'].markAsTouched();
         fixture.detectChanges();
         const msgs = el.querySelectorAll('.help.is-danger');
         fixture.detectChanges();
         expect(msgs[0].innerHTML).toContain('El price debe ser mayor que 0');
       });
 
-      it('Enviar formulario no válido', () => {
+      it('Enviar formGroup no válido', () => {
         component.showButtonType("Add");
         expect(expect(component.purchases.length).toBe(0));
-        component.formulario.markAllAsTouched();
+        component.formGroup.markAllAsTouched();
         component.showButtonType("Add");
         expect(expect(component.purchases.length).toBe(0));
       });

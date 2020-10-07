@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { PurchasesService } from '../purchases.service';
-import { Purchase } from '../purchases';
+import { Purchase } from '../purchase';
 import { dates } from 'src/app/tools/dates';
 
 @Component({

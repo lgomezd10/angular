@@ -74,11 +74,11 @@
       
       <div class="columns">
       <div class="column">
-        <label class="label">Buscar product: </label>
+        <label class="label">Buscar producto: </label>
         <input class="input" placeholder="Buscar product" type="text"
           (keypress)="keyPress($event, product)" #find [formControl]="formGroup.controls['find']" />
 
-
+          
         <select size="5"(keypress)="keyPress($event, quantity)" #product
           [formControl]="formGroup.controls['product']">
           <option
@@ -86,18 +86,19 @@
             [ngValue]="product">
             {{product.id}} {{product.name}} {{product.price}}</option>
         </select>
+          
         <div class="help is-danger"
           *ngIf="!formGroup.controls['product'].valid && formGroup.controls['product'].touched">Seleccione un
           producto</div>
 
       </div>
       <div class="column">
-        <label class="label"> quantity</label>
+        <label class="label"> Cantidad</label>
         <input class="input" type="number" (keypress)="keyPress($event, send)" #quantity
           [formControl]="formGroup.controls['quantity']">
         <div class="help is-danger"
           *ngIf="formGroup.controls['quantity'].hasError('required') && formGroup.controls['quantity'].touched">
-          Introduzca la quantity</div>
+          Introduzca la cantidad</div>
         <div class="help is-danger"
           *ngIf="formGroup.controls['quantity'].hasError('min') && formGroup.controls['quantity'].touched">La cantidad
           debe ser mayor que 0</div>

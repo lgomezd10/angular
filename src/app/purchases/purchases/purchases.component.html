@@ -43,28 +43,30 @@
       <p *ngIf="purchaseCompleted">Compra guardada correctamente</p>
 
     </div>
-    
+
     <form *ngIf="showNew" [formGroup]="formGroup" [class.error]="!formGroup.valid && formGroup.touched" #elementForm>
-      
+
       <div class="columns">
         <div class="column">
           <label class="label">Buscar:</label>
-          <input class="input" name="find" type="text" (keypress)="procesarKeypress($event, product)" #find
+          <input class="input" name="find" type="text" (keypress)="keyPress($event, product)" #find
             [formControl]="formGroup.controls['find']">
-          <select class="select is-multiple" id="product" name="product" size="5" (keypress)="procesarKeypress($event, quantity)" #product
-            [formControl]="formGroup.controls['product']">
-            <option
-              *ngFor="let product of products$| async | sort:'name' |filter: formGroup.controls['find'].value"
-              [ngValue]="product">
-              {{product.id}} {{product.name}} stock: {{product.stock}}</option>
-          </select><br>
+          
+            <select id="product" name="product" size="5" (keypress)="keyPress($event, quantity)" #product
+              [formControl]="formGroup.controls['product']">
+              <option *ngFor="let product of products$| async | sort:'name' |filter: formGroup.controls['find'].value"
+                [ngValue]="product">
+                {{product.id}} {{product.name}} stock: {{product.stock}}</option>
+            </select>
+         
+          
           <div class="help is-danger"
             *ngIf="!formGroup.controls['product'].valid && formGroup.controls['product'].touched">Seleccione un
             producto</div>
         </div>
         <div class="column">
           <label class="label">Cantidad:</label> <input class="input" type="number" id="quantity" name="quantity"
-            (keypress)="procesarKeypress($event, price)" #quantity [formControl]="formGroup.controls['quantity']"><br>
+            (keypress)="keyPress($event, price)" #quantity [formControl]="formGroup.controls['quantity']"><br>
 
           <div class="help is-danger"
             *ngIf="formGroup.controls['quantity'].hasError('required') && formGroup.controls['quantity'].touched">
@@ -75,7 +77,7 @@
 
 
           <label class="label">Precio: </label>
-          <input class="input" type="number" id="price" name="price" min=0 (keypress)="procesarKeypress($event, send)" #price
+          <input class="input" type="number" id="price" name="price" min=0 (keypress)="keyPress($event, send)" #price
             [formControl]="formGroup.controls['price']">
           <div class="help is-danger"
             *ngIf="formGroup.controls['price'].hasError('required') && formGroup.controls['price'].touched">
@@ -87,7 +89,7 @@
         </div>
       </div>
     </form>
-  
+
     <div class="crear-new">
       <!--<button (click) = sendPurchase() *ngIf ="purchases.length > 0 && !purchaseCompleted">Enviar compra</button>-->
       <app-new *ngIf="showNewProduct" (savedProduct)="newGuardado($event)"></app-new>

@@ -2,7 +2,7 @@ import { async, ComponentFixture, fakeAsync, TestBed, inject, tick } from '@angu
 
 import { PurchasesDateComponent } from './purchases-date.component';
 import { PurchasesService } from '../purchases.service';
-import { Purchase } from '../purchases';
+import { Purchase } from '../purchase';
 import { DatePipe } from '@angular/common';
 import { GroupBydatePipe } from 'src/app/tools/group-by.date.pipe';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';

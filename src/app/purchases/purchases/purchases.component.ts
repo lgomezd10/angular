@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { ProductsService } from 'src/app/product/products.service';
-import { Purchase } from '../purchases';
+import { Purchase } from '../purchase';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Product } from 'src/app/product/product';
 import { PurchasesService } from '../purchases.service';
@@ -8,7 +8,7 @@ import { ButtonType } from 'src/app/tools/button-type';
 import { ToolsService } from 'src/app/tools/tools.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-const nameButtonTypes = { sendPurchase: 'EnviarPurchase', createProduct: 'CrearProduct', addProduct: 'AddProduct', add: 'Add' };
+const nameButtonTypes = { sendPurchase: 'SendPruchase', newPurchase: 'NewPurchase', createProduct: 'CreateProduct', addProduct: 'AddProduct', add: 'Add' };
 
 @Component({
   selector: 'app-purchases',
@@ -37,6 +37,7 @@ export class PurchasesComponent implements OnInit {
   myDateValue: Date = new Date();
   botones: ButtonType[] = [
     { id: nameButtonTypes.sendPurchase, name: "Enviar compra", show: false },
+    { id: nameButtonTypes.newPurchase, name: "Nueva compra", show: false },
     { id: nameButtonTypes.createProduct, name: "Crear producto", show: true },
     { id: nameButtonTypes.addProduct, name: "Añadir producto", show: true },
     { id: nameButtonTypes.add, name: "Añadir", show: false }
@@ -80,6 +81,10 @@ export class PurchasesComponent implements OnInit {
       //setTimeout(() => this.autoFoco.nativeElement.focus(), 100);
       //this.autoFoco.nativeElement.focus();
     }
+
+    if (button == nameButtonTypes.newPurchase) {
+      this.newPurchase();
+    }
     if (button == nameButtonTypes.createProduct) {
       this.disableButtonType(button);
       this.activateButtonType(nameButtonTypes.addProduct);
@@ -95,25 +100,43 @@ export class PurchasesComponent implements OnInit {
     }
   }
 
+  newPurchase(): void {
+    if (this.purchases.length > 0) {
+      var statusConfirm = confirm("¿Desea crear una nueva compra? La compra actual no se ha guardado");
+      if (statusConfirm) {
+        this.purchases = [];
+        this.showNew = false;
+        this.showNewProduct = false;
+        this.disableButtonType(nameButtonTypes.add);
+        this.disableButtonType(nameButtonTypes.sendPurchase);
+      } 
+    }
+  }
+
   addPurchaseToList() {
     let purchase = this.purchases.find(purchase => purchase.product.name == this.currentPurchase.product.name);
+    
 
     if (purchase == undefined || purchase.price != this.currentPurchase.price) {
       this.purchases.push(this.currentPurchase);
     } else {
       purchase.quantity = purchase.quantity + this.currentPurchase.quantity;
     }
+
+    console.log("Desde Puchase COMPONENT se va a añadir la compra", purchase);
     //this.total = this.totalPurchase();
     this.showNew = false;
     this.activateButtonType(nameButtonTypes.addProduct);
     this.disableButtonType(nameButtonTypes.add);
     this.activateButtonType(nameButtonTypes.sendPurchase);
+    this.activateButtonType(nameButtonTypes.newPurchase);
     this.toolsServices.activateFocus(nameButtonTypes.addProduct);
 
   }
 
   onSubmit() {
     if (this.formGroup.valid) {
+      console.log("Desde Puchase COMPONENT se va a añadir la compra", this.formGroup.value.product);
       this.currentPurchase.product = this.formGroup.value.product;
       this.currentPurchase.quantity = this.formGroup.value.quantity;
       this.currentPurchase.price = this.formGroup.value.price;
@@ -165,7 +188,7 @@ export class PurchasesComponent implements OnInit {
     }
   }  
 
-  procesarKeypress(key: KeyboardEvent, campo: HTMLElement) {
+  keyPress(key: KeyboardEvent, campo: HTMLElement) {
     if (key.keyCode == 13) { // press Enter      
       if (this.goToSummit.nativeElement == campo) {
         this.toolsServices.activateFocus(nameButtonTypes.add);

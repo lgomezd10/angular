@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Purchase } from './purchases';
+import { Purchase } from './purchase';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -34,6 +34,7 @@ export class PurchasesService {
   backendUrl = 'http://localhost:3000';
 
   guardarPurchase(purchases: Purchase[]): Observable<ResponsePurchase> {
+    console.log("DESDE PRURCHASES SERVICE se va a guardar", purchases);
     return this.http.post<ResponsePurchase>(this.backendUrl + '/purchases/', purchases, httpOptions);
   }
 

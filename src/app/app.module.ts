@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
+import { CanActivate} from '@angular/router'
 import { AppComponent } from './app.component';
 import { ProductModule } from './product/product.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -21,39 +21,18 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MenuUserComponent } from './auth/menu-user/menu-user.component';
+import { AppRoutingModule } from './app-routing.module';
+import { LoginModule } from './auth/login/login.module';
 library.add(fas);
 
-const appRoutes: Routes = [
-  {
-    path: '',
-    component: SalesComponent
-  },
-  {
-    path: 'sales',
-    component: SalesComponent
-  },
-  {
-    path: 'products',
-    component: ProductsComponent
-  },
-  {
-    path: 'purchases',
-    component: PurchasesComponent
-  },
-  {
-    path: 'error',
-    component: ErroresComponent
-  },
-  {
-    path: 'product/:id',
-    component: ProductComponent
-  }
-]
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    LogoComponent
+    LogoComponent,
+    MenuUserComponent
   ],
   imports: [
     FormsModule,
@@ -62,19 +41,16 @@ const appRoutes: Routes = [
     ProductModule,
     SalesModule,
     PurchasesModule,
+    LoginModule,
     ErroresModule,
     ToolsModule,
     HttpClientModule,
-    RouterModule.forRoot(
-      appRoutes,
-      { enableTracing: true }
-    ),
+    AppRoutingModule,
     BrowserAnimationsModule,
     FontAwesomeModule
 
   ],
   exports: [FontAwesomeModule],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

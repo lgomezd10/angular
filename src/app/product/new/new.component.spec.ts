@@ -11,13 +11,13 @@ import { MockProductsService } from 'src/app/test/products.service.mock';
 import { ProductsService } from '../products.service';
 import { Product } from '../product';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { toolsService } from 'src/app/tools/tools.service';
+import { ToolsService } from 'src/app/tools/tools.service';
 import { MockToolsServices } from 'src/app/test/tools.service.mock';
 import { CommonModule } from '@angular/common';
 import { ProductModule } from '../product.module';
 
 describe('NewComponent', () => {
-  let componet: NewComponent;
+  let component: NewComponent;
   let fixture: ComponentFixture<NewComponent>;
   beforeEach(async(() => {
 
@@ -27,7 +27,7 @@ describe('NewComponent', () => {
       imports: [FormsModule, ReactiveFormsModule, ProductModule],
       providers: [
         mockProductsService.getProviders(),
-        { provide: toolsService, useValue: mocktoolsServices }
+        { provide: ToolsService, useValue: mocktoolsServices }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [NewComponent]
@@ -37,11 +37,11 @@ describe('NewComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NewComponent);
-    componet = fixture.componentInstance;
+    component = fixture.componentInstance;
   });
 
   it('should create', () => {
-    expect(componet).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 
   describe('formulario', () => {
@@ -70,22 +70,22 @@ describe('NewComponent', () => {
       }));
 
       afterAll(() => {
-        componet.formulario.reset();
+        component.formGroup.reset();
       })
 
       it('campo name', () => {
-        expect(componet.formulario.controls['name'].value).toBe('product1');
+        expect(component.formGroup.controls['name'].value).toBe('product1');
       });
       it('campo type', () => {
-        expect(componet.formulario.controls['type'].value).toBe("Otros/Verdura");
+        expect(component.formGroup.controls['type'].value).toBe("Otros/Verdura");
       });
 
       it('campo price', () => {
-        expect(componet.formulario.controls['price'].value).toBe(1);
+        expect(component.formGroup.controls['price'].value).toBe(1);
       });
 
       it('No lanza errores',fakeAsync(() => { 
-        componet.formulario.markAllAsTouched();     
+        component.formGroup.markAllAsTouched();     
         fixture.detectChanges();  
         const msgs = el.querySelectorAll('.help.is-danger');
         fixture.detectChanges();        
@@ -96,12 +96,12 @@ describe('NewComponent', () => {
 
     describe('Errores en formulario', () => {
 
-      afterEach(() => componet.formulario.reset());
+      afterEach(() => component.formGroup.reset());
 
       it('Errores en campo name', fakeAsync(() => {
         name.value = '';
         dispatchEvent(name, 'input');
-        componet.formulario.controls['name'].markAsTouched();        
+        component.formGroup.controls['name'].markAsTouched();        
         fixture.detectChanges();
         const msgs = el.querySelectorAll('.help.is-danger');
         fixture.detectChanges();        
@@ -111,7 +111,7 @@ describe('NewComponent', () => {
       it('Errores en campo type', fakeAsync(() => {
         type.value = '';
         dispatchEvent(type, 'input');
-        componet.formulario.controls['type'].markAsTouched();        
+        component.formGroup.controls['type'].markAsTouched();        
         fixture.detectChanges();
         const msgs = el.querySelectorAll('.help.is-danger');
         fixture.detectChanges();        
@@ -121,7 +121,7 @@ describe('NewComponent', () => {
       it('Error price invalido', fakeAsync(() => {
         price.value = '';
         dispatchEvent(price, 'input');
-        componet.formulario.controls['price'].markAsTouched();        
+        component.formGroup.controls['price'].markAsTouched();        
         fixture.detectChanges();
         const msgs = el.querySelectorAll('.help.is-danger');
         fixture.detectChanges();        
@@ -131,7 +131,7 @@ describe('NewComponent', () => {
       it('Error price menor que 0,1', fakeAsync(() => {
         price.value = 0;
         dispatchEvent(price, 'input');
-        componet.formulario.controls['price'].markAsTouched();        
+        component.formGroup.controls['price'].markAsTouched();        
         fixture.detectChanges();
         const msgs = el.querySelectorAll('.help.is-danger');
         fixture.detectChanges();     

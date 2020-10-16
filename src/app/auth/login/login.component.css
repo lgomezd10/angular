@@ -1,0 +1,8 @@
+.login {
+    display: flex;    
+    justify-content: center;
+    padding-top: 20px;
+    max-width: 400px;
+    min-width: 300px;
+    margin: 0 auto 0 auto; text-align: left;
+}

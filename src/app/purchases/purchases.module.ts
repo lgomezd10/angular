@@ -11,8 +11,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToolsModule } from '../tools/tools.module';
 import { Routes, RouterModule } from '@angular/router';
 import { FlexLayoutModule } from "@angular/flex-layout";
+import { NavPurchasesComponent } from './nav-purchases/nav-purchases.component';
+import { AppRoutingModule } from '@app/app-routing.module';
 
-const purchasesRoutes: Routes = [
+/*const purchasesRoutes: Routes = [
   {
     path: 'purchases-dates',
     component: PurchasesDateComponent
@@ -21,10 +23,10 @@ const purchasesRoutes: Routes = [
     path: 'purchases',
     component: PurchasesComponent
   }  
-]
+]*/
 
 @NgModule({
-  declarations: [PurchasesComponent, PurchasesDateComponent],
+  declarations: [PurchasesComponent, PurchasesDateComponent, NavPurchasesComponent],
   imports: [
     FlexLayoutModule,
     CommonModule,
@@ -35,10 +37,7 @@ const purchasesRoutes: Routes = [
     ToolsModule,
     MatDatepickerModule,
         BrowserAnimationsModule,
-    RouterModule.forRoot(
-      purchasesRoutes,
-      { enableTracing: true }
-    )
+   AppRoutingModule
   ],
   exports: [
     PurchasesComponent,

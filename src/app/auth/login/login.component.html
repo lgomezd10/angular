@@ -1,0 +1,9 @@
+<div class="login">
+<form class="form" [formGroup] = "formGroup" (ngSubmit)="onLogin()">
+    <label class="label">Usuario: </label>
+    <input class= "input" type="text" [formControl]="formGroup.controls['username']" />
+    <label class="label">Contraseña: </label>
+    <input class= "input" type="password" autocomplete="off" [formControl]="formGroup.controls['password']"/>
+    <button class="button is-fullwidth" type="submit">Login</button>
+</form>
+</div>

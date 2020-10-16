@@ -11,9 +11,12 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ToolsModule } from '../tools/tools.module';
-import { Routes, RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NavSalesComponent } from './nav-sales/nav-sales.component';
+import { AppRoutingModule } from '@app/app-routing.module';
 
+
+/*//TODO Rehacer routes
 const salesRoutes: Routes = [
   {
     path: 'sales-dates',
@@ -23,12 +26,13 @@ const salesRoutes: Routes = [
     path: 'sales',
     component: SalesComponent
   }  
-]
+]*/
 
 @NgModule({
-  declarations: [SalesComponent, SalesDateComponent],
-  imports: [
+  declarations: [SalesComponent, SalesDateComponent, NavSalesComponent],
+  imports: [    
     FontAwesomeModule,
+    AppRoutingModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -37,11 +41,11 @@ const salesRoutes: Routes = [
     ToolsModule,
     MatDatepickerModule,
     BrowserAnimationsModule,
-    RouterModule.forRoot(
+    /*RouterModule.forRoot(
       salesRoutes,
       { enableTracing: true }
-    )
+    )*/
   ],
-  exports: [SalesComponent],
+  exports: [SalesComponent, SalesDateComponent, NavSalesComponent],
 })
 export class SalesModule { }

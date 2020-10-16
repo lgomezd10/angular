@@ -1,14 +1,54 @@
 <app-errores></app-errores>
 
-<div id="principal">
+<!--<div id="principal">
     <app-logo></app-logo>
     <div id="header">
         <ul class="nav">
-            <li><a  routerLink="/sales" routerLinkActive="active">Caja</a></li>
+            <li><a routerLink="/sales" routerLinkActive="active">Caja</a></li>
             <li><a routerLink="/products" routerLinkActive="active">Productos</a></li>
             <li><a routerLink="/purchases" routerLinkActive="active">Compras</a></li>
+            <li><app-menu-user></app-menu-user></li>
         </ul>
     </div>    
     <router-outlet></router-outlet>
-</div>
+</div>-->
 
+
+<div id="principal">
+    <app-logo></app-logo>
+    <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand  has-text-white is-size-4">
+                   
+            <a role="button" class="navbar-burger burger" #buttoOculto id="buttoOculto" aria-label="menu" (click)="onClickBurger()"
+            aria-expanded="false" data-target="navMenu">
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+            </a>
+          </div>
+
+        <div id="navMenu" #navMenu class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" routerLink="/sales" routerLinkActive="active" (click)="onClickBurger()">
+                    Caja
+                </a>
+
+                <a class="navbar-item" routerLink="/products" routerLinkActive="active" (click)="onClickBurger()">
+                    Productos
+                </a>
+
+                <a class="navbar-item" routerLink="/purchases" routerLinkActive="active" (click)="onClickBurger()">
+                    Compras
+                </a>
+
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <app-menu-user></app-menu-user>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <router-outlet></router-outlet>
+</div>

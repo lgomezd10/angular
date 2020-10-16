@@ -1,8 +1,3 @@
-<nav>
-  <a routerLink="/purchases" routerLinkActive="active">Compras</a>
-  <a routerLink="/purchases-dates" routerLinkActive="active">Buscar Compras</a>
-</nav>
-<router-outlet></router-outlet>
 <app-select-dates (enviardates) = "findPurchases($event)"></app-select-dates>
 
 <table class="resultados" *ngFor = "let purchase of purchases | groupBydate">  

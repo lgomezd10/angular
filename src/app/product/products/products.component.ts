@@ -26,6 +26,7 @@ export class ProductsComponent implements OnInit {
   ];
 
   constructor(private productsService: ProductsService, private route: ActivatedRoute) {
+    
     console.log("Desde products component***:", this.updatedProduct);
     /*route.url.subscribe(url => {
       if (this.products == null) {
@@ -40,6 +41,8 @@ export class ProductsComponent implements OnInit {
  
 
   ngOnInit() {
+    
+    this.productsService.loadProducts();
     console.log("pasa por init")
     this.products$ = this.productsService.getProducts$().pipe(
       tap((value) => {

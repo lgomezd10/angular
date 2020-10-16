@@ -1,6 +1,6 @@
 import { SpyObject } from './test.helpers';
 import { ProductsService } from '../product/products.service';
-import { toolsService } from '../tools/tools.service';
+import { ToolsService } from '../tools/tools.service';
 
 export class MockToolsServices extends SpyObject {
     fakePulsado: String;
@@ -32,6 +32,6 @@ export class MockToolsServices extends SpyObject {
     }
 
     getProviders(): Array<any> {
-        return [{ provide: toolsService, useValue: this }];
+        return [{ provide: ToolsService, useValue: this }];
       }
 }

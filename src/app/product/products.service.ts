@@ -6,6 +6,7 @@ import { ResponseNew } from './responsenew';
 import { ResponsePost } from './responsepost';
 
 import { Socket } from 'ngx-socket-io';
+import { environment } from '@env/environment';
 
 function formatoname(name: string): string {
   name = name.trim();
@@ -47,9 +48,9 @@ export class ProductsService {
 
   //@Output() updateProducts: EventEmitter<Product> = new EventEmitter();
 
-  backendUrl = 'http://localhost:3000';
+  backendUrl = environment.API_URL;
 
-  private loadProducts() {
+  loadProducts() {
     this._docSub = this.getProductsServer().subscribe(response => {      
       
       this.products$.next(response);

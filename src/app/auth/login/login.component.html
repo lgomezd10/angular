@@ -1,9 +1,15 @@
 <div class="login">
-<form class="form" [formGroup] = "formGroup" (ngSubmit)="onLogin()">
+  <form class="form" [formGroup]="formGroup" (ngSubmit)="onLogin()">
     <label class="label">Usuario: </label>
-    <input class= "input" type="text" [formControl]="formGroup.controls['username']" />
+    <input class="input" type="text" [formControl]="formGroup.controls['username']" />
     <label class="label">Contraseña: </label>
-    <input class= "input" type="password" autocomplete="off" [formControl]="formGroup.controls['password']"/>
+    <div class="control has-icons-right">
+      <input class="input" type="password" autocomplete="off" [formControl]="formGroup.controls['password']"
+        #password />
+      <span class="icon" class="icon is-small is-right">
+        <i class="fas fa-eye" (click)="showPassword()" #icon></i>
+      </span>
+    </div>
     <button class="button is-fullwidth" type="submit">Login</button>
-</form>
+  </form>
 </div>

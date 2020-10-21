@@ -168,11 +168,16 @@ export class SalesComponent implements OnInit {
   
   openSale(salesId: number) {
     this.salesService.obtenerSale(salesId).subscribe(sales => {
+      
       this.sales = sales.sale;
       this.saleId = sales.id;
       this.creditCard = sales.creditCard;      
       this.open = true;
       this.activateButtonType(nameButtonTypes.closeSale);
+   
+    error => {
+      console.log(`No se ha encontrado la compra ${salesId}`);
+    }
       
     });
   }

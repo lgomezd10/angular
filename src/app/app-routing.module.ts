@@ -30,10 +30,10 @@ const routes: Routes = [
     canActivate: [CheckLoginGuard],
     children: [
       {
-        path: '', redirectTo: 'sales', pathMatch: "full"
+        path: 'sales', redirectTo: '', pathMatch: "full"
       },
       {
-        path: 'sales', // child route path
+        path: '', // child route path
         component: SalesComponent, // child route component that the router renders
       },
       {
@@ -49,10 +49,10 @@ const routes: Routes = [
     canActivate: [CheckLoginGuard],
     children: [
       {
-        path: '', redirectTo: 'purchases', pathMatch: "full"
+        path: 'purchases', redirectTo: '', pathMatch: "full"
       },
       {
-        path: 'purchases', component: PurchasesComponent
+        path: '', component: PurchasesComponent
       },
       {
         path: 'purchases-dates', component: PurchasesDateComponent

@@ -11,7 +11,6 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ToolsModule } from '../tools/tools.module';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NavSalesComponent } from './nav-sales/nav-sales.component';
 import { AppRoutingModule } from '@app/app-routing.module';
 
@@ -30,8 +29,7 @@ const salesRoutes: Routes = [
 
 @NgModule({
   declarations: [SalesComponent, SalesDateComponent, NavSalesComponent],
-  imports: [    
-    FontAwesomeModule,
+  imports: [        
     AppRoutingModule,
     CommonModule,
     FormsModule,

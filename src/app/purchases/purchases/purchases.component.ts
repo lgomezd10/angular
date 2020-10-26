@@ -7,6 +7,7 @@ import { PurchasesService } from '../purchases.service';
 import { ButtonType } from 'src/app/tools/button-type';
 import { ToolsService } from 'src/app/tools/tools.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormErrors } from '@app/tools/form-errors';
 
 const nameButtonTypes = { sendPurchase: 'SendPruchase', newPurchase: 'NewPurchase', createProduct: 'CreateProduct', addProduct: 'AddProduct', add: 'Add' };
 
@@ -100,16 +101,27 @@ export class PurchasesComponent implements OnInit {
     }
   }
 
-  newPurchase(): void {
-    if (this.purchases.length > 0) {
-      var statusConfirm = confirm("¿Desea crear una nueva compra? La compra actual no se ha guardado");
-      if (statusConfirm) {
-        this.purchases = [];
+  resetPurchase() {
+    this.purchases = [];
         this.showNew = false;
         this.showNewProduct = false;
         this.disableButtonType(nameButtonTypes.add);
         this.disableButtonType(nameButtonTypes.sendPurchase);
+        this.disableButtonType(nameButtonTypes.newPurchase);
+        this.activateButtonType(nameButtonTypes.addProduct);
+        this.activateButtonType(nameButtonTypes.createProduct);
+        this.toolsServices.activateFocus(nameButtonTypes.addProduct);
+        this.purchaseCompleted = false;
+  }
+
+  newPurchase(): void {
+    if (!this.purchaseCompleted) {
+      var statusConfirm = confirm("¿Desea crear una nueva compra? La compra actual no se ha guardado");
+      if (statusConfirm) {
+        this.resetPurchase();
       } 
+    } else {
+      this.resetPurchase();
     }
   }
 
@@ -185,6 +197,7 @@ export class PurchasesComponent implements OnInit {
       this.disableButtonType(nameButtonTypes.addProduct);
       this.disableButtonType(nameButtonTypes.createProduct);
       this.disableButtonType(nameButtonTypes.sendPurchase);
+      this.toolsServices.activateFocus(nameButtonTypes.newPurchase);
     }
   }  
 
@@ -197,6 +210,14 @@ export class PurchasesComponent implements OnInit {
       }
 
     }
+  }
+
+  checkError(field: string): boolean {
+    return FormErrors.checkError(field, this.formGroup)
+  }
+
+  getError(name: string, field: string): string {
+    return FormErrors.getError(name, field, this.formGroup);
   }
 
   onChange(e, campo) {

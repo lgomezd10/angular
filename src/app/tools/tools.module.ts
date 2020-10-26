@@ -15,6 +15,7 @@ import { ButtonListComponent } from './button-list/button-list.component';
 import { from } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { RequestInterceptor } from './interceptors/request-interceptor';
+import { ErroresModule } from '@app/errores/errores.module';
 
 @NgModule({
   declarations: [SelecciondatesComponent, GroupByPipe, GroupBydatePipe, ButtonListComponent],
@@ -26,7 +27,8 @@ import { RequestInterceptor } from './interceptors/request-interceptor';
     MatFormFieldModule,
     MatNativeDateModule,
     MatInputModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ErroresModule
   ],
   providers: [ MatDatepickerModule, 
     { provide: MAT_DATE_LOCALE, useValue: 'es-ES' } ,

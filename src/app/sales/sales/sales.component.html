@@ -1,8 +1,9 @@
-
 <h2 class="title is-3">Caja</h2>
 
-<input type="text" [(ngModel)]="findSale">
-<button (click)=openSale(findSale)>Buscar</button>
+<app-errores [typeError]="'Error404'"></app-errores>
+
+<input class="input hola" type="text" [(ngModel)]="findSale">
+<button class="button hola" (click)=openSale(findSale)>Buscar</button>
 <br><br>
 
 <div *ngIf="saleId > 0 && !open">
@@ -61,45 +62,42 @@
       <br>
 
       <div *ngIf="saleId == 0 || open">
-        <input type="checkbox" name="checkCreditCard" [(ngModel)]="creditCard"/> Pago con Tarjeta
+        <input type="checkbox" name="checkCreditCard" [(ngModel)]="creditCard" /> Pago con Tarjeta
       </div>
     </div>
 
     <form *ngIf="showNew" [formGroup]="formGroup" [class.error]="!formGroup.valid && formGroup.touched" #elementForm>
-      
+
       <div class="columns">
-      <div class="column">
-        <label class="label">Buscar producto: </label>
-        <input class="input" placeholder="Buscar product" type="text"
-          (keypress)="keyPress($event, product)" #find [formControl]="formGroup.controls['find']" />
+        <div class="column">
+          <p>
+            <label class="label">Buscar producto: </label>
+            <input class="input" placeholder="Buscar product" type="text" (keypress)="keyPress($event, product)" #find
+              [formControl]="formGroup.controls['find']" />
+          </p>
+          <p>
+            <select class="input is-arrowless" size="5" (keypress)="keyPress($event, quantity)" #product
+              [formControl]="formGroup.controls['product']">
+              <option *ngFor="let product of products$| async | sort:'name' |filter: formGroup.controls['find'].value"
+                [ngValue]="product">
+                {{product.id}} {{product.name}} {{product.price}}</option>
+            </select>
+          </p>
+          <div class="help is-danger" *ngIf="checkError('product')">
+            {{getError('Producto', 'product')}}
+          </div>
 
-          
-        <select size="5"(keypress)="keyPress($event, quantity)" #product
-          [formControl]="formGroup.controls['product']">
-          <option
-            *ngFor="let product of products$| async | sort:'name' |filter: formGroup.controls['find'].value"
-            [ngValue]="product">
-            {{product.id}} {{product.name}} {{product.price}}</option>
-        </select>
-          
-        <div class="help is-danger"
-          *ngIf="!formGroup.controls['product'].valid && formGroup.controls['product'].touched">Seleccione un
-          producto</div>
-
+        </div>
+        <div class="column">
+          <label class="label"> Cantidad</label>
+          <input class="input" type="number" (keypress)="keyPress($event, send)" #quantity
+            [formControl]="formGroup.controls['quantity']">
+          <div class="help is-danger" *ngIf="checkError('quantity')">
+            {{getError('Cantidad', 'quantity')}}
+          </div>
+          <div id="send" #send></div>
+        </div>
       </div>
-      <div class="column">
-        <label class="label"> Cantidad</label>
-        <input class="input" type="number" (keypress)="keyPress($event, send)" #quantity
-          [formControl]="formGroup.controls['quantity']">
-        <div class="help is-danger"
-          *ngIf="formGroup.controls['quantity'].hasError('required') && formGroup.controls['quantity'].touched">
-          Introduzca la cantidad</div>
-        <div class="help is-danger"
-          *ngIf="formGroup.controls['quantity'].hasError('min') && formGroup.controls['quantity'].touched">La cantidad
-          debe ser mayor que 0</div>
-        <div id="send" #send></div>
-      </div>
-    </div>
     </form>
   </div>
 

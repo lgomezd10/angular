@@ -42,7 +42,7 @@ export class ProductsService {
     this.products$ = new BehaviorSubject<Product[]>([]);
     this.loadProducts();
     this.updateProducts$.subscribe(products => this.products$.next(products),
-      err => console.log('error en socket', err));
+      err => console.log('piripitos'));
 
   }
 

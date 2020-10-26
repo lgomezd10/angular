@@ -6,6 +6,7 @@ import { TYPES } from '../products-types';
 import { ToolsService } from 'src/app/tools/tools.service';
 import { ButtonType } from 'src/app/tools/button-type';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormErrors } from '@app/tools/form-errors';
 
 /*function productValidator(control: FormControl): {[s: string]: boolean} {
   if(this.productsService.getProductByName(control.value) != undefined) {
@@ -122,6 +123,15 @@ export class NewComponent implements OnInit {
   onChange(e, campo) {
     campo.focus();
   }
+
+  checkError(field: string): boolean {
+    return FormErrors.checkError(field, this.formGroup)
+  }
+
+  getError(name: string, field: string): string {
+    return FormErrors.getError(name, field, this.formGroup);
+  }
+  
 
   ngOnDestroy() {
     if (this._pressSub) this._pressSub.unsubscribe();

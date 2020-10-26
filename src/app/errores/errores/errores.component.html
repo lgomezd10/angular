@@ -1,3 +1,7 @@
-<p>
+<p *ngIf= "typeError=='Errors'">
   {{errores$ | async}}
 </p>
+<p *ngIf= "typeError=='Error404'">  
+  {{errores404$ | async}}
+</p>
+

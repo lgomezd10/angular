@@ -7,10 +7,12 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class ErrorService {
 
   mensaje$: BehaviorSubject<string>;
+  mensaje404$: BehaviorSubject<string>;
 
   constructor() {
 
     this.mensaje$ = new BehaviorSubject('');
+    this.mensaje404$ = new BehaviorSubject('');
 
    }
 
@@ -18,8 +20,21 @@ export class ErrorService {
      return this.mensaje$.asObservable();
    }
 
+   getError404$(): Observable<string> {
+     return this.mensaje404$.asObservable();
+   }
+
    show(mensaje: string) {
      this.mensaje$.next(this.mensaje$.getValue() + mensaje);
+   }
+
+   showError404(mensaje: string) {
+     this.mensaje404$.next(mensaje);
+   }
+
+   reset() {
+     this.mensaje$.next("");
+     this.mensaje404$.next("");
    }
   
 }

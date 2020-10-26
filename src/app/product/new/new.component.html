@@ -8,9 +8,9 @@
                     (keypress)="keyPress($event, type)" #name [formControl]="formGroup.controls['name']">
                 <div class="help is-danger" *ngIf="repeatedProduct!='' && formGroup.controls['name'].value == repeatedProduct">Ya existe un producto
                     {{formGroup.controls['name'].value}}</div>
-                <div class="help is-danger"
-                    *ngIf="formGroup.controls['name'].hasError('required') && formGroup.controls['name'].touched">
-                    Falta el name del producto</div>
+                    <div class="help is-danger" *ngIf= "checkError('name')">
+                        {{getError('Nombre', 'name')}}
+                    </div>  
                 <div id="listaProducts">
                     <ul>
                         <li
@@ -29,19 +29,16 @@
                     </select>
                     <div #send id="send"></div>
                 </div>
-                <div class="help is-danger"
-                    *ngIf="!formGroup.controls['type'].valid && formGroup.controls['type'].touched">Seleccione un tipo
-                </div>
+                <div class="help is-danger" *ngIf= "checkError('type')">
+                    {{getError('Tipo', 'type')}}
+                </div>                
                 <label class="label">Precio: </label>
                 <input class="input" id="price" type="number" #price (keypress)="keyPress($event, send)"
                     [formControl]="formGroup.controls['price']">
 
-                <div class="help is-danger"
-                    *ngIf="formGroup.controls['price'].hasError('required') && formGroup.controls['price'].touched">
-                    Introduzca el precio</div>
-                <div class="help is-danger"
-                    *ngIf="formGroup.controls['price'].hasError('min') && formGroup.controls['price'].touched">El
-                    precio debe ser mayor que 0</div>
+                    <div class="help is-danger" *ngIf= "checkError('price')">
+                        {{getError('Precio', 'price')}}
+                    </div>  
 
             </div>
 

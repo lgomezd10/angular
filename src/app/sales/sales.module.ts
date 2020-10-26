@@ -13,6 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToolsModule } from '../tools/tools.module';
 import { NavSalesComponent } from './nav-sales/nav-sales.component';
 import { AppRoutingModule } from '@app/app-routing.module';
+import { ErroresModule } from '@app/errores/errores.module';
 
 
 /*//TODO Rehacer routes
@@ -29,7 +30,8 @@ const salesRoutes: Routes = [
 
 @NgModule({
   declarations: [SalesComponent, SalesDateComponent, NavSalesComponent],
-  imports: [        
+  imports: [   
+    ErroresModule,    
     AppRoutingModule,
     CommonModule,
     FormsModule,

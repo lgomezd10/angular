@@ -7,6 +7,7 @@ import { SalesService } from '../sales.service';
 import { ButtonType } from 'src/app/tools/button-type';
 import { ToolsService } from 'src/app/tools/tools.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormErrors } from '@app/tools/form-errors';
 
 const nameButtonTypes = { newSale: 'NuevaSale', closeSale: 'FinalizarSale', addProduct: 'AddProduct', add: 'Add', reopenTicket: 'ReabrirTicket' };
 
@@ -30,7 +31,7 @@ export class SalesComponent implements OnInit {
 
   formGroup: FormGroup;
   sales: Sale[] = [];
-  
+
   saleId: number = 0;
   creditCard: boolean = false;
   open: boolean = false;
@@ -54,7 +55,7 @@ export class SalesComponent implements OnInit {
     this.formGroup = formBuilder.group({
       'find': [''],
       'product': [null, Validators.required],
-      'quantity': ['', Validators.compose([Validators.required, Validators.min(0.01)])]      
+      'quantity': ['', Validators.compose([Validators.required, Validators.min(0.01)])]
     });
   }
 
@@ -161,25 +162,25 @@ export class SalesComponent implements OnInit {
     this.disableButtonType(nameButtonTypes.closeSale);
     this.disableButtonType(nameButtonTypes.add);
     this.disableButtonType(nameButtonTypes.addProduct);
-    this.activateButtonType(nameButtonTypes.reopenTicket);    
+    this.activateButtonType(nameButtonTypes.reopenTicket);
     this.toolsService.activateFocus(nameButtonTypes.reopenTicket);
   }
 
-  
+
   openSale(salesId: number) {
     this.salesService.obtenerSale(salesId).subscribe(sales => {
-      
+
       this.sales = sales.sale;
       this.saleId = sales.id;
-      this.creditCard = sales.creditCard;      
+      this.creditCard = sales.creditCard;
       this.open = true;
       this.activateButtonType(nameButtonTypes.closeSale);
-   
-    error => {
-      console.log(`No se ha encontrado la compra ${salesId}`);
-    }
-      
-    });
+    },
+      error => {
+        console.log(`No se ha encontrado la compra ${salesId}`);
+      }
+
+    );
   }
 
   resetSales() {
@@ -188,11 +189,12 @@ export class SalesComponent implements OnInit {
     this.creditCard = false;
     //this.totalSale =0;
     this.saleId = 0;
-    this.activateButtonType(nameButtonTypes.newSale);
+    this.disableButtonType(nameButtonTypes.newSale);
     this.disableButtonType(nameButtonTypes.closeSale);
     this.activateButtonType(nameButtonTypes.addProduct);
     this.disableButtonType(nameButtonTypes.add);
     this.disableButtonType(nameButtonTypes.reopenTicket);
+    this.toolsService.activateFocus(nameButtonTypes.addProduct);
 
   }
 
@@ -227,6 +229,14 @@ export class SalesComponent implements OnInit {
 
   onChange(e, campo) {
     campo.focus();
+  }
+
+  checkError(field: string): boolean {
+    return FormErrors.checkError(field, this.formGroup)
+  }
+
+  getError(name: string, field: string): string {
+    return FormErrors.getError(name, field, this.formGroup);
   }
 
 }

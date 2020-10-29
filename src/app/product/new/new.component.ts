@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, ViewChildren, QueryList, Input, AfterContentInit, AfterViewInit } from '@angular/core';
 import { Product } from '../product';
 import { ProductsService } from '../products.service';
 import { Observable, Subscription } from 'rxjs';
@@ -21,6 +21,7 @@ import { FormErrors } from '@app/tools/form-errors';
 })
 export class NewComponent implements OnInit {
 
+  @Input() isModal: boolean = false;
   @Output() savedProduct = new EventEmitter<Product>();
 
   buttonName: ElementRef;
@@ -32,22 +33,13 @@ export class NewComponent implements OnInit {
       this.buttonName = content;
     }
   }
-  @ViewChild('send', { static: false }) goToSummit: ElementRef;
+  @ViewChild('sent', { static: false }) goToSummit: ElementRef;
+
+  @ViewChild('sentButton', { static: false }) sentButton: ElementRef;
 
   @ViewChild('elementForm') elementForm: ElementRef;
 
   formGroup: FormGroup;
-
-  constructor(private productsService: ProductsService, private toolsServices: ToolsService, 
-    formBuilder: FormBuilder) {
-    this.formGroup = formBuilder.group({
-      'name': ['', Validators.required],
-      'type': ['', Validators.required],
-      'price': ['', Validators.compose([Validators.required, Validators.min(0.01)])]
-
-    });
-
-  }
 
   public types = TYPES;
   products$: Observable<Product[]>;
@@ -58,16 +50,36 @@ export class NewComponent implements OnInit {
   _pressSub: Subscription;
 
   boton: ButtonType = { id: "SaveNew", name: "Guardar nuevo", show: true };
+  botones: ButtonType[] = [this.boton];
 
+  
+
+  constructor(private productsService: ProductsService, private toolsServices: ToolsService,
+    formBuilder: FormBuilder) {
+    this.formGroup = formBuilder.group({
+      'name': ['', Validators.required],
+      'type': ['', Validators.required],
+      'price': ['', Validators.compose([Validators.required, Validators.min(0.01)])]
+
+    });
+
+  }
+ 
   ngOnInit() {
+    
     this.product = new Product();
     this.products$ = this.productsService.getProducts$();
-    this.toolsServices.newButtonType(this.boton);
-    this._pressSub = this.toolsServices.getPulsado$().subscribe(boton => {
-      if (boton == "SaveNew") {
-        this.onSubmit(this.formGroup.value);
-      }
-    });
+    console.log("Es modal?", this.isModal);
+    if (this.isModal) {
+      
+    } else {
+      this.toolsServices.newButtonType(this.boton);
+      this._pressSub = this.toolsServices.getPulsado$().subscribe(boton => {
+        if (boton == "SaveNew") {
+          this.onSubmit();
+        }
+      });
+    }
   }
 
   format() {
@@ -76,33 +88,37 @@ export class NewComponent implements OnInit {
   }
 
   // JSON.parse (JSON.stringif para pasar el objeto por referencia
-  saveProduct() {    
+  saveProduct() {
     //this.productsService.postNewProduct(JSON.parse(JSON.stringify(this.product)));
-    this.productsService.postNewProduct(this.product).subscribe(respuesta => console.log("Se ha guardado el product", respuesta));
-    this.sent = true;
-    this.toolsServices.deleteButtonType(this.boton);
-    console.log("DESDE NEW COMPONENT GUARDAR PRODUCT se ha guardado", this.product.name);
-    this.product = new Product();
-    this.savedProduct.emit(this.product)
+    this.productsService.postNewProduct(this.product).subscribe(respuesta => {
+      this.sent=true;
+      if (!this.isModal) this.toolsServices.deleteButtonType(this.boton);
+      this.product = new Product();
+      this.savedProduct.emit(this.product)
+    });
+    
+    
   }
 
   keyPress(key: KeyboardEvent, campo: HTMLElement) {
     if (key.keyCode == 13) { // press Enter      
+      
       if (this.goToSummit.nativeElement == campo) {
-        console.log("DESDE NEW COMPONENT Se va a send el foco a button-list", this.boton.id);
-        this.toolsServices.activateFocus(this.boton.id);
+        if(this.isModal) this.sentButton.nativeElement.focus();
+        else this.toolsServices.activateFocus(this.boton.id);
       } else {
         campo.focus();
       }
     }
   }
 
-  onSubmit(value: any) {
+  onSubmit() {
+    let value = this.formGroup.value;
     console.log("Lo devuelto por el formGroup", value);
     this.repeatedProduct = "";
-    
+
     if (this.formGroup.valid) {
-      if(this.productsService.getProductByName(value.name) != undefined) {
+      if (this.productsService.getProductByName(value.name) != undefined) {
         this.repeatedProduct = value.name;
         this.buttonName.nativeElement.focus();
       } else {
@@ -111,7 +127,7 @@ export class NewComponent implements OnInit {
         this.product.price = value.price;
         this.saveProduct();
       }
-    } else if(value.name != "" && this.productsService.getProductByName(value.name) != undefined) {
+    } else if (value.name != "" && this.productsService.getProductByName(value.name) != undefined) {
       this.repeatedProduct = value.name;
       this.buttonName.nativeElement.focus();
     } else {
@@ -131,11 +147,11 @@ export class NewComponent implements OnInit {
   getError(name: string, field: string): string {
     return FormErrors.getError(name, field, this.formGroup);
   }
-  
+
 
   ngOnDestroy() {
     if (this._pressSub) this._pressSub.unsubscribe();
-    this.toolsServices.deleteButtonType(this.boton);
+    if(!this.isModal) this.toolsServices.deleteButtonType(this.boton);
   }
 
 

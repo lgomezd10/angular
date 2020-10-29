@@ -17,7 +17,8 @@ import { CheckLoginGuard } from './auth/check-login.guard';
 const routes: Routes = [
   {
     path: '',
-    component: NavSalesComponent
+    redirectTo: 'sales',
+    pathMatch: "full"
   },
   {
     path: 'products',

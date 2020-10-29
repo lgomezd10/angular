@@ -4,10 +4,10 @@
     <input class="input" type="text" [formControl]="formGroup.controls['username']" />
     <label class="label">Contraseña: </label>
     <div class="control has-icons-right">
-      <input class="input" type="password" autocomplete="off" [formControl]="formGroup.controls['password']"
+      <input class="input" [type]="hide ? 'password':'text'" autocomplete="off" [formControl]="formGroup.controls['password']"
         #password />
       <span class="icon" class="icon is-small is-right">
-        <i class="fas fa-eye" (click)="showPassword()" #icon></i>
+        <i [class]="hide ? 'fas fa-eye': 'fas fa-eye-slash'"  (click)="hide = !hide" #icon></i>
       </span>
     </div>
     <button class="button is-fullwidth" type="submit">Login</button>

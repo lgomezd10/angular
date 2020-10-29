@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ErrorService } from '../error.service';
 import { Observable } from 'rxjs';
-import { type } from 'os';
 
 
 

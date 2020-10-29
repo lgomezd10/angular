@@ -215,10 +215,8 @@ export class SalesComponent implements OnInit {
   keyPress(key: KeyboardEvent, campo: HTMLElement) {
     if (key.keyCode == 13) { // press Enter      
       if (this.goToSummit.nativeElement == campo) {
-        console.log("DESDE sales COMPONENTE TS: Se va a send el foco a button-list", "Add");
         this.toolsService.activateFocus("Add");
       } else {
-        console.log("El atributo de campo es", campo.getAttributeNames());
         campo.focus();
         // let cosa: HTMLInputElement = campo;
         // cosa.select

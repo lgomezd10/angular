@@ -110,9 +110,13 @@ div.formulario select {
   margin-top: 20px;
 }
 
-.input {
-  margin-bottom: 20px;
+.input, .select {
+  
   max-width: 200px;
+}
+
+.label {
+  margin-top: 2em;
 }
 
 

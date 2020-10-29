@@ -11,6 +11,7 @@ import { User } from '../user';
 export class LoginComponent implements OnInit {
 
   formGroup: FormGroup;
+  hide: boolean;
 
   @ViewChild('password') password: ElementRef;
   @ViewChild('icon') icon: ElementRef;
@@ -26,13 +27,12 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin(): void {
-    console.log("Eentrando en OnLogin", this.formGroup.value);
 
     this.auth.login(this.formGroup.value).subscribe((resp) => {
       if (resp) {
         console.log("Se ha logado", resp);
       }
-      console.log("Se ha logado");
+
     }, (error) => { console.log(error) });
   }
 

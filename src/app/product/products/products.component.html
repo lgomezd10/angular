@@ -2,7 +2,7 @@
 
 <div class="columns">
   <div class="column is-three-quarters">
-    <app-new *ngIf="new" (savedProduct)="savedNewProduct(event$)"></app-new>
+    <!--<app-new *ngIf="new" (savedProduct)="savedNewProduct(event$)"></app-new>-->
 
     <label class="label">Buscar productos: </label>
     <input class="input" type="text" [(ngModel)]="searchText"> <br>
@@ -23,9 +23,26 @@
     </div>
   </div>
 
+
   <div class="column">
     <app-button-list [lista]="botones" (sendButtonType)= "showButtonType($event)"></app-button-list>
   </div>
 </div>
 
+
+
+
+<div class="modal" #modal>
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Crear nuevo producto</p>
+      <button class="delete" aria-label="close" (click)="closeModal()"></button>
+    </header>
+    <section class="modal-card-body">
+      <!-- Content ... -->
+      <app-new *ngIf="showModal" [isModal] ="true" (savedProduct)="savedNewProduct(event$)"></app-new>
+    </section>    
+  </div>
+</div>
 

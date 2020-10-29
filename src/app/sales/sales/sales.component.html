@@ -3,7 +3,7 @@
 <app-errores [typeError]="'Error404'"></app-errores>
 
 <input class="input hola" type="text" [(ngModel)]="findSale">
-<button class="button hola" (click)=openSale(findSale)>Buscar</button>
+<button class="button" (click)=openSale(findSale)>Buscar</button>
 <br><br>
 
 <div *ngIf="saleId > 0 && !open">
@@ -72,7 +72,7 @@
         <div class="column">
           <p>
             <label class="label">Buscar producto: </label>
-            <input class="input" placeholder="Buscar product" type="text" (keypress)="keyPress($event, product)" #find
+            <input class="input" type="text" (keypress)="keyPress($event, product)" #find
               [formControl]="formGroup.controls['find']" />
           </p>
           <p>

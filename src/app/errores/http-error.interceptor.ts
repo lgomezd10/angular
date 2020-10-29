@@ -24,6 +24,10 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           } else
           if (error.status === 401) {
             this.router.navigate(['/login']);
+          } else if (error.status === 400) {
+            errorMessage = error.error.message;
+            window.alert(errorMessage);
+          
           } else if (error.status === 404) {
             if (error.error.message == "Sale not found") {
               errorMessage = "No se ha entrado la venta"
@@ -38,6 +42,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             }            
             this.errorService.showError404(errorMessage);
             window.alert(errorMessage);
+          } else if (error.status === 409) {
+            errorMessage = "Registro duplicado";
+            this.errorService.show(errorMessage);
           } else {
             // backend error
             if (error.error.message != undefined) {

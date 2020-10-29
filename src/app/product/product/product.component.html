@@ -5,21 +5,36 @@
 
   <div class="columns">
     <div class="column is-three-quarters">
-      
+      <form [formGroup]="formGroup" [class.error]="!formGroup.valid && formGroup.touched" #elementForm>
         <h3 *ngIf="updatedProduct.show">Se ha actualizado el producto: {{updatedProduct.product.name}}</h3>
-        <label class="label is-medium">Identificador:</label> <label class="label">{{product.id}}</label>
-        <label class="label is-medium">Nombre:</label><input class="input" id="name" type="text" [(ngModel)]="product.name">
-        
-        <label class="label is-medium">Stock:</label><label class="label" id="stock"> {{product.stock}} </label> <br>
+        <label class="label is-medium">Identificador:</label> <label
+          class="label">{{formGroup.controls['id'].value}}</label>
+        <label class="label is-medium">Nombre:</label><input class="input" id="name" #name type="text"
+          [formControl]="formGroup.controls['name']">
+        <div class="help is-danger" *ngIf="checkError('name')">
+          {{getError('Nombre', 'name')}}
+        </div>
+        <div class="help is-danger" *ngIf="repitedProduct != '' && formGroup.controls['name'].value == repeatedProduct">
+          Ya existe otro producto con el nombre {{repitedProduct}}
+        </div>
+
+        <label class="label is-medium">Stock:</label><label class="label" id="stock">
+          {{formGroup.controls['stock'].value}} </label> <br>
         <label class="label is-medium">Precio:</label><input class="input" id="price" type="number"
-          [(ngModel)]="product.price">
+          [formControl]="formGroup.controls['price']">
+        <div class="help is-danger" *ngIf="checkError('price')">
+          {{getError('Precio', 'price')}}
+        </div>
         <label class="label is-medium">Tipo:</label>
         <div class="select">
-          <select id="type" [(ngModel)]="product.type">
+          <select id="type" [formControl]="formGroup.controls['type']">
             <option *ngFor="let type of types" [ngValue]="type">{{type}}</option>
           </select>
         </div>
-      
+        <div class="help is-danger" *ngIf="checkError('type')">
+          {{getError('Tipo', 'type')}}
+        </div>
+      </form>
     </div>
     <div class="column">
       <app-button-list [lista]="buttons" (sendButtonType)="showButtonType($event)"></app-button-list>

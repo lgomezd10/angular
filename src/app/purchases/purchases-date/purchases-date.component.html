@@ -1,21 +1,27 @@
 <app-select-dates (enviardates) = "findPurchases($event)"></app-select-dates>
 
-<table class="resultados" *ngFor = "let purchase of purchases | groupBydate">  
+<table class="table table is-striped" *ngFor = "let purchase of purchases | groupBydate">  
+  <thead>
   <tr>
-    <td>Fecha</td>
+    <th>Fecha</th>
     <td>{{purchase.key}}</td>
   </tr>
+</thead>
+<thead>
   <tr>
     <th>Producto</th>
     <th>Cantidad</th>
     <th>Precio Kg/Unidad</th>
     <th>Total</th>
   </tr>  
+</thead>
+<tbody>
   <tr *ngFor = "let item of purchase.value">
     <td>{{item.product.name}}</td>
     <td>{{item.quantity}}</td>
     <td>{{item.price}}</td>
     <td>{{item.quantity * item.price | number: '1.0-2'}}</td>
   </tr>
+</tbody>
 </table>
 

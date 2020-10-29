@@ -1,4 +1,3 @@
-{{send}}
 <form *ngIf="!sent" [formGroup]="formGroup" [class.error]="!formGroup.valid && formGroup.touched" #elementForm>
     <div>
         <div class="columns">
@@ -6,11 +5,15 @@
                 <label class="label">Nombre: </label>
                 <input class="input" name="name" id="name" type="text" autocomplete="off"
                     (keypress)="keyPress($event, type)" #name [formControl]="formGroup.controls['name']">
-                <div class="help is-danger" *ngIf="repeatedProduct!='' && formGroup.controls['name'].value == repeatedProduct">Ya existe un producto
-                    {{formGroup.controls['name'].value}}</div>
-                    <div class="help is-danger" *ngIf= "checkError('name')">
-                        {{getError('Nombre', 'name')}}
-                    </div>  
+                <div class="help is-danger"
+                    *ngIf="repeatedProduct!='' && formGroup.controls['name'].value == repeatedProduct">Ya existe un
+                    producto
+                    {{formGroup.controls['name'].value}}
+                </div>
+
+                <div class="help is-danger" *ngIf="checkError('name')">
+                    {{getError('Nombre', 'name')}}
+                </div>
                 <div id="listaProducts">
                     <ul>
                         <li
@@ -23,28 +26,33 @@
             <div class="column">
                 <label class="label">Tipo: </label>
                 <div class="select">
-                    <select class="select" name="type"  id="type" [formControl]="formGroup.controls['type']" #type
+                    <select class="select" name="type" id="type" [formControl]="formGroup.controls['type']" #type
                         (change)="onChange($event,price)">
                         <option *ngFor="let type of types" [ngValue]="type">{{type}}</option>
                     </select>
-                    <div #send id="send"></div>
+                    
                 </div>
-                <div class="help is-danger" *ngIf= "checkError('type')">
+
+                <div class="help is-danger" *ngIf="checkError('type')">
                     {{getError('Tipo', 'type')}}
-                </div>                
+                </div>
                 <label class="label">Precio: </label>
-                <input class="input" id="price" type="number" #price (keypress)="keyPress($event, send)"
+                <input class="input" id="price" type="number" #price (keypress)="keyPress($event, sent)"
                     [formControl]="formGroup.controls['price']">
 
-                    <div class="help is-danger" *ngIf= "checkError('price')">
-                        {{getError('Precio', 'price')}}
-                    </div>  
-
+                <div class="help is-danger" *ngIf="checkError('price')">
+                    {{getError('Precio', 'price')}}
+                </div>
+                <div #sent id="sent"></div>
             </div>
 
         </div>
     </div>
 </form>
+<div *ngIf="isModal && !sent">
+    <button class="button" #sentButton (click)="onSubmit()">Guardar</button>
+</div>
+
 <div *ngIf="sent">
     <h2>Nuevo producto creado</h2>
 </div>

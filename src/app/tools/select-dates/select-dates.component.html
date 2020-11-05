@@ -1,18 +1,17 @@
 <h2>Seleccione las fechas:</h2>
 
-Desde: 
+<label class="label">Desde: </label>
 <mat-form-field>
   <input matInput [matDatepicker]="SelectInitDate" [(ngModel)]="from">
   <mat-datepicker-toggle matSuffix [for]="SelectInitDate"></mat-datepicker-toggle>
   <mat-datepicker #SelectInitDate></mat-datepicker>
 </mat-form-field>
-
-Hasta: 
+<label class="label">Hasta:</label>
 <mat-form-field>
   <input matInput [matDatepicker]="SelectFinalDate" [(ngModel)]="to">
   <mat-datepicker-toggle matSuffix [for]="SelectFinalDate"></mat-datepicker-toggle>
   <mat-datepicker #SelectFinalDate></mat-datepicker>
 </mat-form-field>
 
-
-<button (click) = "onSend()">Buscar</button>
+<p>
+<button class="button" (click) = "onSend()">Buscar</button></p>

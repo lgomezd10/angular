@@ -1,16 +1,18 @@
-import { Product } from "../product/product";
+
+import { ItemSale } from './item-sale';
 
 export class Sale {
     id: number;
-    product: Product;
-    quantity: number;
-    price: number;
-
+    date: Date;
+    creditCard: boolean;
+    itemsSale: ItemSale[];
+    
     constructor() {
+        
         this.id = 0;
-        this.product = null;
-        this.quantity = 0;
-        this.price= 0;
+        this.date = null;
+        this.creditCard = false;
+        this.itemsSale = [];
         
     }
 }

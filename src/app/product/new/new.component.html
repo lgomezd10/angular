@@ -1,7 +1,7 @@
 <form *ngIf="!sent" [formGroup]="formGroup" [class.error]="!formGroup.valid && formGroup.touched" #elementForm>
     <div>
         <div class="columns">
-            <div class="column">
+            <div class="column is-half">
                 <label class="label">Nombre: </label>
                 <input class="input" name="name" id="name" type="text" autocomplete="off"
                     (keypress)="keyPress($event, type)" #name [formControl]="formGroup.controls['name']">
@@ -14,7 +14,7 @@
                 <div class="help is-danger" *ngIf="checkError('name')">
                     {{getError('Nombre', 'name')}}
                 </div>
-                <div id="listaProducts">
+                <div id="productList">
                     <ul>
                         <li
                             *ngFor="let p of products$ | async | sort:'name' | filter: formGroup.controls['name'].value">
@@ -23,7 +23,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="column">
+            <div class="column is-half">
                 <label class="label">Tipo: </label>
                 <div class="select">
                     <select class="select" name="type" id="type" [formControl]="formGroup.controls['type']" #type
@@ -50,7 +50,7 @@
     </div>
 </form>
 <div *ngIf="isModal && !sent">
-    <button class="button" #sentButton (click)="onSubmit()">Guardar</button>
+    <button class="button is-medium" #sentButton (click)="onSubmit()">Guardar</button>
 </div>
 
 <div *ngIf="sent">

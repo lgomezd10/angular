@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Sale } from '../sale';
+import { ItemSale } from '../item-sale';
 import { Product } from 'src/app/product/product';
 import { Observable } from 'rxjs';
 import { ProductsService } from 'src/app/product/products.service';
@@ -30,13 +30,13 @@ export class SalesComponent implements OnInit {
   @ViewChild('elementForm') elementForm: ElementRef;
 
   formGroup: FormGroup;
-  sales: Sale[] = [];
+  items: ItemSale[] = [];
 
   saleId: number = 0;
   creditCard: boolean = false;
   open: boolean = false;
   findSale: number = 0;
-  currentSale: Sale;
+  currentItem: ItemSale;
   searchText: string;
   showNew: boolean = false;
   products$: Observable<Product[]>;
@@ -101,7 +101,7 @@ export class SalesComponent implements OnInit {
   }
 
   newProduct() {
-    this.currentSale = new Sale();
+    this.currentItem = new ItemSale();
     this.formGroup.reset();
     this.showNew = true;
     this.activateButtonType(nameButtonTypes.newSale);
@@ -109,30 +109,28 @@ export class SalesComponent implements OnInit {
 
   totalSale(): number {
     let suma = 0;
-    this.sales.forEach(sale => {
-      let quantity = sale.price * sale.quantity;
+    this.items.forEach(item => {
+      let quantity = item.price * item.quantity;
       quantity = Math.round(quantity * 100) / 100;
       suma = Math.round((suma + quantity) * 100) / 100;
     });
     return suma;
   }
 
-  eliminarSale(sale: Sale) {
-    this.sales.splice(this.sales.indexOf(sale), 1);
+  deleteItem(sale: ItemSale) {
+    this.items.splice(this.items.indexOf(sale), 1);
     //this.totalSale = this.totalSale();
 
   }
 
   addPurchaseToList() {
-    console.log(this.currentSale.product);
-
-    let sale = this.sales.find(sale => sale.product.name == this.currentSale.product.name);
-
-    if (sale == undefined) {
-      this.currentSale.price = this.currentSale.product.price;
-      this.sales.push(this.currentSale);
+    let itemSale = this.items.find(item => ((item.product.name == this.currentItem.product.name) && (item.price == this.currentItem.product.price)));
+    
+    if (!itemSale) {
+      this.currentItem.price = this.currentItem.product.price;
+      this.items.push(this.currentItem);
     } else {
-      sale.quantity = this.currentSale.quantity + sale.quantity;
+      itemSale.quantity = this.currentItem.quantity + itemSale.quantity;
     }
     this.showNew = false;
     //this.totalSale = this.totalSale();
@@ -144,8 +142,8 @@ export class SalesComponent implements OnInit {
 
   onSubmit() {
     if (this.formGroup.valid) {
-      this.currentSale.product = this.formGroup.value.product;
-      this.currentSale.quantity = this.formGroup.value.quantity;
+      this.currentItem.product = this.formGroup.value.product;
+      this.currentItem.quantity = this.formGroup.value.quantity;
       this.addPurchaseToList();
     } else {
       this.elementForm.nativeElement.querySelector('.ng-invalid').focus();
@@ -154,9 +152,9 @@ export class SalesComponent implements OnInit {
 
   closeSale(): void {
     if (this.saleId == 0)
-      this.salesService.saveSales(this.sales, this.creditCard).subscribe(cod => this.saleId = cod);
+      this.salesService.saveSales(this.items, this.creditCard).subscribe(cod => this.saleId = cod);
     else
-      this.salesService.updateSales(this.saleId, this.sales, this.creditCard).subscribe(cod => this.saleId = cod);
+      this.salesService.updateSales(this.saleId, this.items, this.creditCard).subscribe(cod => this.saleId = cod);
     this.showNew = false;
     this.open = false;
     this.disableButtonType(nameButtonTypes.closeSale);
@@ -167,24 +165,24 @@ export class SalesComponent implements OnInit {
   }
 
 
-  openSale(salesId: number) {
-    this.salesService.obtenerSale(salesId).subscribe(sales => {
+  openSale(saleId: number) {
+    this.salesService.getSale(saleId).subscribe(sale => {
 
-      this.sales = sales.sale;
-      this.saleId = sales.id;
-      this.creditCard = sales.creditCard;
+      this.items = sale.itemsSale;
+      this.saleId = sale.id;
+      this.creditCard = sale.creditCard;
       this.open = true;
       this.activateButtonType(nameButtonTypes.closeSale);
     },
       error => {
-        console.log(`No se ha encontrado la compra ${salesId}`);
+        console.log(`No se ha encontrado la compra ${saleId}`);
       }
 
     );
   }
 
   resetSales() {
-    this.sales = [];
+    this.items = [];
     this.showNew = false;
     this.creditCard = false;
     //this.totalSale =0;
@@ -199,7 +197,7 @@ export class SalesComponent implements OnInit {
   }
 
   newSale(): void {
-    if (this.saleId == 0 && this.sales.length > 0) {
+    if (this.saleId == 0 && this.items.length > 0) {
       var statusConfirm = confirm("¿Desea crear una nueva venta? La venta actual no se ha guardado");
       if (statusConfirm) this.resetSales();
     } else {
@@ -212,12 +210,12 @@ export class SalesComponent implements OnInit {
      this.ngOnInit();
    }*/
 
-  keyPress(key: KeyboardEvent, campo: HTMLElement) {
-    if (key.keyCode == 13) { // press Enter      
-      if (this.goToSummit.nativeElement == campo) {
+  keyPress(key: KeyboardEvent, field: HTMLElement) {
+    if (key.code == "Enter") { // press Enter      
+      if (this.goToSummit.nativeElement == field) {
         this.toolsService.activateFocus("Add");
       } else {
-        campo.focus();
+        field.focus();
         // let cosa: HTMLInputElement = campo;
         // cosa.select
       }

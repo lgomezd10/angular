@@ -49,12 +49,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let sale of sales">
-            <td>{{sale.product.name}}</td>
-            <td>{{sale.quantity}}</td>
-            <td>{{sale.price}}</td>
-            <td>{{sale.quantity * sale.price | number: '1.0-2'}}</td>
-            <td *ngIf="saleId == 0 || open"> <button (click)=eliminarSale(sale)>Eliminar</button></td>
+          <tr *ngFor="let item of items">
+            <td>{{item.product.name}}</td>
+            <td>{{item.quantity}}</td>
+            <td>{{item.price}}</td>
+            <td>{{item.quantity * item.price | number: '1.0-2'}}</td>
+            <td *ngIf="saleId == 0 || open"> <button (click)= "deleteItem(item)">Eliminar</button></td>
           </tr>
         </tbody>
       </table>

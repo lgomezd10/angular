@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Sale } from './sale';
+import { ItemSale } from './item-sale';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { Sales } from './sales';
+import { Sale } from './sale';
 import { ProductsService } from '../product/products.service';
 
 const httpOptions = {
@@ -27,10 +27,10 @@ export class SalesService {
 
   backendUrl = 'http://localhost:3000';
 
-  saveSales(sales: Sale[], creditCard: boolean): Observable<number> {
+  saveSales(itemsSale: ItemSale[], creditCard: boolean): Observable<number> {
     let envio = {
-      creditCard:  creditCard,
-      sale: sales
+      creditCard,
+      itemsSale
     }    
     var response: BehaviorSubject<number> = new BehaviorSubject(0);
     this.http.post<ResponseSavedSales>(this.backendUrl + '/sales/', envio, httpOptions).subscribe(resp => {
@@ -40,11 +40,11 @@ export class SalesService {
   }
 
 
-  updateSales(salesId: number, sales: Sale[], creditCard: boolean): Observable<number> {
+  updateSales(salesId: number, itemsSale: ItemSale[], creditCard: boolean): Observable<number> {
     let envio = {
-      salesId: salesId,
-      creditCard:  creditCard,
-      sales: sales
+      salesId,
+      creditCard,
+      itemsSale
     }
     var response: BehaviorSubject<number> = new BehaviorSubject(0);
     this.http.post<ResponseSavedSales>(this.backendUrl + '/sales/update/' + salesId, envio, httpOptions).subscribe(resp => {
@@ -53,32 +53,32 @@ export class SalesService {
     return response;
   }
 
-  obtenerSale(salesId: number) : BehaviorSubject<Sales> {
-    let response: BehaviorSubject<Sales> = new BehaviorSubject(new Sales());
-    this.http.get<Sales>(this.backendUrl + '/sales/sale/' + salesId).subscribe(resp => {
+  getSale(salesId: number) : BehaviorSubject<Sale> {
+    let response: BehaviorSubject<Sale> = new BehaviorSubject(new Sale());
+    this.http.get<Sale>(this.backendUrl + '/sales/sale/' + salesId).subscribe(resp => {
       response.next(resp);
     });
 
     return response;
   }
 
-  salesAListaSale(sales: Sales): Sale[] {
-    let salida: Sale[] = [];
+  salesAListaSale(sale: Sale): ItemSale[] {
+    let outcome: ItemSale[] = [];
     let cont: number = 0;
-    sales.sale.forEach(sale => {
-      let actual: Sale = new Sale;
-      actual.product = this.productsService.getProduct(sale.id),
-      actual.quantity = sale.quantity;
-      actual.price = sale.price;
-      salida[cont] = actual;
+    sale.itemsSale.forEach(item => {
+      let actual: ItemSale = new ItemSale();
+      actual.product = this.productsService.getProduct(item.id),
+      actual.quantity = item.quantity;
+      actual.price = item.price;
+      outcome[cont] = actual;
       cont++;
     });
-    return salida;
+    return outcome;
   }
 
 
-  salesByDate(from: string, to: string): Observable<Sales[]> {
+  salesByDate(from: string, to: string): Observable<Sale[]> {
     let dates = {from: from, to: to};
-    return this.http.post<Sales[]>(this.backendUrl + '/sales/date', dates, httpOptions);
+    return this.http.post<Sale[]>(this.backendUrl + '/sales/date', dates, httpOptions);
   }
 }

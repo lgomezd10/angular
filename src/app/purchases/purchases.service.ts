@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Purchase } from './purchase';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '@env/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -10,20 +11,6 @@ const httpOptions = {
   })
 };
 
-class ResponsePurchase {
-  status: number;
-  error: number;
-  response: {
-    actualizados: number[];
-  }
-}
-
-class Responsepurchases {
-  status: number;
-  error: number;
-  response: Purchase[];
-
-}
 
 @Injectable({
   providedIn: 'root'
@@ -31,11 +18,10 @@ class Responsepurchases {
 export class PurchasesService {
 
   constructor(private http: HttpClient) { }
-  backendUrl = 'http://localhost:3000';
+  backendUrl = environment.API_URL;
 
-  guardarPurchase(purchases: Purchase[]): Observable<ResponsePurchase> {
-    console.log("DESDE PRURCHASES SERVICE se va a guardar", purchases);
-    return this.http.post<ResponsePurchase>(this.backendUrl + '/purchases/', purchases, httpOptions);
+  guardarPurchase(purchases: Purchase[]): Observable<Purchase[]> {
+    return this.http.post<Purchase[]>(this.backendUrl + '/purchases/', purchases, httpOptions);
   }
 
   purchasesByDate(from: string, to: string): Observable<Purchase[]> {

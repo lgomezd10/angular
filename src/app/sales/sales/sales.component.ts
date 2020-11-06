@@ -92,6 +92,7 @@ export class SalesComponent implements OnInit {
       this.newSale();
     }
     if (boton == nameButtonTypes.reopenTicket) {
+      this.openSale(this.saleId);
       this.open = true;
       this.activateButtonType(nameButtonTypes.addProduct);
       this.disableButtonType(nameButtonTypes.reopenTicket);
@@ -125,7 +126,7 @@ export class SalesComponent implements OnInit {
 
   addPurchaseToList() {
     let itemSale = this.items.find(item => ((item.product.name == this.currentItem.product.name) && (item.price == this.currentItem.product.price)));
-    
+
     if (!itemSale) {
       this.currentItem.price = this.currentItem.product.price;
       this.items.push(this.currentItem);
@@ -154,7 +155,13 @@ export class SalesComponent implements OnInit {
     if (this.saleId == 0)
       this.salesService.saveSales(this.items, this.creditCard).subscribe(cod => this.saleId = cod);
     else
-      this.salesService.updateSales(this.saleId, this.items, this.creditCard).subscribe(cod => this.saleId = cod);
+      this.salesService.updateSales(this.saleId, this.items, this.creditCard).subscribe(cod => {
+        this.saleId = cod;
+        if (cod == 0) {
+          window.alert("Se ha eliminado la compra tras eliminar sus elementos");
+          this.resetSales();
+        }
+      });
     this.showNew = false;
     this.open = false;
     this.disableButtonType(nameButtonTypes.closeSale);

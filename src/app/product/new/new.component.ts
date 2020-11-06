@@ -90,7 +90,7 @@ export class NewComponent implements OnInit {
   // JSON.parse (JSON.stringif para pasar el objeto por referencia
   saveProduct() {
     //this.productsService.postNewProduct(JSON.parse(JSON.stringify(this.product)));
-    this.productsService.postNewProduct(this.product).subscribe(respuesta => {
+    this.productsService.postNewProduct(this.product).subscribe(response => {
       this.sent=true;
       if (!this.isModal) this.toolsServices.deleteButtonType(this.boton);
       this.product = new Product();
@@ -101,7 +101,7 @@ export class NewComponent implements OnInit {
   }
 
   keyPress(key: KeyboardEvent, campo: HTMLElement) {
-    if (key.keyCode == 13) { // press Enter      
+    if (key.code == "Enter") { // press Enter      
       
       if (this.goToSummit.nativeElement == campo) {
         if(this.isModal) this.sentButton.nativeElement.focus();

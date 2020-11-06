@@ -4,6 +4,8 @@ import { ItemSale } from './item-sale';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Sale } from './sale';
 import { ProductsService } from '../product/products.service';
+import { map, tap } from 'rxjs/operators';
+import { environment } from '@env/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -14,7 +16,7 @@ const httpOptions = {
 
 class ResponseSavedSales {
   message: string;
-  salesId: number;
+  saleId: number;
 }
 
 @Injectable({
@@ -25,55 +27,29 @@ export class SalesService {
 
   constructor(private http: HttpClient, private productsService: ProductsService) { }
 
-  backendUrl = 'http://localhost:3000';
+  backendUrl = environment.API_URL;
 
   saveSales(itemsSale: ItemSale[], creditCard: boolean): Observable<number> {
     let envio = {
       creditCard,
       itemsSale
-    }    
-    var response: BehaviorSubject<number> = new BehaviorSubject(0);
-    this.http.post<ResponseSavedSales>(this.backendUrl + '/sales/', envio, httpOptions).subscribe(resp => {
-      response.next(resp.salesId);
-    });
-    return response;
+    }  
+    return this.http.post<ResponseSavedSales>(this.backendUrl + '/sales/', envio, httpOptions).pipe(map(resp => resp.saleId)); 
   }
 
 
-  updateSales(salesId: number, itemsSale: ItemSale[], creditCard: boolean): Observable<number> {
+  updateSales(saleId: number, itemsSale: ItemSale[], creditCard: boolean): Observable<number> {
     let envio = {
-      salesId,
+      saleId: saleId,
       creditCard,
       itemsSale
     }
-    var response: BehaviorSubject<number> = new BehaviorSubject(0);
-    this.http.post<ResponseSavedSales>(this.backendUrl + '/sales/update/' + salesId, envio, httpOptions).subscribe(resp => {
-      response.next(resp.salesId); 
-    });
-    return response;
+    return this.http.post<ResponseSavedSales>(this.backendUrl + '/sales/update/' + saleId, envio, httpOptions).pipe(map(resp => resp.saleId));
+    
   }
 
-  getSale(salesId: number) : BehaviorSubject<Sale> {
-    let response: BehaviorSubject<Sale> = new BehaviorSubject(new Sale());
-    this.http.get<Sale>(this.backendUrl + '/sales/sale/' + salesId).subscribe(resp => {
-      response.next(resp);
-    });
-
-    return response;
-  }
-
-  salesAListaSale(sale: Sale): ItemSale[] {
-    let outcome: ItemSale[] = [];
-    let cont: number = 0;
-    sale.itemsSale.forEach(item => {
-      let actual: ItemSale = new ItemSale();
-      actual.product = this.productsService.getProduct(item.id),
-      actual.quantity = item.quantity;
-      actual.price = item.price;
-      outcome[cont] = actual;
-      cont++;
-    });
-    return outcome;
+  getSale(saleId: number) : Observable<Sale> {
+    return this.http.get<Sale>(this.backendUrl + '/sales/sale/' + saleId);
   }
 
 

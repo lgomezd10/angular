@@ -193,7 +193,10 @@ export class PurchasesComponent implements OnInit {
     if (this.purchases.length == 0)
       alert("No hay products comprados");
     else {
-      this.purchasesService.guardarPurchase(this.purchases).subscribe(resp => this.purchaseCompleted = true);
+      this.purchasesService.guardarPurchase(this.purchases).subscribe(purchases => {
+        this.purchaseCompleted = true;
+        this.purchases = purchases;      
+      });
       this.disableButtonType(nameButtonTypes.addProduct);
       this.disableButtonType(nameButtonTypes.createProduct);
       this.disableButtonType(nameButtonTypes.sendPurchase);
@@ -202,7 +205,7 @@ export class PurchasesComponent implements OnInit {
   }  
 
   keyPress(key: KeyboardEvent, campo: HTMLElement) {
-    if (key.keyCode == 13) { // press Enter      
+    if (key.code == "Enter") { // press Enter      
       if (this.goToSummit.nativeElement == campo) {
         this.toolsServices.activateFocus(nameButtonTypes.add);
       } else {

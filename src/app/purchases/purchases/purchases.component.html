@@ -13,6 +13,7 @@
       <table class="table is-striped">
         <thead>
           <tr>
+            <th *ngIf="purchaseCompleted">Id</th>
             <th>Producto</th>
             <th>Cantidad</th>
             <th>Precio Kg/Unidad</th>
@@ -22,7 +23,9 @@
         </thead>
         <tbody>
           <tr *ngFor="let purchase of purchases">
-            <td>{{purchase.product.name}}</td>
+            <td *ngIf="purchaseCompleted">{{purchase.id}}</td>
+            <td *ngIf="purchase.product">{{purchase.product.name}}</td>
+            <td *ngIf="!purchase.product">{{purchase.productId | product}}</td>
             <td>{{purchase.quantity}}</td>
             <td>{{purchase.price}}</td>
             <td>{{purchase.quantity * purchase.price | number: '1.0-2'}}</td>

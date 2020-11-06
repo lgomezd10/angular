@@ -2,8 +2,6 @@ import { Injectable, Output, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Product } from './product';
 import { Observable, of, BehaviorSubject, Subscription } from 'rxjs';
-import { ResponseNew } from './responsenew';
-import { ResponsePost } from './responsepost';
 
 import { Socket } from 'ngx-socket-io';
 import { environment } from '@env/environment';
@@ -31,8 +29,6 @@ export class ProductsService {
 
   updateProducts$ = this.socket.fromEvent<Product[]>('updateProducts');
 
-  //products: Product[];
-
   products$: BehaviorSubject<Product[]>;
 
   private _docSub: Subscription;
@@ -41,8 +37,7 @@ export class ProductsService {
   constructor(private http: HttpClient, private socket: Socket) {
     this.products$ = new BehaviorSubject<Product[]>([]);
     this.loadProducts();
-    this.updateProducts$.subscribe(products => this.products$.next(products),
-      err => console.log('piripitos'));
+    this.updateProducts$.subscribe(products => this.products$.next(products));
 
   }
 
@@ -52,9 +47,7 @@ export class ProductsService {
 
   loadProducts() {
     this._docSub = this.getProductsServer().subscribe(response => {      
-      
       this.products$.next(response);
-      console.log("Desde ProductService GUARDADO EN PRODUCT$", this.products$.getValue())
     });
   }
 
@@ -90,14 +83,13 @@ export class ProductsService {
 
   postEditProduct(product: Product): Observable<Product> {
     product.name = formatoname(product.name);
-    console.log("DESDE PRODUCT SERVICE se va a actualizar el producto", product)
     return this.http.post<Product>(this.backendUrl + '/products/' +
       product.id, product, httpOptions);
   }
 
-  postNewProduct(product: Product): Observable<ResponsePost> {
+  postNewProduct(product: Product): Observable<Product> {
     product.name = formatoname(product.name);
-    return this.http.post<ResponseNew>(this.backendUrl + '/products/', product, httpOptions);
+    return this.http.post<Product>(this.backendUrl + '/products/', product, httpOptions);
       
   }
 

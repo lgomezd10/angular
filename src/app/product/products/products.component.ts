@@ -30,7 +30,7 @@ export class ProductsComponent implements OnInit {
 
   constructor(private productsService: ProductsService, private route: ActivatedRoute) {
     
-    console.log("Desde products component***:", this.updatedProduct);
+    
     /*route.url.subscribe(url => {
       if (this.products == null) {
         this.products$ = this.productsService.getProducts$();
@@ -45,12 +45,11 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit() {
     
-    //this.productsService.loadProducts();
-    console.log("pasa por init")
+    //TODO al cargar aquí los productos, se están cargando dos veces (desde aquí y desde el service) pero si no se carga desde aquí no se actualiza
+    this.productsService.loadProducts();
     this.products$ = this.productsService.getProducts$().pipe(
       tap((value) => {
         this.new = false;
-        console.log("desde productsComponent", value)
       })
     );
     this.productsService.getProducts$().subscribe(products => {
@@ -105,7 +104,6 @@ export class ProductsComponent implements OnInit {
   }
 
   savedNewProduct(product: Product) {
-    console.log("DESDE PRODUCTS: Recibido evento de new product guardado");
     this.activateButtonType("AddNew");
   }
 

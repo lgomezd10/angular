@@ -32,7 +32,6 @@ export class PurchasesDateComponent implements OnInit {
     
     this.purchasesService.purchasesByDate(dates.from, dates.to).subscribe(purchases => {
       this.purchases = purchases;
-      console.log("Desde fechas compras ", this.purchases);
     });
 
   }

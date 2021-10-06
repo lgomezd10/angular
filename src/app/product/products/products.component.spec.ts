@@ -53,7 +53,6 @@ describe('ProductsComponent', () => {
   });
   it('cargar products', fakeAsync(
     inject([ProductsService, ActivatedRoute], (mockProductsService: MockProductsService, r) => {
-      console.log("prueba");
       var products;
       const product1 = new Product();
       product1.name = "pera";

@@ -69,7 +69,6 @@ export class NewComponent implements OnInit {
     
     this.product = new Product();
     this.products$ = this.productsService.getProducts$();
-    console.log("Es modal?", this.isModal);
     if (this.isModal) {
       
     } else {
@@ -114,7 +113,6 @@ export class NewComponent implements OnInit {
 
   onSubmit() {
     let value = this.formGroup.value;
-    console.log("Lo devuelto por el formGroup", value);
     this.repeatedProduct = "";
 
     if (this.formGroup.valid) {

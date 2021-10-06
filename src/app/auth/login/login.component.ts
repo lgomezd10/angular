@@ -49,7 +49,6 @@ export class LoginComponent implements OnInit {
   }
 
   onEnter(key: KeyboardEvent, field: HTMLElement) {
-    console.log("El keycode", key);
     if (key.code == "Enter") {
       if (field) {
         field.focus();

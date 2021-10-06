@@ -15,7 +15,7 @@ import { ButtonListComponent } from './button-list/button-list.component';
 import { from } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { RequestInterceptor } from './interceptors/request-interceptor';
-import { ErroresModule } from '@app/errores/errores.module';
+import { ErroresModule } from '@app/errores/errors.module';
 
 @NgModule({
   declarations: [SelecciondatesComponent, GroupByPipe, GroupBydatePipe, ButtonListComponent],

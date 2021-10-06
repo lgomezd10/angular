@@ -6,7 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { SalesModule } from './sales/sales.module';
 import { LogoComponent } from './logo/logo.component';
 import { PurchasesModule } from './purchases/purchases.module';
-import { ErroresModule } from './errores/errores.module';
+import { ErroresModule } from './errores/errors.module';
 import { ToolsModule } from './tools/tools.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';

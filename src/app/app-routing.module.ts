@@ -4,8 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ProductComponent } from './product/product/product.component';
 import { NavSalesComponent } from './sales/nav-sales/nav-sales.component';
 import { SalesComponent } from './sales/sales/sales.component';
-import { ErroresComponent } from './errores/errores/errores.component';
-import { LogoComponent } from './logo/logo.component';
+import { ShowErrorsComponent } from './errores/show-errors/show-errors.component';
 import { ProductsComponent } from './product/products/products.component';
 import { PurchasesComponent } from './purchases/purchases/purchases.component';
 import { SalesDateComponent } from './sales/sales-date/sales-date.component';
@@ -63,7 +62,7 @@ const routes: Routes = [
   },
   {
     path: 'error',
-    component: ErroresComponent
+    component: ShowErrorsComponent
   },
   {
     path: 'product/:id',
@@ -80,7 +79,7 @@ const routes: Routes = [
   declarations: [],
   imports: [
     CommonModule,
-    RouterModule.forRoot(routes, { enableTracing: true })
+    RouterModule.forRoot(routes /*, { enableTracing: true }*/)
   ],
   exports: [RouterModule]
 })

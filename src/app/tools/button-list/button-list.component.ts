@@ -35,6 +35,7 @@ export class ButtonListComponent implements OnInit {
 
     this.viewUpdated$ = combineLatest(this.foco$, this.buttonList$)
 
+    //TODO mirar si se puede evitar el delay
     this._focoSub = this.foco$
       .pipe(
         filter((button) => button !== null),
@@ -54,18 +55,17 @@ export class ButtonListComponent implements OnInit {
 
   }
 
-  procesarKeydown(key: KeyboardEvent, idButtonType: string) {
-    console.log(`se va a procesa la tecla ${key} para el campo ${idButtonType}`);
+  processKeydown(key: KeyboardEvent, idButtonType: string) {
     
-    if (key.keyCode == 38 || key.keyCode == 40) { // key up || key down
+    if (key.code == "ArrowUp" || key.code == "ArrowDown") { // key up || key down
            
       let active: string = idButtonType;
       let buttons: ButtonType[] = this.toolsServices.getButtonTypes().filter((button:ButtonType )=> button.show);
       let index = buttons.indexOf(buttons.find(button => button.id == idButtonType));
-      if (index < buttons.length - 1 && key.keyCode == 40) {
+      if (index < buttons.length - 1 && key.code == "ArrowDown") {
         active = buttons[index + 1].id;        
       }
-      if (index > 0 && key.keyCode == 38) {
+      if (index > 0 && key.code == "ArrowUp") {
         active = buttons[index - 1].id;
       } 
       if (active != idButtonType) {

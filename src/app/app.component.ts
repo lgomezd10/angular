@@ -15,7 +15,6 @@ export class AppComponent {
   constructor(private auth: AuthService) {}
 
   onLogout() {
-    console.log(" Se va a deslogar");
     this.auth.logout();
   }
 

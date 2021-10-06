@@ -69,7 +69,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           console.log("DESDE HTTP INTERCEPTOR RECIBIDO OTRO TIPO DE ERROR", error);
           errorMessage = 'other errors';
         }
-        return throwError(errorMessage);
+        return throwError(error);
         // aquí podrías agregar código que muestre el error en alguna parte fija de la pantalla.
         
         //console.log('errore en interceptor', errorMessage);

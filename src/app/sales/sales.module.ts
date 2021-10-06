@@ -13,7 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToolsModule } from '../tools/tools.module';
 import { NavSalesComponent } from './nav-sales/nav-sales.component';
 import { AppRoutingModule } from '@app/app-routing.module';
-import { ErroresModule } from '@app/errores/errores.module';
+import { ErroresModule } from '@app/errores/errors.module';
 
 
 /*//TODO Rehacer routes

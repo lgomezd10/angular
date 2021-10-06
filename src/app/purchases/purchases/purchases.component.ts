@@ -78,7 +78,6 @@ export class PurchasesComponent implements OnInit {
       this.disableButtonType(button);
       this.activateButtonType(nameButtonTypes.add);
       this.activateButtonType(nameButtonTypes.createProduct);
-      //console.log("DESDE purchases COMPONENT este es el hijo autofoco", this.autoFoco);
       //setTimeout(() => this.autoFoco.nativeElement.focus(), 100);
       //this.autoFoco.nativeElement.focus();
     }
@@ -135,7 +134,6 @@ export class PurchasesComponent implements OnInit {
       purchase.quantity = purchase.quantity + this.currentPurchase.quantity;
     }
 
-    console.log("Desde Puchase COMPONENT se va a añadir la compra", purchase);
     //this.total = this.totalPurchase();
     this.showNew = false;
     this.activateButtonType(nameButtonTypes.addProduct);
@@ -148,7 +146,6 @@ export class PurchasesComponent implements OnInit {
 
   onSubmit() {
     if (this.formGroup.valid) {
-      console.log("Desde Puchase COMPONENT se va a añadir la compra", this.formGroup.value.product);
       this.currentPurchase.product = this.formGroup.value.product;
       this.currentPurchase.quantity = this.formGroup.value.quantity;
       this.currentPurchase.price = this.formGroup.value.price;
@@ -167,7 +164,6 @@ export class PurchasesComponent implements OnInit {
   }
 
   newGuardado(product: Product) {
-    console.log("DESDE purchases COMPONET: Recibido evento de newGuardado");
     this.activateButtonType(nameButtonTypes.addProduct);
     this.activateButtonType(nameButtonTypes.createProduct);
     this.toolsServices.activateFocus(nameButtonTypes.addProduct);
@@ -189,7 +185,6 @@ export class PurchasesComponent implements OnInit {
   }
 
   sendPurchase() {
-    console.log(this.myDateValue);
     if (this.purchases.length == 0)
       alert("No hay products comprados");
     else {

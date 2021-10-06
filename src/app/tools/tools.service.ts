@@ -23,11 +23,11 @@ export class ToolsService {
     return this.buttons;
   }
 
-  getButtonTypes(): ButtonType[]{
+  getButtonTypes(): ButtonType[] {
     return this.buttons.getValue();
   }
 
-  getPulsado$() : Observable<string> {
+  getPulsado$(): Observable<string> {
     return this.pulsado$;
   }
 
@@ -36,8 +36,6 @@ export class ToolsService {
   }
 
   activateFocus(boton: string) {
-    console.log("DESDE tools SEVICE: Entrando en activar foco del string", boton);
-    console.log("Desde tools hay estos botones", this.buttons.getValue());
     this.foco$.next(boton);
   }
 
@@ -52,22 +50,19 @@ export class ToolsService {
   }
 
   deleteButtonType(boton: ButtonType) {
-    if (this.botones.find((b) => b.name === boton.name ) != undefined) {
-    this.botones.splice(this.botones.indexOf(boton),1);
-    console.log("DESDE tools SERVICE. ButtonTypees en la lista:", this.botones);
-    this.buttons.next(this.botones);
-    } else {
-      console.log("DESDE tools SERVICE. No se ha eliminado el boton porque no existe:", boton);
+    if (this.botones.find((b) => b.name === boton.name) != undefined) {
+      this.botones.splice(this.botones.indexOf(boton), 1);
+      this.buttons.next(this.botones);
     }
   }
 
- 
+
   pushButtonType(boton: string) {
     this.pulsado$.next(boton);
     this.foco$.next("");
   }
 
-  destroy(){
+  destroy() {
 
   }
 

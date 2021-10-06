@@ -1,17 +1,17 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
-import { ErroresComponent } from './errores/errores.component';
+import { ShowErrorsComponent } from './show-errors/show-errors.component';
 import { HttpErrorInterceptor } from './http-error.interceptor';
 import { CapturaErrores } from './captura-errores';
 import { ErrorService } from './error.service';
 
 @NgModule({
-  declarations: [ErroresComponent],
+  declarations: [ShowErrorsComponent],
   imports: [
     CommonModule
   ],
-  exports: [ErroresComponent],
+  exports: [ShowErrorsComponent],
   providers: [
     ErrorService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },

@@ -31,19 +31,33 @@ export class ProductsService {
 
   products$: BehaviorSubject<Product[]>;
 
+  connected$: BehaviorSubject<boolean>;
+
   private _docSub: Subscription;
+
+  backendUrl = environment.API_URL;
  
 
   constructor(private http: HttpClient, private socket: Socket) {
     this.products$ = new BehaviorSubject<Product[]>([]);
+    this.connected$ = new BehaviorSubject<boolean>(false);
     this.loadProducts();
     this.updateProducts$.subscribe(products => this.products$.next(products));
 
+    this.socket.on('connected', resp => {
+      if(this.connected$.getValue != resp)
+        this.connected$.next(resp);
+    });
+
   }
 
-  //@Output() updateProducts: EventEmitter<Product> = new EventEmitter();
+  connetedServer(): Observable<boolean> {
+    return this.connected$;
+  }
 
-  backendUrl = environment.API_URL;
+  private getProductsServer(): Observable<Product[]> {
+    return this.http.get<Product[]>(this.backendUrl + '/products');
+  }
 
   loadProducts() {
     this._docSub = this.getProductsServer().subscribe(response => {      
@@ -55,7 +69,7 @@ export class ProductsService {
     this._docSub.unsubscribe();
   }
 
-  // repensar la comprobación de products para ver from donde lanzamos el error
+  //TODO repensar la comprobación de products para ver desde donde lanzamos el error
   getProducts$(): Observable<Product[]> {
     return this.products$;
   }
@@ -77,9 +91,7 @@ export class ProductsService {
     return this.getProducts().find(product => { return product.name == name });
   }
 
-  private getProductsServer(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.backendUrl + '/products');
-  }
+  
 
   postEditProduct(product: Product): Observable<Product> {
     product.name = formatoname(product.name);

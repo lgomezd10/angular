@@ -148,5 +148,8 @@
         "styleext": "scss"
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

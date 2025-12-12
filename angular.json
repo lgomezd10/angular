@@ -65,18 +65,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "tpv-fruteria:build"
+            "buildTarget": "tpv-fruteria:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "tpv-fruteria:build:production"
+              "buildTarget": "tpv-fruteria:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "tpv-fruteria:build"
+            "buildTarget": "tpv-fruteria:build"
           }
         },
         "test": {

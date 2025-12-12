@@ -71,22 +71,17 @@ export function ConfigureProductTest() {
 
 
 @NgModule({
-  imports: [RouterTestingModule, CommonModule, FormsModule],
-  entryComponents: [
-    BlankCmp,
-    RootCmp,
-    ProductComponent
-  ],
-  exports: [
-    BlankCmp,
-    RootCmp,
-    ProductComponent
-  ],  
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  declarations: [
-    BlankCmp,
-    RootCmp,
-    ProductComponent
-  ]
+    imports: [RouterTestingModule, CommonModule, FormsModule],
+    exports: [
+        BlankCmp,
+        RootCmp,
+        ProductComponent
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    declarations: [
+        BlankCmp,
+        RootCmp,
+        ProductComponent
+    ]
 })
 export class TestModule { }

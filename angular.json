@@ -140,7 +140,6 @@
       }
     }
   },
-  "defaultProject": "tpv-fruteria",
   "schematics": {
     "@schematics/angular": {
       "component": {

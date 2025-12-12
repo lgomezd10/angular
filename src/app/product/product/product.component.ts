@@ -7,7 +7,7 @@ import { Location } from '@angular/common';
 import { Observable, Subscription } from 'rxjs';
 import { ButtonType } from 'src/app/tools/button-type';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { FormErrors } from '@app/tools/form-errors';
 
 
@@ -21,7 +21,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   //private products$: Observable<Product[]>;
   id: number;
   product: Product;
-  formGroup: FormGroup;
+  formGroup: UntypedFormGroup;
   repeatedProduct: string = "";
   private _docSub: Subscription;
   public types = TYPES;
@@ -46,7 +46,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   @ViewChild('elementForm') elementForm: ElementRef;
 
-  constructor(private productsService: ProductsService, private route: ActivatedRoute, private location: Location, formBuilder: FormBuilder) {
+  constructor(private productsService: ProductsService, private route: ActivatedRoute, private location: Location, formBuilder: UntypedFormBuilder) {
 
     this.formGroup = formBuilder.group({
       'id': [''],

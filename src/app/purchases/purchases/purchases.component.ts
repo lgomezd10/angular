@@ -6,7 +6,7 @@ import { Product } from 'src/app/product/product';
 import { PurchasesService } from '../purchases.service';
 import { ButtonType } from 'src/app/tools/button-type';
 import { ToolsService } from 'src/app/tools/tools.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { FormErrors } from '@app/tools/form-errors';
 
 const nameButtonTypes = { sendPurchase: 'SendPruchase', newPurchase: 'NewPurchase', createProduct: 'CreateProduct', addProduct: 'AddProduct', add: 'Add' };
@@ -26,7 +26,7 @@ export class PurchasesComponent implements OnInit {
   @ViewChild('send', { static: false }) goToSummit: ElementRef;
   @ViewChild('elementForm') elementForm: ElementRef;
 
-  formGroup: FormGroup;
+  formGroup: UntypedFormGroup;
   purchases: Purchase[] = [];
   currentPurchase: Purchase;
   searchText: string;
@@ -45,7 +45,7 @@ export class PurchasesComponent implements OnInit {
   ];
 
   constructor(private productsService: ProductsService, private purchasesService: PurchasesService,
-    private toolsServices: ToolsService, formBuilder: FormBuilder) {
+    private toolsServices: ToolsService, formBuilder: UntypedFormBuilder) {
     this.formGroup = formBuilder.group({
       'find': [''],
       'product': [null, Validators.required],

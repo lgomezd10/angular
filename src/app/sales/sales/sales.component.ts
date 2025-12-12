@@ -6,7 +6,7 @@ import { ProductsService } from 'src/app/product/products.service';
 import { SalesService } from '../sales.service';
 import { ButtonType } from 'src/app/tools/button-type';
 import { ToolsService } from 'src/app/tools/tools.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { FormErrors } from '@app/tools/form-errors';
 
 const nameButtonTypes = { newSale: 'NuevaSale', closeSale: 'FinalizarSale', addProduct: 'AddProduct', add: 'Add', reopenTicket: 'ReabrirTicket' };
@@ -29,7 +29,7 @@ export class SalesComponent implements OnInit {
 
   @ViewChild('elementForm') elementForm: ElementRef;
 
-  formGroup: FormGroup;
+  formGroup: UntypedFormGroup;
   items: ItemSale[] = [];
 
   saleId: number = 0;
@@ -51,7 +51,7 @@ export class SalesComponent implements OnInit {
   ];
 
   constructor(private productsService: ProductsService, private salesService: SalesService,
-    private toolsService: ToolsService, formBuilder: FormBuilder) {
+    private toolsService: ToolsService, formBuilder: UntypedFormBuilder) {
     this.formGroup = formBuilder.group({
       'find': [''],
       'product': [null, Validators.required],

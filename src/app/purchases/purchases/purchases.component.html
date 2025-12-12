@@ -13,89 +13,110 @@
       <table class="table is-striped">
         <thead>
           <tr>
-            <th *ngIf="purchaseCompleted">Id</th>
+            @if (purchaseCompleted) {
+              <th>Id</th>
+            }
             <th>Producto</th>
             <th>Cantidad</th>
             <th>Precio Kg/Unidad</th>
             <th>Precio</th>
-            <th *ngIf="!purchaseCompleted">Eliminar</th>
+            @if (!purchaseCompleted) {
+              <th>Eliminar</th>
+            }
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let purchase of purchases">
-            <td *ngIf="purchaseCompleted">{{purchase.id}}</td>
-            <td *ngIf="purchase.product">{{purchase.product.name}}</td>
-            <td *ngIf="!purchase.product">{{purchase.productId | product}}</td>
-            <td>{{purchase.quantity}}</td>
-            <td>{{purchase.price}}</td>
-            <td>{{purchase.quantity * purchase.price | number: '1.0-2'}}</td>
-            <td *ngIf="!purchaseCompleted"> <button (click)=deletePurchase(purchase)>Eliminar</button></td>
-          </tr>
+          @for (purchase of purchases; track purchase) {
+            <tr>
+              @if (purchaseCompleted) {
+                <td>{{purchase.id}}</td>
+              }
+              @if (purchase.product) {
+                <td>{{purchase.product.name}}</td>
+              }
+              @if (!purchase.product) {
+                <td>{{purchase.productId | product}}</td>
+              }
+              <td>{{purchase.quantity}}</td>
+              <td>{{purchase.price}}</td>
+              <td>{{purchase.quantity * purchase.price | number: '1.0-2'}}</td>
+              @if (!purchaseCompleted) {
+                <td> <button (click)=deletePurchase(purchase)>Eliminar</button></td>
+              }
+            </tr>
+          }
         </tbody>
       </table>
 
       <h1>Total: {{totalPurchase()}}</h1>
       <br><br>
       <!--<button (click)=newProduct() *ngIf ="!purchaseCompleted">Nueva compra</button>-->
-      <p *ngIf="purchaseCompleted">Compra guardada correctamente</p>
+      @if (purchaseCompleted) {
+        <p>Compra guardada correctamente</p>
+      }
 
     </div>
 
-    <form *ngIf="showNew" [formGroup]="formGroup" [class.error]="!formGroup.valid && formGroup.touched" #elementForm>
+    @if (showNew) {
+      <form [formGroup]="formGroup" [class.error]="!formGroup.valid && formGroup.touched" #elementForm>
+        <div class="columns">
+          <div class="column">
+            <p>
+              <label class="label">Buscar:</label>
+              <input class="input" name="find" type="text" (keypress)="keyPress($event, product)" #find
+                [formControl]="formGroup.controls['find']">
+              </p>
+              <p>
+                <select class="input is-arrowless" id="product" name="product" size="5"
+                  (keypress)="keyPress($event, quantity)" #product [formControl]="formGroup.controls['product']">
+                  @for (product of products$| async | sort:'name' |filter: formGroup.controls['find'].value; track product) {
+                    <option
+                      [ngValue]="product">
+                    {{product.id}} {{product.name}} stock: {{product.stock}}</option>
+                  }
+                </select>
+              </p>
+              @if (checkError('product')) {
+                <div class="help is-danger">
+                  {{getError('Producto', 'product')}}
+                </div>
+              }
+            </div>
+            <div class="column">
+              <label class="label">Cantidad:</label>
+              <input class="input" type="number" id="quantity" name="quantity" (keypress)="keyPress($event, price)"
+                #quantity [formControl]="formGroup.controls['quantity']">
+                @if (checkError('quantity')) {
+                  <div class="help is-danger">
+                    {{getError('Cantidad', 'quantity')}}
+                  </div>
+                }
+                <label class="label">Precio: </label>
+                <input class="input" type="number" id="price" name="price" min=0 (keypress)="keyPress($event, send)" #price
+                  [formControl]="formGroup.controls['price']">
+                  @if (checkError('price')) {
+                    <div class="help is-danger">
+                      {{getError('Precio', 'price')}}
+                    </div>
+                  }
+                  <div id="send" #send></div>
+                </div>
+              </div>
+            </form>
+          }
 
-      <div class="columns">
+          <div class="crear-new">
+            <!--<button (click) = sendPurchase() *ngIf ="purchases.length > 0 && !purchaseCompleted">Enviar compra</button>-->
+            @if (showNewProduct) {
+              <app-new (savedProduct)="newGuardado($event)"></app-new>
+            }
+          </div>
+
+        </div>
 
         <div class="column">
-          <p>
-            <label class="label">Buscar:</label>
-            <input class="input" name="find" type="text" (keypress)="keyPress($event, product)" #find
-              [formControl]="formGroup.controls['find']">
-          </p>
-
-          <p>
-            <select class="input is-arrowless" id="product" name="product" size="5"
-              (keypress)="keyPress($event, quantity)" #product [formControl]="formGroup.controls['product']">
-              <option *ngFor="let product of products$| async | sort:'name' |filter: formGroup.controls['find'].value"
-                [ngValue]="product">
-                {{product.id}} {{product.name}} stock: {{product.stock}}</option>
-            </select>
-          </p>
-
-          <div class="help is-danger" *ngIf="checkError('product')">
-            {{getError('Producto', 'product')}}
-          </div>
+          <app-button-list [lista]="botones" (sendButtonType)="showButtonType($event)"></app-button-list>
         </div>
-        <div class="column">
-          <label class="label">Cantidad:</label>
-          <input class="input" type="number" id="quantity" name="quantity" (keypress)="keyPress($event, price)"
-            #quantity [formControl]="formGroup.controls['quantity']">
 
-          <div class="help is-danger" *ngIf="checkError('quantity')">
-            {{getError('Cantidad', 'quantity')}}
-          </div>
-
-
-          <label class="label">Precio: </label>
-          <input class="input" type="number" id="price" name="price" min=0 (keypress)="keyPress($event, send)" #price
-            [formControl]="formGroup.controls['price']">
-          <div class="help is-danger" *ngIf="checkError('price')">
-            {{getError('Precio', 'price')}}
-          </div>
-          <div id="send" #send></div>
-        </div>
       </div>
-    </form>
-
-    <div class="crear-new">
-      <!--<button (click) = sendPurchase() *ngIf ="purchases.length > 0 && !purchaseCompleted">Enviar compra</button>-->
-      <app-new *ngIf="showNewProduct" (savedProduct)="newGuardado($event)"></app-new>
-    </div>
-
-  </div>
-
-  <div class="column">
-    <app-button-list [lista]="botones" (sendButtonType)="showButtonType($event)"></app-button-list>
-  </div>
-
-</div>
-<!--Class container-->
+      <!--Class container-->

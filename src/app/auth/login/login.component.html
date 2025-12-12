@@ -2,24 +2,28 @@
   <form class="form" [formGroup]="formGroup">
     <label class="label">Usuario: </label>
     <input class="input" type="text" [formControl]="formGroup.controls['username']" #user
-    (keyup.enter)="onEnter($event, password)" />
-    <div class="help is-danger" *ngIf="checkError('username')">
-      <p>{{getError('Usuario', 'username')}} </p>
-    </div>
+      (keyup.enter)="onEnter($event, password)" />
+      @if (checkError('username')) {
+        <div class="help is-danger">
+          <p>{{getError('Usuario', 'username')}} </p>
+        </div>
+      }
 
-    <label class="label">Contraseña: </label>
-    <div class="control has-icons-right">
-      <input class="input" [type]="hide ? 'password':'text'" autocomplete="off"
-        [formControl]="formGroup.controls['password']" #password (keyup.enter)="onEnter($event, submit)" />
-      <span class="icon" class="icon is-small is-right">
-        <i [class]="hide ? 'fas fa-eye': 'fas fa-eye-slash'" (click)="hide = !hide" #icon></i>
-      </span>
-    </div>
+      <label class="label">Contraseña: </label>
+      <div class="control has-icons-right">
+        <input class="input" [type]="hide ? 'password':'text'" autocomplete="off"
+          [formControl]="formGroup.controls['password']" #password (keyup.enter)="onEnter($event, submit)" />
+          <span class="icon" class="icon is-small is-right">
+            <i [class]="hide ? 'fas fa-eye': 'fas fa-eye-slash'" (click)="hide = !hide" #icon></i>
+          </span>
+        </div>
 
-    <div class="help is-danger" *ngIf="checkError('password')">
-     <p> {{getError('Password', 'password')}} </p>
-    </div>
+        @if (checkError('password')) {
+          <div class="help is-danger">
+            <p> {{getError('Password', 'password')}} </p>
+          </div>
+        }
 
-    <button class="button is-fullwidth" type="submit" #submit (click)="onLogin()">Login</button>
-  </form>
-</div>
+        <button class="button is-fullwidth" type="submit" #submit (click)="onLogin()">Login</button>
+      </form>
+    </div>

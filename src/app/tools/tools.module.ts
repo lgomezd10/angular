@@ -8,7 +8,7 @@ import { MatNativeDateModule, DateAdapter, MAT_DATE_FORMATS } from '@angular/mat
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MAT_DATE_LOCALE} from '@angular/material/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { GroupByPipe } from './group-by.pipe';
 import { GroupBydatePipe } from './group-by.date.pipe';
 import { ButtonListComponent } from './button-list/button-list.component';
@@ -17,23 +17,15 @@ import { MatFormFieldModule} from '@angular/material/form-field';
 import { RequestInterceptor } from './interceptors/request-interceptor';
 import { ErroresModule } from '@app/errores/errors.module';
 
-@NgModule({
-  declarations: [SelecciondatesComponent, GroupByPipe, GroupBydatePipe, ButtonListComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    HttpClientModule,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    MatNativeDateModule,
-    MatInputModule,
-    BrowserAnimationsModule,
-    ErroresModule
-  ],
-  providers: [ MatDatepickerModule, 
-    { provide: MAT_DATE_LOCALE, useValue: 'es-ES' } ,
-    { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true }
-  ],
-  exports:[SelecciondatesComponent, GroupByPipe, GroupBydatePipe, ButtonListComponent]
-})
+@NgModule({ declarations: [SelecciondatesComponent, GroupByPipe, GroupBydatePipe, ButtonListComponent],
+    exports: [SelecciondatesComponent, GroupByPipe, GroupBydatePipe, ButtonListComponent], imports: [CommonModule,
+        FormsModule,
+        MatDatepickerModule,
+        MatFormFieldModule,
+        MatNativeDateModule,
+        MatInputModule,
+        BrowserAnimationsModule,
+        ErroresModule], providers: [MatDatepickerModule,
+        { provide: MAT_DATE_LOCALE, useValue: 'es-ES' },
+        { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true }, provideHttpClient(withInterceptorsFromDi())] })
 export class ToolsModule { }

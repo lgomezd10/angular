@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SalesComponent } from './sales/sales.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule }    from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi }    from '@angular/common/http';
 import { ProductModule } from '../product/product.module';
 import { SalesDateComponent } from './sales-date/sales-date.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
@@ -28,24 +28,14 @@ const salesRoutes: Routes = [
   }  
 ]*/
 
-@NgModule({
-  declarations: [SalesComponent, SalesDateComponent, NavSalesComponent],
-  imports: [   
-    ErroresModule,    
-    AppRoutingModule,
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    ProductModule,
-    ToolsModule,
-    MatDatepickerModule,
-    BrowserAnimationsModule,
-    /*RouterModule.forRoot(
-      salesRoutes,
-      { enableTracing: true }
-    )*/
-  ],
-  exports: [SalesComponent, SalesDateComponent, NavSalesComponent],
-})
+@NgModule({ declarations: [SalesComponent, SalesDateComponent, NavSalesComponent],
+    exports: [SalesComponent, SalesDateComponent, NavSalesComponent], imports: [ErroresModule,
+        AppRoutingModule,
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ProductModule,
+        ToolsModule,
+        MatDatepickerModule,
+        BrowserAnimationsModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class SalesModule { }

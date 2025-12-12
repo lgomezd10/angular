@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { salesService } from './sales.service';
-import { HttpClientModule } from '@angular/common/http';
+import {} from '@angular/common/http';
 
 /*describe('salesService', () => {
   beforeEach(() => TestBed.configureTestingModule({

@@ -6,9 +6,10 @@ import { ProductsService } from '@app/product/products.service';
 
 
 @Component({
-  selector: 'app-show-errors',
-  templateUrl: './show-errors.component.html',
-  styleUrls: ['./show-errors.component.css']
+    selector: 'app-show-errors',
+    templateUrl: './show-errors.component.html',
+    styleUrls: ['./show-errors.component.css'],
+    standalone: false
 })
 export class ShowErrorsComponent implements OnInit {
 

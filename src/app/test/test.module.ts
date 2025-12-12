@@ -12,15 +12,17 @@ import { SortPipe } from '../product/sort.pipe';
 import { ProductPipe } from '../product/product.pipe';
 
 @Component({
-  selector: 'blank-cmp',
-  template: ``
+    selector: 'blank-cmp',
+    template: ``,
+    standalone: false
 })
 export class BlankCmp {
 }
 
 @Component({
-  selector: 'root-cmp',
-  template: `<router-outlet></router-outlet>`
+    selector: 'root-cmp',
+    template: `<router-outlet></router-outlet>`,
+    standalone: false
 })
 export class RootCmp {
 }

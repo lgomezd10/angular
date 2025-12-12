@@ -5,9 +5,10 @@ import { Observable, Subscription, combineLatest } from 'rxjs';
 import { filter, tap, map, delay } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-button-list',
-  templateUrl: './button-list.component.html',
-  styleUrls: ['./button-list.component.scss']
+    selector: 'app-button-list',
+    templateUrl: './button-list.component.html',
+    styleUrls: ['./button-list.component.scss'],
+    standalone: false
 })
 export class ButtonListComponent implements OnInit {
 

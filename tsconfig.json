@@ -10,8 +10,8 @@
         "src/environments/*"
       ]
     },
-    "downlevelIteration": true,
     "outDir": "./dist/out-tsc",
+    "esModuleInterop": true,
     "sourceMap": true,
     "declaration": false,
     "module": "es2020",

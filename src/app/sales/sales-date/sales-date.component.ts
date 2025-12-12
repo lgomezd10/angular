@@ -5,10 +5,11 @@ import { SalesService } from '../sales.service';
 import { dates } from 'src/app/tools/dates';
 
 @Component({
-  selector: 'app-sales-date',
-  templateUrl: './sales-date.component.html',
-  styleUrls: ['./sales-date.component.css'],
-  providers: [DatePipe]
+    selector: 'app-sales-date',
+    templateUrl: './sales-date.component.html',
+    styleUrls: ['./sales-date.component.css'],
+    providers: [DatePipe],
+    standalone: false
 })
 export class SalesDateComponent  {
 

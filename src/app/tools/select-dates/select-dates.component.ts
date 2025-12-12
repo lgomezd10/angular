@@ -3,9 +3,10 @@ import { dates } from '../dates';
 import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-select-dates',
-  templateUrl: './select-dates.component.html',
-  styleUrls: ['./select-dates.component.css']
+    selector: 'app-select-dates',
+    templateUrl: './select-dates.component.html',
+    styleUrls: ['./select-dates.component.css'],
+    standalone: false
 })
 export class SelecciondatesComponent implements OnInit {
 

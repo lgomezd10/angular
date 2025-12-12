@@ -15,9 +15,10 @@ import { FormErrors } from '@app/tools/form-errors';
 }*/
 
 @Component({
-  selector: 'app-new',
-  templateUrl: './new.component.html',
-  styleUrls: ['./new.component.css']
+    selector: 'app-new',
+    templateUrl: './new.component.html',
+    styleUrls: ['./new.component.css'],
+    standalone: false
 })
 export class NewComponent implements OnInit {
 

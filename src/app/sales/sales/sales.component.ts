@@ -12,9 +12,10 @@ import { FormErrors } from '@app/tools/form-errors';
 const nameButtonTypes = { newSale: 'NuevaSale', closeSale: 'FinalizarSale', addProduct: 'AddProduct', add: 'Add', reopenTicket: 'ReabrirTicket' };
 
 @Component({
-  selector: 'app-sales',
-  templateUrl: './sales.component.html',
-  styleUrls: ['./sales.component.scss']
+    selector: 'app-sales',
+    templateUrl: './sales.component.html',
+    styleUrls: ['./sales.component.scss'],
+    standalone: false
 })
 
 

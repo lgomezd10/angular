@@ -5,10 +5,11 @@ import { Purchase } from '../purchase';
 import { dates } from 'src/app/tools/dates';
 
 @Component({
-  selector: 'app-purchases-date',
-  templateUrl: './purchases-date.component.html',
-  styleUrls: ['./purchases-date.component.css'],
-  providers: [DatePipe]
+    selector: 'app-purchases-date',
+    templateUrl: './purchases-date.component.html',
+    styleUrls: ['./purchases-date.component.css'],
+    providers: [DatePipe],
+    standalone: false
 })
 export class PurchasesDateComponent implements OnInit {
 

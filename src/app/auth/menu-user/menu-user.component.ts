@@ -5,9 +5,10 @@ import { AuthService } from '../auth.service';
 import { UserResponse } from '../user';
 
 @Component({
-  selector: 'app-menu-user',
-  templateUrl: './menu-user.component.html',
-  styleUrls: ['./menu-user.component.css']
+    selector: 'app-menu-user',
+    templateUrl: './menu-user.component.html',
+    styleUrls: ['./menu-user.component.css'],
+    standalone: false
 })
 export class MenuUserComponent implements OnInit {
 

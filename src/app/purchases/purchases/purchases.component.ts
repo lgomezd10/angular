@@ -12,9 +12,10 @@ import { FormErrors } from '@app/tools/form-errors';
 const nameButtonTypes = { sendPurchase: 'SendPruchase', newPurchase: 'NewPurchase', createProduct: 'CreateProduct', addProduct: 'AddProduct', add: 'Add' };
 
 @Component({
-  selector: 'app-purchases',
-  templateUrl: './purchases.component.html',
-  styleUrls: ['./purchases.component.scss']
+    selector: 'app-purchases',
+    templateUrl: './purchases.component.html',
+    styleUrls: ['./purchases.component.scss'],
+    standalone: false
 })
 export class PurchasesComponent implements OnInit {
 

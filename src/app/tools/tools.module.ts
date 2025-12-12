@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SelecciondatesComponent } from './select-dates/select-dates.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatInputModule} from '@angular/material/input';
+import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-input';
 import { MatNativeDateModule, DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 //import { MatFormFieldModule, MatInputModule } from '@angular/material/datepicker'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -13,7 +13,7 @@ import { GroupByPipe } from './group-by.pipe';
 import { GroupBydatePipe } from './group-by.date.pipe';
 import { ButtonListComponent } from './button-list/button-list.component';
 import { from } from 'rxjs';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
 import { RequestInterceptor } from './interceptors/request-interceptor';
 import { ErroresModule } from '@app/errores/errors.module';
 

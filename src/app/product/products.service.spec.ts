@@ -31,7 +31,7 @@ describe('ProductsService', () => {
         { provide: Socket, useValue: mockSocket }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 }));
   it('should be created', () => {
-    const service: ProductsService = TestBed.get(ProductsService);
+    const service: ProductsService = TestBed.inject(ProductsService);
     expect(service).toBeTruthy();
   });
 

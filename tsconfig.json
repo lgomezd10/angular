@@ -24,5 +24,8 @@
       "node_modules/@types"
     ],
     "useDefineForClassFields": false
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true
   }
 }

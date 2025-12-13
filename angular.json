@@ -51,7 +51,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -119,18 +118,6 @@
       "projectType": "application",
       "prefix": "",
       "architect": {
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "tpv-fruteria:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "tpv-fruteria:serve:production"
-            }
-          }
-        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {

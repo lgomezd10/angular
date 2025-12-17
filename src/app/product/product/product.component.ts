@@ -4,18 +4,19 @@ import { Product } from '../product';
 import { ActivatedRoute } from '@angular/router';
 import { TYPES } from '../products-types';
 import { Location } from '@angular/common';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ButtonType } from 'src/app/tools/button-type';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { FormErrors } from '@app/tools/form-errors';
+import { ButtonListComponent } from '@app/tools/button-list/button-list.component';
 
 
 @Component({
     selector: 'app-product',
     templateUrl: './product.component.html',
     styleUrls: ['./product.component.css'],
-    standalone: false
+    standalone: true,
+    imports: [ReactiveFormsModule, ButtonListComponent]
 })
 export class ProductComponent implements OnInit, OnDestroy {
 
@@ -36,6 +37,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   ];
 
   buttonName: ElementRef;
+  repitedProduct: any = "";
 
   // set focus when init the component
   @ViewChild('name', { static: false }) set content(content: ElementRef) {

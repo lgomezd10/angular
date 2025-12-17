@@ -12,7 +12,7 @@
           <label class="label is-medium">Identificador:</label> <label
         class="label">{{formGroup.controls['id'].value}}</label>
         <label class="label is-medium">Nombre:</label><input class="input" id="name" #name type="text"
-        [formControl]="formGroup.controls['name']">
+        formControlName="name">
         @if (checkError('name')) {
           <div class="help is-danger">
             {{getError('Nombre', 'name')}}
@@ -26,7 +26,7 @@
         <label class="label is-medium">Stock:</label><label class="label" id="stock">
       {{formGroup.controls['stock'].value}} </label> <br>
       <label class="label is-medium">Precio:</label><input class="input" id="price" type="number"
-      [formControl]="formGroup.controls['price']">
+      formControlName="price">
       @if (checkError('price')) {
         <div class="help is-danger">
           {{getError('Precio', 'price')}}
@@ -34,7 +34,7 @@
       }
       <label class="label is-medium">Tipo:</label>
       <div class="select">
-        <select id="type" [formControl]="formGroup.controls['type']">
+        <select id="type" formControlName="type">
           @for (type of types; track type) {
             <option [ngValue]="type">{{type}}</option>
           }

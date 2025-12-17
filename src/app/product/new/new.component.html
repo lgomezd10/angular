@@ -5,7 +5,7 @@
         <div class="column is-half">
           <label class="label">Nombre: </label>
           <input class="input" name="name" id="name" type="text" autocomplete="off"
-            (keypress)="keyPress($event, type)" #name [formControl]="formGroup.controls['name']">
+            (keypress)="keyPress($event, type)" #name formControlName="name">
             @if (repeatedProduct!='' && formGroup.controls['name'].value == repeatedProduct) {
               <div class="help is-danger"
                 >Ya existe un
@@ -32,7 +32,7 @@
           <div class="column is-half">
             <label class="label">Tipo: </label>
             <div class="select">
-              <select class="select" name="type" id="type" [formControl]="formGroup.controls['type']" #type
+              <select class="select" name="type" id="type" formControlName="type" #type
                 (change)="onChange($event,price)">
                 @for (type of types; track type) {
                   <option [ngValue]="type">{{type}}</option>
@@ -46,7 +46,7 @@
             }
             <label class="label">Precio: </label>
             <input class="input" id="price" type="number" #price (keypress)="keyPress($event, sent)"
-              [formControl]="formGroup.controls['price']">
+              formControlName="price">
               @if (checkError('price')) {
                 <div class="help is-danger">
                   {{getError('Precio', 'price')}}

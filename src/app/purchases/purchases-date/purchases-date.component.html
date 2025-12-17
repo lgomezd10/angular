@@ -1,6 +1,8 @@
-<app-select-dates (enviardates) = "findPurchases($event)"></app-select-dates>
+<h2 class="title is-3">Buscador de compras</h2>
 
-@for (purchase of purchases | groupBydate; track purchase) {
+<app-select-dates (enviardates)="findPurchases($event)"></app-select-dates>
+
+@for (purchase of purchases$ | async | groupBydate; track purchase) {
   <table class="table table is-striped">
     <thead>
       <tr>

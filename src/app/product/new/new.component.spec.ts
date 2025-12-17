@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, fakeAsync, inject, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, inject, tick } from '@angular/core/testing';
 
 import { NewComponent } from './new.component';
 import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
@@ -19,7 +19,7 @@ import { ProductModule } from '../product.module';
 describe('NewComponent', () => {
   let component: NewComponent;
   let fixture: ComponentFixture<NewComponent>;
-  beforeEach(async(() => {
+  beforeEach(async () => {
 
     const mockProductsService: MockProductsService = new MockProductsService();
     const mocktoolsServices: MockToolsServices = new MockToolsServices();
@@ -33,7 +33,7 @@ describe('NewComponent', () => {
       declarations: [NewComponent]
     }).compileComponents();
 
-  }));
+  }) ;
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NewComponent);

@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ErrorService } from '../error.service';
 import { Observable } from 'rxjs';
 import { ProductsService } from '@app/product/products.service';
+import { AsyncPipe } from '@angular/common';
 
 
 
@@ -9,7 +10,8 @@ import { ProductsService } from '@app/product/products.service';
     selector: 'app-show-errors',
     templateUrl: './show-errors.component.html',
     styleUrls: ['./show-errors.component.css'],
-    standalone: false
+    standalone: true,
+    imports: [AsyncPipe]
 })
 export class ShowErrorsComponent implements OnInit {
 

@@ -7,9 +7,6 @@ import { ProductModule } from '../product/product.module';
 import { SalesDateComponent } from './sales-date/sales-date.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 
-
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { ToolsModule } from '../tools/tools.module';
 import { NavSalesComponent } from './nav-sales/nav-sales.component';
 import { AppRoutingModule } from '@app/app-routing.module';
@@ -28,14 +25,16 @@ const salesRoutes: Routes = [
   }  
 ]*/
 
-@NgModule({ declarations: [SalesComponent, SalesDateComponent, NavSalesComponent],
-    exports: [SalesComponent, SalesDateComponent, NavSalesComponent], imports: [ErroresModule,
+@NgModule({ declarations: [NavSalesComponent],
+    exports: [SalesComponent, SalesDateComponent, NavSalesComponent], 
+    imports: [ErroresModule,
         AppRoutingModule,
+        SalesDateComponent,
+        SalesComponent,
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
         ProductModule,
         ToolsModule,
-        MatDatepickerModule,
-        BrowserAnimationsModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        MatDatepickerModule], providers: [] })
 export class SalesModule { }

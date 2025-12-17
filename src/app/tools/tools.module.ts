@@ -1,31 +1,30 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SelecciondatesComponent } from './select-dates/select-dates.component';
+import { SelectionDatesComponent } from './select-dates/select-dates.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatInputModule} from '@angular/material/input';
 import { MatNativeDateModule, DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
-//import { MatFormFieldModule, MatInputModule } from '@angular/material/datepicker'
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MAT_DATE_LOCALE} from '@angular/material/core';
 import { FormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { GroupByPipe } from './group-by.pipe';
 import { GroupBydatePipe } from './group-by.date.pipe';
 import { ButtonListComponent } from './button-list/button-list.component';
 import { from } from 'rxjs';
 import { MatFormFieldModule} from '@angular/material/form-field';
-import { RequestInterceptor } from './interceptors/request-interceptor';
 import { ErroresModule } from '@app/errores/errors.module';
 
-@NgModule({ declarations: [SelecciondatesComponent, GroupByPipe, GroupBydatePipe, ButtonListComponent],
-    exports: [SelecciondatesComponent, GroupByPipe, GroupBydatePipe, ButtonListComponent], imports: [CommonModule,
+@NgModule({ declarations: [GroupByPipe],
+    exports: [SelectionDatesComponent, GroupByPipe, GroupBydatePipe, ButtonListComponent], imports: [CommonModule,
         FormsModule,
+        ButtonListComponent,
+        GroupBydatePipe,
+        SelectionDatesComponent,
         MatDatepickerModule,
         MatFormFieldModule,
         MatNativeDateModule,
         MatInputModule,
-        BrowserAnimationsModule,
         ErroresModule], providers: [MatDatepickerModule,
         { provide: MAT_DATE_LOCALE, useValue: 'es-ES' },
-        { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true }, provideHttpClient(withInterceptorsFromDi())] })
+        ] })
 export class ToolsModule { }

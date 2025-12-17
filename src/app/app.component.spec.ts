@@ -1,4 +1,4 @@
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { LogoComponent } from './logo/logo.component';
 import { ShowErrorsComponent } from './errores/show-errors/show-errors.component';
@@ -8,7 +8,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 
 describe('AppComponent', () => {
-  beforeEach(async(() => {
+  beforeEach(async() => {
     TestBed.configureTestingModule({
       declarations: [
         AppComponent,
@@ -17,7 +17,7 @@ describe('AppComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
-  }));
+  });
 
   it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent);

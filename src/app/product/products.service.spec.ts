@@ -5,7 +5,7 @@ import { HttpClient, HttpBackend, HttpRequest, HttpResponse, HttpHandler, provid
 import { ProductsService } from './products.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Product } from './product';
-import { Socket } from 'ngx-socket-io';
+import { SocketService } from '../services/socket';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 
@@ -28,7 +28,7 @@ describe('ProductsService', () => {
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [],
     providers: [ProductsService,
-        { provide: Socket, useValue: mockSocket }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+        { provide: SocketService, useValue: mockSocket }, provideHttpClientTesting()]
 }));
   it('should be created', () => {
     const service: ProductsService = TestBed.inject(ProductsService);

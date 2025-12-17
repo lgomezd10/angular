@@ -6,8 +6,14 @@ import { Product } from 'src/app/product/product';
 import { PurchasesService } from '../purchases.service';
 import { ButtonType } from 'src/app/tools/button-type';
 import { ToolsService } from 'src/app/tools/tools.service';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { FormErrors } from '@app/tools/form-errors';
+import { ProductPipe } from '@app/product/product.pipe';
+import { AsyncPipe, DecimalPipe } from '@angular/common';
+import { SortPipe } from '@app/product/sort.pipe';
+import { FilterPipe } from '@app/product/filter.pipe';
+import { NewComponent } from '@app/product/new/new.component';
+import { ButtonListComponent } from '@app/tools/button-list/button-list.component';
 
 const nameButtonTypes = { sendPurchase: 'SendPruchase', newPurchase: 'NewPurchase', createProduct: 'CreateProduct', addProduct: 'AddProduct', add: 'Add' };
 
@@ -15,7 +21,8 @@ const nameButtonTypes = { sendPurchase: 'SendPruchase', newPurchase: 'NewPurchas
     selector: 'app-purchases',
     templateUrl: './purchases.component.html',
     styleUrls: ['./purchases.component.scss'],
-    standalone: false
+    standalone: true,
+    imports: [ProductPipe, ReactiveFormsModule, AsyncPipe, SortPipe, FilterPipe, NewComponent, ButtonListComponent, DecimalPipe]
 })
 export class PurchasesComponent implements OnInit {
 

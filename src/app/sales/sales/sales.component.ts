@@ -6,8 +6,13 @@ import { ProductsService } from 'src/app/product/products.service';
 import { SalesService } from '../sales.service';
 import { ButtonType } from 'src/app/tools/button-type';
 import { ToolsService } from 'src/app/tools/tools.service';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { FormErrors } from '@app/tools/form-errors';
+import { AsyncPipe, DecimalPipe } from '@angular/common';
+import { SortPipe } from '@app/product/sort.pipe';
+import { FilterPipe } from '@app/product/filter.pipe';
+import { ButtonListComponent } from '@app/tools/button-list/button-list.component';
+import { ShowErrorsComponent } from '@app/errores/show-errors/show-errors.component';
 
 const nameButtonTypes = { newSale: 'NuevaSale', closeSale: 'FinalizarSale', addProduct: 'AddProduct', add: 'Add', reopenTicket: 'ReabrirTicket' };
 
@@ -15,7 +20,8 @@ const nameButtonTypes = { newSale: 'NuevaSale', closeSale: 'FinalizarSale', addP
     selector: 'app-sales',
     templateUrl: './sales.component.html',
     styleUrls: ['./sales.component.scss'],
-    standalone: false
+    standalone: true,
+    imports: [ReactiveFormsModule, AsyncPipe, SortPipe, FilterPipe, ButtonListComponent, FormsModule, DecimalPipe, ShowErrorsComponent]
 })
 
 

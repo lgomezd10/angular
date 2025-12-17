@@ -4,7 +4,7 @@ import { ProductsService } from './products.service';
 
 @Pipe({
     name: 'product',
-    standalone: false
+    standalone: true
 })
 export class ProductPipe implements PipeTransform {    
 

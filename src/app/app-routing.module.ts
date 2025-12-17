@@ -11,9 +11,9 @@ import { SalesDateComponent } from './sales/sales-date/sales-date.component';
 import { LoginComponent } from './auth/login/login.component';
 import { NavPurchasesComponent } from './purchases/nav-purchases/nav-purchases.component';
 import { PurchasesDateComponent } from './purchases/purchases-date/purchases-date.component';
-import { CheckLoginGuard } from './auth/check-login.guard';
+import { checkLoginGuard } from './check-login.guard';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     redirectTo: 'sales',
@@ -22,12 +22,12 @@ const routes: Routes = [
   {
     path: 'products',
     component: ProductsComponent,
-    canActivate: [CheckLoginGuard]
+    canActivate: [checkLoginGuard]
   },
   {
     path: 'sales',
     component: NavSalesComponent,
-    canActivate: [CheckLoginGuard],
+    canActivate: [checkLoginGuard],
     children: [
       {
         path: 'sales', redirectTo: '', pathMatch: "full"
@@ -46,7 +46,7 @@ const routes: Routes = [
   {
     path: 'purchases',
     component: NavPurchasesComponent,
-    canActivate: [CheckLoginGuard],
+    canActivate: [checkLoginGuard],
     children: [
       {
         path: 'purchases', redirectTo: '', pathMatch: "full"
@@ -67,7 +67,7 @@ const routes: Routes = [
   {
     path: 'product/:id',
     component: ProductComponent,
-    canActivate: [CheckLoginGuard]
+    canActivate: [checkLoginGuard]
   },
   {
     path: 'login',

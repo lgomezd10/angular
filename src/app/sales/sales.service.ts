@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ItemSale } from './item-sale';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, of } from 'rxjs';
 import { Sale } from './sale';
 import { ProductsService } from '../product/products.service';
-import { map, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from '@env/environment';
 
 const httpOptions = {
@@ -49,7 +49,9 @@ export class SalesService {
   }
 
   getSale(saleId: number) : Observable<Sale> {
-    return this.http.get<Sale>(this.backendUrl + '/sales/sale/' + saleId);
+    return this.http.get<Sale>(this.backendUrl + '/sales/sale/' + saleId).pipe(
+      catchError(() => of(null))
+    );
   }
 
 

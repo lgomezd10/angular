@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 
-import { salesService } from './sales.service';
 import {} from '@angular/common/http';
 
 /*describe('salesService', () => {

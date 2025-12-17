@@ -64,11 +64,11 @@
             <p>
               <label class="label">Buscar:</label>
               <input class="input" name="find" type="text" (keypress)="keyPress($event, product)" #find
-                [formControl]="formGroup.controls['find']">
+                formControlName="find">
               </p>
               <p>
                 <select class="input is-arrowless" id="product" name="product" size="5"
-                  (keypress)="keyPress($event, quantity)" #product [formControl]="formGroup.controls['product']">
+                  (keypress)="keyPress($event, quantity)" #product formControlName="product">
                   @for (product of products$| async | sort:'name' |filter: formGroup.controls['find'].value; track product) {
                     <option
                       [ngValue]="product">
@@ -85,7 +85,7 @@
             <div class="column">
               <label class="label">Cantidad:</label>
               <input class="input" type="number" id="quantity" name="quantity" (keypress)="keyPress($event, price)"
-                #quantity [formControl]="formGroup.controls['quantity']">
+                #quantity formControlName="quantity">
                 @if (checkError('quantity')) {
                   <div class="help is-danger">
                     {{getError('Cantidad', 'quantity')}}
@@ -93,7 +93,7 @@
                 }
                 <label class="label">Precio: </label>
                 <input class="input" type="number" id="price" name="price" min=0 (keypress)="keyPress($event, send)" #price
-                  [formControl]="formGroup.controls['price']">
+                  formControlName="price">
                   @if (checkError('price')) {
                     <div class="help is-danger">
                       {{getError('Precio', 'price')}}

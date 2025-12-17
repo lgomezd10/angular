@@ -3,7 +3,7 @@ import { DatePipe } from '@angular/common';
 
 @Pipe({
     name: 'groupBydate',
-    standalone: false
+    standalone: true
 })
 export class GroupBydatePipe implements PipeTransform {
 

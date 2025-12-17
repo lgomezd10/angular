@@ -11,7 +11,7 @@
     }
     <div id="productList">
       <ul class="products">
-        @for (product of products$ | async | sort:'name' | filter: searchText; track product) {
+        @for (product of products$ | async | sort:'name' | filter: searchText; track product.id) {
           <li>
             <span class="id">{{product.id}}</span>
             <input class="name" type="text" [(ngModel)]="product.name">

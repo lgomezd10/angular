@@ -4,11 +4,14 @@ import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { UserResponse } from '../user';
 
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 @Component({
-    selector: 'app-menu-user',
-    templateUrl: './menu-user.component.html',
-    styleUrls: ['./menu-user.component.css'],
-    standalone: false
+  selector: 'app-menu-user',
+  templateUrl: './menu-user.component.html',
+  styleUrls: ['./menu-user.component.css'],
+  standalone: true,
+  imports: [CommonModule, RouterModule]
 })
 export class MenuUserComponent implements OnInit {
 

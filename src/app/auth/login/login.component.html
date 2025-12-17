@@ -1,8 +1,9 @@
+login
 <div class="login">
   <form class="form" [formGroup]="formGroup">
     <label class="label">Usuario: </label>
-    <input class="input" type="text" [formControl]="formGroup.controls['username']" #user
-      (keyup.enter)="onEnter($event, password)" />
+    <input class="input" type="text" formControlName="username"
+         #user (keyup)="onEnter($event, password)" />
       @if (checkError('username')) {
         <div class="help is-danger">
           <p>{{getError('Usuario', 'username')}} </p>
@@ -11,8 +12,8 @@
 
       <label class="label">Contraseña: </label>
       <div class="control has-icons-right">
-        <input class="input" [type]="hide ? 'password':'text'" autocomplete="off"
-          [formControl]="formGroup.controls['password']" #password (keyup.enter)="onEnter($event, submit)" />
+        <input class="input" [type]="hide ? 'password':'text'" autocomplete="off" 
+            formControlName="password" #password (keyup)="onEnter($event, submit)" />
           <span class="icon" class="icon is-small is-right">
             <i [class]="hide ? 'fas fa-eye': 'fas fa-eye-slash'" (click)="hide = !hide" #icon></i>
           </span>

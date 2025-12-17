@@ -76,14 +76,12 @@ export function ConfigureProductTest() {
     imports: [RouterTestingModule, CommonModule, FormsModule],
     exports: [
         BlankCmp,
-        RootCmp,
-        ProductComponent
+        RootCmp
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     declarations: [
         BlankCmp,
-        RootCmp,
-        ProductComponent
+        RootCmp
     ]
 })
 export class TestModule { }

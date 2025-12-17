@@ -1,9 +1,10 @@
+@use "./sass/mystyles.scss" as *;
 /* You can add global styles to this file, and also import other style files */
 @import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 // Update some of Bulma's component variables
 // $body-background-color: $beige-lighter;
 
-@import "src/sass/mystyles.scss";
+
 .mynavigation a {
     padding: 5px 10px;
     text-decoration: none;

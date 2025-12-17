@@ -7,10 +7,8 @@ import { PurchasesComponent } from './purchases/purchases.component';
 import { PurchasesDateComponent } from './purchases-date/purchases-date.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToolsModule } from '../tools/tools.module';
 import { Routes, RouterModule } from '@angular/router';
-import { FlexLayoutModule } from "@angular/flex-layout";
 import { NavPurchasesComponent } from './nav-purchases/nav-purchases.component';
 import { AppRoutingModule } from '@app/app-routing.module';
 
@@ -25,17 +23,17 @@ import { AppRoutingModule } from '@app/app-routing.module';
   }  
 ]*/
 
-@NgModule({ declarations: [PurchasesComponent, PurchasesDateComponent, NavPurchasesComponent],
+@NgModule({ declarations: [NavPurchasesComponent],
     exports: [
         PurchasesComponent,
         PurchasesDateComponent
-    ], imports: [FlexLayoutModule,
+    ], imports: [PurchasesComponent,
+        PurchasesDateComponent,
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
         ProductModule,
         ToolsModule,
         MatDatepickerModule,
-        BrowserAnimationsModule,
-        AppRoutingModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        AppRoutingModule], providers: [] })
 export class PurchasesModule { }

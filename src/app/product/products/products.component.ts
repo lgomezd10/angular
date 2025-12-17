@@ -1,18 +1,25 @@
 import { Component, OnInit, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { AsyncPipe, NgIf, NgFor } from '@angular/common';
 import { ProductsService } from '../products.service';
 import { Product } from '../product';
 import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ButtonType } from 'src/app/tools/button-type';
+import { FormsModule } from '@angular/forms';
+import { SortPipe } from '../sort.pipe';
+import { FilterPipe } from '../filter.pipe';
+import { ButtonListComponent } from '@app/tools/button-list/button-list.component';
+import { NewComponent } from '../new/new.component';
 
 
 
 @Component({
-    selector: 'app-products',
-    templateUrl: './products.component.html',
-    styleUrls: ['./products.component.css'],
-    standalone: false
+  selector: 'app-products',
+  templateUrl: './products.component.html',
+  styleUrls: ['./products.component.css'],
+  standalone: true,
+  imports: [AsyncPipe, FormsModule, SortPipe, FilterPipe, RouterModule, ButtonListComponent, NewComponent]
 })
 export class ProductsComponent implements OnInit {
 
@@ -28,6 +35,9 @@ export class ProductsComponent implements OnInit {
   ];
 
   @ViewChild('modal') modal: ElementRef;
+  searchText: any;
+  oldPrice: any;
+  event$: Product;
 
   constructor(private productsService: ProductsService, private route: ActivatedRoute) {
     
@@ -46,16 +56,17 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit() {
     
-    //TODO al cargar aquí los productos, se están cargando dos veces (desde aquí y desde el service) pero si no se carga desde aquí no se actualiza
+    console.log('ngOnInit ejecutado');
     this.productsService.loadProducts();
     this.products$ = this.productsService.getProducts$().pipe(
       tap((value) => {
         this.new = false;
+        console.log('products$ emitió:', value);
       })
     );
     this.productsService.getProducts$().subscribe(products => {
       console.log("peticion al servidor", products);
-    })
+    });
     /* this.products$.subscribe(products => {
       this.products = products;
       this.new = false;
@@ -105,6 +116,7 @@ export class ProductsComponent implements OnInit {
   }
 
   savedNewProduct(product: Product) {
+    console.log("Producto recibido del modal:", product);
     this.activateButtonType("AddNew");
   }
 

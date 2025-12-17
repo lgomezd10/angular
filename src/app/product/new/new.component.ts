@@ -5,8 +5,12 @@ import { Observable, Subscription } from 'rxjs';
 import { TYPES } from '../products-types';
 import { ToolsService } from 'src/app/tools/tools.service';
 import { ButtonType } from 'src/app/tools/button-type';
-import { UntypedFormGroup, UntypedFormBuilder, Validators, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, FormControl, FormsModule } from '@angular/forms';
 import { FormErrors } from '@app/tools/form-errors';
+import { AsyncPipe } from '@angular/common';
+import { SortPipe } from '../sort.pipe';
+import { FilterPipe } from '../filter.pipe';
+import { RouterModule } from '@angular/router';
 
 /*function productValidator(control: FormControl): {[s: string]: boolean} {
   if(this.productsService.getProductByName(control.value) != undefined) {
@@ -14,11 +18,13 @@ import { FormErrors } from '@app/tools/form-errors';
   }
 }*/
 
+import { ReactiveFormsModule } from '@angular/forms';
 @Component({
-    selector: 'app-new',
-    templateUrl: './new.component.html',
-    styleUrls: ['./new.component.css'],
-    standalone: false
+  selector: 'app-new',
+  templateUrl: './new.component.html',
+  styleUrls: ['./new.component.css'],
+  standalone: true,
+  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, SortPipe, FilterPipe, RouterModule]
 })
 export class NewComponent implements OnInit {
 

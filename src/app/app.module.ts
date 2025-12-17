@@ -8,21 +8,15 @@ import { LogoComponent } from './logo/logo.component';
 import { PurchasesModule } from './purchases/purchases.module';
 import { ErroresModule } from './errores/errors.module';
 import { ToolsModule } from './tools/tools.module';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MenuUserComponent } from './auth/menu-user/menu-user.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginModule } from './auth/login/login.module';
 
 
-
-@NgModule({ declarations: [
-        AppComponent,
-        LogoComponent,
-        MenuUserComponent
-    ],
+@NgModule({
     exports: [],
-    bootstrap: [AppComponent], imports: [FormsModule,
+    imports: [FormsModule,
         ReactiveFormsModule,
         BrowserModule,
         ProductModule,
@@ -31,6 +25,8 @@ import { LoginModule } from './auth/login/login.module';
         LoginModule,
         ErroresModule,
         ToolsModule,
-        AppRoutingModule,
-        BrowserAnimationsModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        AppRoutingModule],
+    providers: [provideHttpClient(withInterceptorsFromDi())],
+    bootstrap: []
+})
 export class AppModule { }

@@ -1,27 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { AsyncPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { PurchasesService } from '../purchases.service';
 import { Purchase } from '../purchase';
 import { dates } from 'src/app/tools/dates';
+import { GroupBydatePipe } from '@app/tools/group-by.date.pipe';
+import { ToolsModule } from '@app/tools/tools.module';
+import { Observable } from 'rxjs';
+import { FormControl, FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-purchases-date',
     templateUrl: './purchases-date.component.html',
     styleUrls: ['./purchases-date.component.css'],
     providers: [DatePipe],
-    standalone: false
+    standalone: true,
+    imports: [DecimalPipe, GroupBydatePipe, ToolsModule, AsyncPipe, FormsModule]
 })
-export class PurchasesDateComponent implements OnInit {
+export class PurchasesDateComponent {
 
-
-  purchases: Purchase[];
+  purchases$: Observable<Purchase[]>;
 
   constructor(private datePipe: DatePipe, private purchasesService: PurchasesService) {
-
-  }
-
-  ngOnInit() {
-    this.purchases = [];
   }
 
   escribirDatos(datos) {
@@ -29,12 +28,8 @@ export class PurchasesDateComponent implements OnInit {
   }
   //2019-05-09 00:00:00
 
-  findPurchases(dates: dates) {
-    
-    this.purchasesService.purchasesByDate(dates.from, dates.to).subscribe(purchases => {
-      this.purchases = purchases;
-    });
-
+  findPurchases(dates: dates) {    
+    this.purchases$ = this.purchasesService.purchasesByDate(dates.from, dates.to);
   }
 
 }

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, fakeAsync, inject, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, inject, tick } from '@angular/core/testing';
 
 import { ProductComponent } from './product.component';
 import { MockProductsService } from 'src/app/test/products.service.mock';
@@ -7,15 +7,15 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { ProductsService } from '../products.service';
 import { Product } from '../product';
-import { Component, DebugElement } from '@angular/core';
+import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 
 describe('ProductComponent', () => {
 
-  beforeEach(async(() => {
+  beforeEach(async () => {
     ConfigureProductTest();
-  }));
+  });
 
   describe('uso funciones', () => {
     let component: ProductComponent;

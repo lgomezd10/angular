@@ -1,11 +1,17 @@
-<p *ngIf="withoutConexion">
-  Conectando con el servidor
-</p>
+@if (withoutConexion) {
+  <p>
+    Conectando con el servidor
+  </p>
+}
 
-<p *ngIf= "typeError=='Errors'">
-  {{errores$ | async}}
-</p>
-<p *ngIf= "typeError=='Error404'">  
-  {{errores404$ | async}}
-</p>
+@if (typeError=='Errors') {
+  <p>
+    {{errores$ | async}}
+  </p>
+}
+@if (typeError=='Error404') {
+  <p>
+    {{errores404$ | async}}
+  </p>
+}
 

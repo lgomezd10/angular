@@ -1,7 +1,7 @@
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 export class FormErrors {
-    static getError(name: string, field: string, formGroup: FormGroup): string {
+    static getError(name: string, field: string, formGroup: UntypedFormGroup): string {
         const { errors } = formGroup.get(field);
 
         if (errors) {    
@@ -18,7 +18,7 @@ export class FormErrors {
         }
     }
 
-    static checkError(field: string, formGroup: FormGroup): boolean {
+    static checkError(field: string, formGroup: UntypedFormGroup): boolean {
         return !formGroup.controls[field].valid && formGroup.controls[field].touched
     }
 }

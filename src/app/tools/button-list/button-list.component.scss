@@ -1,4 +1,4 @@
-@import "src/sass/mystyles.scss";
+@use "../../../sass/mystyles.scss" as *;
 li {    
     list-style: none;
 }
@@ -26,6 +26,3 @@ li {
   .button{
     margin-bottom: 20px;
   }
-
-  
-  

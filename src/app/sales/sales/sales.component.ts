@@ -6,15 +6,22 @@ import { ProductsService } from 'src/app/product/products.service';
 import { SalesService } from '../sales.service';
 import { ButtonType } from 'src/app/tools/button-type';
 import { ToolsService } from 'src/app/tools/tools.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { FormErrors } from '@app/tools/form-errors';
+import { AsyncPipe, DecimalPipe } from '@angular/common';
+import { SortPipe } from '@app/product/sort.pipe';
+import { FilterPipe } from '@app/product/filter.pipe';
+import { ButtonListComponent } from '@app/tools/button-list/button-list.component';
+import { ShowErrorsComponent } from '@app/errores/show-errors/show-errors.component';
 
 const nameButtonTypes = { newSale: 'NuevaSale', closeSale: 'FinalizarSale', addProduct: 'AddProduct', add: 'Add', reopenTicket: 'ReabrirTicket' };
 
 @Component({
-  selector: 'app-sales',
-  templateUrl: './sales.component.html',
-  styleUrls: ['./sales.component.scss']
+    selector: 'app-sales',
+    templateUrl: './sales.component.html',
+    styleUrls: ['./sales.component.scss'],
+    standalone: true,
+    imports: [ReactiveFormsModule, AsyncPipe, SortPipe, FilterPipe, ButtonListComponent, FormsModule, DecimalPipe, ShowErrorsComponent]
 })
 
 
@@ -29,7 +36,7 @@ export class SalesComponent implements OnInit {
 
   @ViewChild('elementForm') elementForm: ElementRef;
 
-  formGroup: FormGroup;
+  formGroup: UntypedFormGroup;
   items: ItemSale[] = [];
 
   saleId: number = 0;
@@ -51,7 +58,7 @@ export class SalesComponent implements OnInit {
   ];
 
   constructor(private productsService: ProductsService, private salesService: SalesService,
-    private toolsService: ToolsService, formBuilder: FormBuilder) {
+    private toolsService: ToolsService, formBuilder: UntypedFormBuilder) {
     this.formGroup = formBuilder.group({
       'find': [''],
       'product': [null, Validators.required],

@@ -3,7 +3,8 @@ import { ProductsService } from './products.service';
 
 
 @Pipe({
-    name: 'product'
+    name: 'product',
+    standalone: true
 })
 export class ProductPipe implements PipeTransform {    
 

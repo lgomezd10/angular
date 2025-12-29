@@ -6,10 +6,12 @@
 <button class="button" (click)=openSale(findSale)>Buscar</button>
 <br><br>
 
-<div *ngIf="saleId > 0 && !open">
-  <p>Compra finalizada</p>
-  <p>Código Venta: {{saleId}}</p>
-</div>
+@if (saleId > 0 && !open) {
+  <div>
+    <p>Compra finalizada</p>
+    <p>Código Venta: {{saleId}}</p>
+  </div>
+}
 
 <div class="columns">
   <div class="column is-three-quarters">
@@ -34,75 +36,89 @@
       <h2>Total : {{total}}</h2>
       <br>
 
-      <div *ngIf="saleId == 0 || open">
-        <input type="checkbox" [(ngModel)]="creditCard" /> Pago con creditCard
-      </div>
-      -->
-      <table class="table is-striped">
-        <thead>
-          <tr>
-            <th>Producto</th>
-            <th>Cantidad</th>
-            <th>Precio Kg</th>
-            <th>Precio</th>
-            <th *ngIf="saleId == 0 || open">Eliminar</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of items">
-            <td>{{item.product.name}}</td>
-            <td>{{item.quantity}}</td>
-            <td>{{item.price}}</td>
-            <td>{{item.quantity * item.price | number: '1.0-2'}}</td>
-            <td *ngIf="saleId == 0 || open"> <button (click)= "deleteItem(item)">Eliminar</button></td>
-          </tr>
-        </tbody>
-      </table>
-      <h2>Total : {{totalSale()}}</h2>
-      <br>
+        <div *ngIf="saleId == 0 || open">
+          <input type="checkbox" [(ngModel)]="creditCard" /> Pago con creditCard
+        </div>
+        -->
+        <table class="table is-striped">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Precio Kg</th>
+              <th>Precio</th>
+              @if (saleId == 0 || open) {
+                <th>Eliminar</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of items; track item) {
+              <tr>
+                <td>{{item.product.name}}</td>
+                <td>{{item.quantity}}</td>
+                <td>{{item.price}}</td>
+                <td>{{item.quantity * item.price | number: '1.0-2'}}</td>
+                @if (saleId == 0 || open) {
+                  <td> <button (click)= "deleteItem(item)">Eliminar</button></td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+        <h2>Total : {{totalSale()}}</h2>
+        <br>
 
-      <div *ngIf="saleId == 0 || open">
-        <input type="checkbox" name="checkCreditCard" [(ngModel)]="creditCard" /> Pago con Tarjeta
-      </div>
-    </div>
+          @if (saleId == 0 || open) {
+            <div>
+              <input type="checkbox" name="checkCreditCard" [(ngModel)]="creditCard" /> Pago con Tarjeta
+            </div>
+          }
+        </div>
 
-    <form *ngIf="showNew" [formGroup]="formGroup" [class.error]="!formGroup.valid && formGroup.touched" #elementForm>
+        @if (showNew) {
+          <form [formGroup]="formGroup" [class.error]="!formGroup.valid && formGroup.touched" #elementForm>
+            <div class="columns">
+              <div class="column">
+                <p>
+                  <label class="label">Buscar producto: </label>
+                  <input class="input" type="text" (keypress)="keyPress($event, product)" #find
+                    formControlName="find" />
+                  </p>
+                  <p>
+                    <select class="input is-arrowless" size="5" (keypress)="keyPress($event, quantity)" #product
+                      formControlName="product">
+                      @for (product of products$| async | sort:'name' |filter: formGroup.controls['find'].value; track product) {
+                        <option
+                          [ngValue]="product">
+                        {{product.id}} {{product.name}} {{product.price}}</option>
+                      }
+                    </select>
+                  </p>
+                  @if (checkError('product')) {
+                    <div class="help is-danger">
+                      {{getError('Producto', 'product')}}
+                    </div>
+                  }
+                </div>
+                <div class="column">
+                  <label class="label"> Cantidad</label>
+                  <input class="input" type="number" (keypress)="keyPress($event, send)" #quantity
+                    formControlName="quantity">
+                    @if (checkError('quantity')) {
+                      <div class="help is-danger">
+                        {{getError('Cantidad', 'quantity')}}
+                      </div>
+                    }
+                    <div id="send" #send></div>
+                  </div>
+                </div>
+              </form>
+            }
+          </div>
 
-      <div class="columns">
-        <div class="column">
-          <p>
-            <label class="label">Buscar producto: </label>
-            <input class="input" type="text" (keypress)="keyPress($event, product)" #find
-              [formControl]="formGroup.controls['find']" />
-          </p>
-          <p>
-            <select class="input is-arrowless" size="5" (keypress)="keyPress($event, quantity)" #product
-              [formControl]="formGroup.controls['product']">
-              <option *ngFor="let product of products$| async | sort:'name' |filter: formGroup.controls['find'].value"
-                [ngValue]="product">
-                {{product.id}} {{product.name}} {{product.price}}</option>
-            </select>
-          </p>
-          <div class="help is-danger" *ngIf="checkError('product')">
-            {{getError('Producto', 'product')}}
+          <div class="column">
+            <app-button-list [lista]="buttons" (sendButtonType)="showButtonType($event)"></app-button-list>
           </div>
 
         </div>
-        <div class="column">
-          <label class="label"> Cantidad</label>
-          <input class="input" type="number" (keypress)="keyPress($event, send)" #quantity
-            [formControl]="formGroup.controls['quantity']">
-          <div class="help is-danger" *ngIf="checkError('quantity')">
-            {{getError('Cantidad', 'quantity')}}
-          </div>
-          <div id="send" #send></div>
-        </div>
-      </div>
-    </form>
-  </div>
-
-  <div class="column">
-    <app-button-list [lista]="buttons" (sendButtonType)="showButtonType($event)"></app-button-list>
-  </div>
-
-</div>

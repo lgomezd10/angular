@@ -1,39 +1,38 @@
 import { Component, OnInit } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { AsyncPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { Sale } from '../sale';
 import { SalesService } from '../sales.service';
 import { dates } from 'src/app/tools/dates';
+import { ProductPipe } from '@app/product/product.pipe';
+import { ToolsModule } from "@app/tools/tools.module";
+import { Observable, tap } from 'rxjs';
+import { NgIf, NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-sales-date',
-  templateUrl: './sales-date.component.html',
-  styleUrls: ['./sales-date.component.css'],
-  providers: [DatePipe]
+    selector: 'app-sales-date',
+    templateUrl: './sales-date.component.html',
+    styleUrls: ['./sales-date.component.css'],
+    providers: [DatePipe],
+    standalone: true,
+    imports: [ProductPipe, DecimalPipe, ToolsModule, AsyncPipe, DatePipe]
 })
 export class SalesDateComponent  {
+  sales$: Observable<Sale[]>;
+  total: number = 0;
 
- 
-  sales: Sale[] =[];
-  total: number;
+  constructor(private datePipe: DatePipe, private salesService: SalesService) { }
 
-  constructor(private datePipe: DatePipe, private salesService: SalesService) { 
-    
-   }
-
-
-  //2019-05-09 00:00:00
-
-  findPurchases(dates: dates) {
+  findSales(dates: dates) {
     this.total = 0;
-    this.salesService.salesByDate(dates.from, dates.to).subscribe(sales => {
-      this.sales = sales;
-      this.sales.forEach(element => {
-        element.itemsSale.forEach(e => {
-          this.total += e.price * e.quantity;
+    this.sales$ = this.salesService.salesByDate(dates.from, dates.to).pipe(
+      tap(sales => {
+        sales.forEach(element => {
+          element.itemsSale.forEach(e => {
+            this.total += e.price * e.quantity;
+          });
         });
-      });
-    });
-  } 
-
+      })
+    );
+  }
 }
 

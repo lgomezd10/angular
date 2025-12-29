@@ -6,19 +6,23 @@
 
     <label class="label">Buscar productos: </label>
     <input class="input" type="text" [(ngModel)]="searchText"> <br>
-    <h3 *ngIf="updatedProduct.show">Se ha actualizado el producto: {{updatedProduct.product.name}}</h3>
+    @if (updatedProduct.show) {
+      <h3>Se ha actualizado el producto: {{updatedProduct.product.name}}</h3>
+    }
     <div id="productList">
       <ul class="products">
-        <li *ngFor="let product of products$ | async | sort:'name' | filter: searchText">
-          <span class="id">{{product.id}}</span>
-          <input class="name" type="text" [(ngModel)]="product.name">
-          <span class="stock"> {{product.stock}} </span>
-          <input class="price" type="number" [(ngModel)]="product.price">
-          <button (click)="changePrice(product, oldPrice)">Guardar</button>
-          <a [title]="product.name + ' details'" [routerLink]="['/product', product.id]">
-            Detalle
-          </a>
-        </li>
+        @for (product of products$ | async | sort:'name' | filter: searchText; track product.id) {
+          <li>
+            <span class="id">{{product.id}}</span>
+            <input class="name" type="text" [(ngModel)]="product.name">
+            <span class="stock"> {{product.stock}} </span>
+            <input class="price" type="number" [(ngModel)]="product.price">
+            <button (click)="changePrice(product, oldPrice)">Guardar</button>
+            <a [title]="product.name + ' details'" [routerLink]="['/product', product.id]">
+              Detalle
+            </a>
+          </li>
+        }
       </ul>
     </div>
   </div>
@@ -41,8 +45,10 @@
     </header>
     <section class="modal-card-body">
       <!-- Content ... -->
-      <app-new *ngIf="showModal" [isModal] ="true" (savedProduct)="savedNewProduct(event$)"></app-new>
-    </section>    
+      @if (showModal) {
+        <app-new [isModal] ="true" (savedProduct)="savedNewProduct(event$)"></app-new>
+      }
+    </section>
   </div>
 </div>
 

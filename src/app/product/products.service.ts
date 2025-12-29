@@ -1,9 +1,9 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Product } from './product';
-import { Observable, of, BehaviorSubject, Subscription } from 'rxjs';
+import { Observable, of, BehaviorSubject, Subscription, catchError } from 'rxjs';
 
-import { Socket } from 'ngx-socket-io';
+import { SocketService } from '../services/socket';
 import { environment } from '@env/environment';
 
 function formatoname(name: string): string {
@@ -38,14 +38,14 @@ export class ProductsService {
   backendUrl = environment.API_URL;
  
 
-  constructor(private http: HttpClient, private socket: Socket) {
+  constructor(private http: HttpClient, private socket: SocketService) {
     this.products$ = new BehaviorSubject<Product[]>([]);
     this.connected$ = new BehaviorSubject<boolean>(false);
     this.loadProducts();
     this.updateProducts$.subscribe(products => this.products$.next(products));
 
-    this.socket.on('connected', resp => {
-      if(this.connected$.getValue != resp)
+    this.socket.fromEvent<boolean>('connected').subscribe(resp => {
+      if(this.connected$.getValue() != resp)
         this.connected$.next(resp);
     });
 
@@ -56,7 +56,10 @@ export class ProductsService {
   }
 
   private getProductsServer(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.backendUrl + '/products');
+    return this.http.get<Product[]>(this.backendUrl + '/products').pipe(
+      catchError(() => of([]))
+    );
+  
   }
 
   loadProducts() {

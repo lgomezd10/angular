@@ -1,4 +1,4 @@
-import { async, ComponentFixture, fakeAsync, TestBed, inject, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, inject, tick } from '@angular/core/testing';
 
 import { PurchasesDateComponent } from './purchases-date.component';
 import { PurchasesService } from '../purchases.service';
@@ -14,7 +14,7 @@ export class MockPurchasesService {
 
   constructor() {
 
-    this.purchases = [{ id: 1, product: null, quantity: 2, price: 3, date: new Date() }]
+    this.purchases = [{ id: 1, product: null, productId: 1, quantity: 2, price: 3, date: new Date() }]
   }
 
   purchasesByDate(from, to): any {    
@@ -31,17 +31,17 @@ describe('PurchasesDateComponent', () => {
   let component: PurchasesDateComponent;
   let fixture: ComponentFixture<PurchasesDateComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(async() => {
     const mockPurchasesService: MockPurchasesService = new MockPurchasesService();
     TestBed.configureTestingModule({
       declarations: [PurchasesDateComponent, DatePipe, GroupBydatePipe],
       providers: [
-        { provide: PurchasesService, useValue: MockPurchasesService }
+        { provide: PurchasesService, useValue: mockPurchasesService }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PurchasesDateComponent);

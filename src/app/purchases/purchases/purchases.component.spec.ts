@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, fakeAsync, inject, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, inject, tick } from '@angular/core/testing';
 
 import { PurchasesComponent } from './purchases.component';
 import { MockPurchasesService } from 'src/app/test/purchases.service.mock';
@@ -18,7 +18,6 @@ import {
 import { ProductsService } from 'src/app/product/products.service';
 import { Product } from 'src/app/product/product';
 import { Purchase } from '../purchase';
-import { error } from 'protractor';
 
 
 describe('PurchasesComponent', () => {
@@ -26,7 +25,7 @@ describe('PurchasesComponent', () => {
   let fixture: ComponentFixture<PurchasesComponent>;
 
 
-  beforeEach(async(() => {
+  beforeEach(async() => {
     const mockProductsService: MockProductsService = new MockProductsService();
     const mocktoolsServices: MockToolsServices = new MockToolsServices();
     const mockPurchasesService: MockPurchasesService = new MockPurchasesService();
@@ -41,7 +40,7 @@ describe('PurchasesComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PurchasesComponent);

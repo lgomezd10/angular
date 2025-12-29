@@ -12,15 +12,17 @@ import { SortPipe } from '../product/sort.pipe';
 import { ProductPipe } from '../product/product.pipe';
 
 @Component({
-  selector: 'blank-cmp',
-  template: ``
+    selector: 'blank-cmp',
+    template: ``,
+    standalone: false
 })
 export class BlankCmp {
 }
 
 @Component({
-  selector: 'root-cmp',
-  template: `<router-outlet></router-outlet>`
+    selector: 'root-cmp',
+    template: `<router-outlet></router-outlet>`,
+    standalone: false
 })
 export class RootCmp {
 }
@@ -71,22 +73,15 @@ export function ConfigureProductTest() {
 
 
 @NgModule({
-  imports: [RouterTestingModule, CommonModule, FormsModule],
-  entryComponents: [
-    BlankCmp,
-    RootCmp,
-    ProductComponent
-  ],
-  exports: [
-    BlankCmp,
-    RootCmp,
-    ProductComponent
-  ],  
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  declarations: [
-    BlankCmp,
-    RootCmp,
-    ProductComponent
-  ]
+    imports: [RouterTestingModule, CommonModule, FormsModule],
+    exports: [
+        BlankCmp,
+        RootCmp
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    declarations: [
+        BlankCmp,
+        RootCmp
+    ]
 })
 export class TestModule { }

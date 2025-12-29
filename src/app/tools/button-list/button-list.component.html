@@ -1,12 +1,14 @@
 <div class="columns">
   <div class="column">
     <ul>
-      <ng-container *ngFor="let button of buttonList$ | async">
-        <li *ngIf="button.show">
-          <button class="button is-fullwidth" id="{{button.id}}" (click)="onSend(button.id)" 
-          #listButton (keydown)="processKeydown($event, button.id)">{{button.name}}</button>
-        </li>
-      </ng-container>
+      @for (button of buttonList$ | async; track button) {
+        @if (button.show) {
+          <li>
+            <button class="button is-fullwidth" id="{{button.id}}" (click)="onSend(button.id)"
+            #listButton (keydown)="processKeydown($event, button.id)">{{button.name}}</button>
+          </li>
+        }
+      }
     </ul>
   </div>
 </div>

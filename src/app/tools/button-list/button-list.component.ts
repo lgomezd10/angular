@@ -3,11 +3,14 @@ import { ButtonType } from '../button-type';
 import { ToolsService } from '../tools.service';
 import { Observable, Subscription, combineLatest } from 'rxjs';
 import { filter, tap, map, delay } from 'rxjs/operators';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-button-list',
-  templateUrl: './button-list.component.html',
-  styleUrls: ['./button-list.component.scss']
+    selector: 'app-button-list',
+    templateUrl: './button-list.component.html',
+    styleUrls: ['./button-list.component.scss'],
+    standalone: true,
+    imports: [AsyncPipe]
 })
 export class ButtonListComponent implements OnInit {
 

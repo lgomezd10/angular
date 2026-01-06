@@ -1,23 +1,41 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { ItemSale } from '../item-sale';
 import { Product } from 'src/app/product/product';
 import { Observable } from 'rxjs';
 import { ProductsService } from 'src/app/product/products.service';
 import { SalesService } from '../sales.service';
 import { ButtonType } from 'src/app/tools/button-type';
+import { ButtonListComponent } from '@app/tools/button-list/button-list.component';
 import { ToolsService } from 'src/app/tools/tools.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { FormErrors } from '@app/tools/form-errors';
+import { DecimalPipe } from '@angular/common';
+import { ShowErrorsComponent } from '@app/errores/show-errors/show-errors.component';
+import { TableModule } from 'primeng/table';
+import { MenubarModule } from 'primeng/menubar';
+import { MenuModule } from 'primeng/menu';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { SelectModule } from 'primeng/select';
+import { CheckboxModule } from 'primeng/checkbox';
+import { MessageModule } from 'primeng/message';
+import { MenuItem } from 'primeng/api';
+import { CommonFormComponent } from '@app/tools/common-form/common-form.component';
 
 const nameButtonTypes = { newSale: 'NuevaSale', closeSale: 'FinalizarSale', addProduct: 'AddProduct', add: 'Add', reopenTicket: 'ReabrirTicket' };
 
 @Component({
   selector: 'app-sales',
   templateUrl: './sales.component.html',
-  styleUrls: ['./sales.component.scss']
+  styleUrls: ['./sales.component.css'],
+  standalone: true,
+  imports: [
+    ReactiveFormsModule, ButtonListComponent, CommonFormComponent,
+    FormsModule, DecimalPipe, ShowErrorsComponent, TableModule,
+    MenubarModule, MenuModule, InputTextModule, ButtonModule, MultiSelectModule, SelectModule, CheckboxModule, MessageModule
+  ]
 })
-
-
 export class SalesComponent implements OnInit {
 
   @ViewChild('find', { static: false }) set content(content: ElementRef) {
@@ -26,11 +44,10 @@ export class SalesComponent implements OnInit {
     }
   }
   @ViewChild('send', { static: false }) goToSummit: ElementRef;
-
   @ViewChild('elementForm') elementForm: ElementRef;
 
-  formGroup: FormGroup;
-  items: ItemSale[] = [];
+  formGroup: UntypedFormGroup;
+  saleList: ItemSale[] = [];
 
   saleId: number = 0;
   creditCard: boolean = false;
@@ -40,18 +57,28 @@ export class SalesComponent implements OnInit {
   searchText: string;
   showNew: boolean = false;
   products$: Observable<Product[]>;
-  //total: number=0;
+  formFields: Array<{
+    name: string;
+    label: string;
+    type: 'text' | 'number' | 'select';
+    options$?: Observable<any[]>;
+    placeholder?: string;
+  }>;
 
   buttons: ButtonType[] = [
     { id: nameButtonTypes.newSale, name: "Nueva venta", show: false },
     { id: nameButtonTypes.closeSale, name: "Finalizar venta", show: false },
     { id: nameButtonTypes.addProduct, name: "Añadir producto", show: true },
-    { id: nameButtonTypes.add, name: "Añadir", show: false },
     { id: nameButtonTypes.reopenTicket, name: "Reabrir ticket", show: false }
   ];
 
-  constructor(private productsService: ProductsService, private salesService: SalesService,
-    private toolsService: ToolsService, formBuilder: FormBuilder) {
+  constructor(
+    private productsService: ProductsService,
+    private salesService: SalesService,
+    private toolsService: ToolsService,
+    formBuilder: UntypedFormBuilder,
+    private cdr: ChangeDetectorRef
+  ) {
     this.formGroup = formBuilder.group({
       'find': [''],
       'product': [null, Validators.required],
@@ -59,31 +86,49 @@ export class SalesComponent implements OnInit {
     });
   }
 
-
   ngOnInit() {
     this.products$ = this.productsService.getProducts$();
     this.toolsService.activateFocus(nameButtonTypes.addProduct);
+    this. formFields = [
+      {
+        name: 'product',
+        label: 'Buscar producto',
+        type: 'select',
+        options$: this.products$,
+        placeholder: 'Selecciona un producto'
+      },
+      {
+        name: 'quantity',
+        label: 'Cantidad',
+        type: 'number',
+        placeholder: 'Cantidad'
+      }
+    ];
+  }
+
+  get menuItems(): MenuItem[] {
+    return this.buttons
+      .filter(button => button.show)
+      .map(button => ({
+        label: button.name,
+        id: button.id,
+        command: () => this.showButtonType(button.id)
+      }));
   }
 
   activateButtonType(id: string) {
-    this.buttons.find(boton => { return boton.id == id }).show = true;
+    this.buttons.find(boton => boton.id == id).show = true;
   }
 
   disableButtonType(id: string) {
-    this.buttons.find(boton => { return boton.id == id }).show = false;
+    this.buttons.find(boton => boton.id == id).show = false;
   }
 
   showButtonType(boton: string) {
     if (boton == nameButtonTypes.addProduct) {
       this.newProduct();
       this.searchText = "";
-      this.disableButtonType(boton);
-      this.activateButtonType(nameButtonTypes.add);
-    }
-
-    if (boton == nameButtonTypes.add) {
-      this.onSubmit();
-
+      this.showNew = true;
     }
     if (boton == nameButtonTypes.closeSale) {
       this.closeSale();
@@ -99,6 +144,7 @@ export class SalesComponent implements OnInit {
       this.activateButtonType(nameButtonTypes.closeSale);
       this.toolsService.activateFocus(nameButtonTypes.addProduct);
     }
+    this.cdr.detectChanges();
   }
 
   newProduct() {
@@ -110,7 +156,7 @@ export class SalesComponent implements OnInit {
 
   totalSale(): number {
     let suma = 0;
-    this.items.forEach(item => {
+    this.saleList.forEach(item => {
       let quantity = item.price * item.quantity;
       quantity = Math.round(quantity * 100) / 100;
       suma = Math.round((suma + quantity) * 100) / 100;
@@ -119,43 +165,46 @@ export class SalesComponent implements OnInit {
   }
 
   deleteItem(sale: ItemSale) {
-    this.items.splice(this.items.indexOf(sale), 1);
-    //this.totalSale = this.totalSale();
-
+    this.saleList.splice(this.saleList.indexOf(sale), 1);
   }
 
   addPurchaseToList() {
-    let itemSale = this.items.find(item => ((item.product.name == this.currentItem.product.name) && (item.price == this.currentItem.product.price)));
-
+    let itemSale = this.saleList.find(item => ((item.product.name == this.currentItem.product.name) && (item.price == this.currentItem.product.price)));
     if (!itemSale) {
       this.currentItem.price = this.currentItem.product.price;
-      this.items.push(this.currentItem);
+      console.log(`Añadiendo item: ${this.currentItem.product.name}, cantidad: ${this.currentItem.quantity}, precio: ${this.currentItem.price}`);
+      this.saleList.push(this.currentItem);
     } else {
       itemSale.quantity = this.currentItem.quantity + itemSale.quantity;
     }
     this.showNew = false;
-    //this.totalSale = this.totalSale();
     this.activateButtonType(nameButtonTypes.closeSale);
     this.activateButtonType(nameButtonTypes.addProduct);
     this.disableButtonType(nameButtonTypes.add);
     this.toolsService.activateFocus(nameButtonTypes.addProduct);
   }
 
-  onSubmit() {
-    if (this.formGroup.valid) {
-      this.currentItem.product = this.formGroup.value.product;
-      this.currentItem.quantity = this.formGroup.value.quantity;
-      this.addPurchaseToList();
-    } else {
-      this.elementForm.nativeElement.querySelector('.ng-invalid').focus();
+  onSubmit(action: string) {
+    this.showNew = false;
+    if (action === 'submit') {    
+      if (this.formGroup.valid) {
+        this.currentItem.product = this.formGroup.value.product;
+        this.currentItem.quantity = this.formGroup.value.quantity;
+        this.addPurchaseToList();
+      } else {
+        this.elementForm.nativeElement.querySelector('.ng-invalid').focus();
+      }
     }
   }
 
   closeSale(): void {
     if (this.saleId == 0)
-      this.salesService.saveSales(this.items, this.creditCard).subscribe(cod => this.saleId = cod);
+      this.salesService.saveSales(this.saleList, this.creditCard).subscribe(cod => {
+        this.saleId = cod;
+        this.cdr.detectChanges();
+      });
     else
-      this.salesService.updateSales(this.saleId, this.items, this.creditCard).subscribe(cod => {
+      this.salesService.updateSales(this.saleId, this.saleList, this.creditCard).subscribe(cod => {
         this.saleId = cod;
         if (cod == 0) {
           window.alert("Se ha eliminado la compra tras eliminar sus elementos");
@@ -164,35 +213,34 @@ export class SalesComponent implements OnInit {
       });
     this.showNew = false;
     this.open = false;
+    this.activateButtonType(nameButtonTypes.reopenTicket);
+    this.disableButtonType(nameButtonTypes.addProduct);
     this.disableButtonType(nameButtonTypes.closeSale);
     this.disableButtonType(nameButtonTypes.add);
     this.disableButtonType(nameButtonTypes.addProduct);
-    this.activateButtonType(nameButtonTypes.reopenTicket);
     this.toolsService.activateFocus(nameButtonTypes.reopenTicket);
+    this.cdr.detectChanges();
   }
 
-
   openSale(saleId: number) {
-    this.salesService.getSale(saleId).subscribe(sale => {
-
-      this.items = sale.itemsSale;
-      this.saleId = sale.id;
-      this.creditCard = sale.creditCard;
-      this.open = true;
-      this.activateButtonType(nameButtonTypes.closeSale);
-    },
-      error => {
+    this.salesService.getSale(saleId).subscribe({
+      next: sale => {
+        this.saleList = sale.itemsSale;
+        this.saleId = sale.id;
+        this.creditCard = sale.creditCard;
+        this.open = true;
+        this.activateButtonType(nameButtonTypes.closeSale);
+      },
+      error: () => {
         console.log(`No se ha encontrado la compra ${saleId}`);
       }
-
-    );
+    });
   }
 
   resetSales() {
-    this.items = [];
+    this.saleList = [];
     this.showNew = false;
     this.creditCard = false;
-    //this.totalSale =0;
     this.saleId = 0;
     this.disableButtonType(nameButtonTypes.newSale);
     this.disableButtonType(nameButtonTypes.closeSale);
@@ -200,11 +248,10 @@ export class SalesComponent implements OnInit {
     this.disableButtonType(nameButtonTypes.add);
     this.disableButtonType(nameButtonTypes.reopenTicket);
     this.toolsService.activateFocus(nameButtonTypes.addProduct);
-
   }
 
   newSale(): void {
-    if (this.saleId == 0 && this.items.length > 0) {
+    if (this.saleId == 0 && this.saleList.length > 0) {
       var statusConfirm = confirm("¿Desea crear una nueva venta? La venta actual no se ha guardado");
       if (statusConfirm) this.resetSales();
     } else {
@@ -212,23 +259,15 @@ export class SalesComponent implements OnInit {
     }
   }
 
-  // envento sent por router-outlet al activar la pagina
-  /* onActivate(elementRef) {
-     this.ngOnInit();
-   }*/
-
   keyPress(key: KeyboardEvent, field: HTMLElement) {
-    if (key.code == "Enter") { // press Enter      
+    if (key.code == "Enter") {
       if (this.goToSummit.nativeElement == field) {
         this.toolsService.activateFocus("Add");
       } else {
         field.focus();
-        // let cosa: HTMLInputElement = campo;
-        // cosa.select
       }
     }
   }
-
 
   onChange(e, campo) {
     campo.focus();
@@ -241,5 +280,4 @@ export class SalesComponent implements OnInit {
   getError(name: string, field: string): string {
     return FormErrors.getError(name, field, this.formGroup);
   }
-
 }

@@ -1,21 +1,11 @@
 import { inject, fakeAsync, tick, TestBed } from "@angular/core/testing";
-import {
-  HttpTestingController,
-  HttpClientTestingModule,
-  TestRequest
-} from "@angular/common/http/testing";
-import {
-  HttpClient,
-  HttpBackend,
-  HttpRequest,
-  HttpResponse,
-  HttpHandler
-} from "@angular/common/http";
+import { HttpTestingController, TestRequest, provideHttpClientTesting } from "@angular/common/http/testing";
+import { HttpClient, HttpBackend, HttpRequest, HttpResponse, HttpHandler, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 
 import { ProductsService } from './products.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Product } from './product';
-import { Socket } from 'ngx-socket-io';
+import { SocketService } from '../services/socket';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 
@@ -35,13 +25,13 @@ class MockSocket {
 describe('ProductsService', () => {
   const mockSocket: MockSocket = new MockSocket();
   beforeEach(() => TestBed.configureTestingModule({
-    imports: [HttpClientTestingModule],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [],
     providers: [ProductsService,
-      { provide: Socket, useValue: mockSocket }],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-  }));
+        { provide: SocketService, useValue: mockSocket }, provideHttpClientTesting()]
+}));
   it('should be created', () => {
-    const service: ProductsService = TestBed.get(ProductsService);
+    const service: ProductsService = TestBed.inject(ProductsService);
     expect(service).toBeTruthy();
   });
 

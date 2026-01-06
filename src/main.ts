@@ -1,12 +1,25 @@
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
+import { routes } from './app/app-routing.module';
+import { loggingInterceptor } from '@app/tools/interceptors/logging-interceptor';
+import { requestInterceptor } from '@app/tools/interceptors/request-interceptor';
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeuix/themes/aura';
+import { provideZoneChangeDetection } from '@angular/core';
 
-import { AppModule } from './app/app.module';
-import { environment } from './environments/environment';
-
-if (environment.production) {
-  enableProdMode();
-}
-
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.error(err));
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideRouter(routes),
+    provideHttpClient(
+      withInterceptors([loggingInterceptor, requestInterceptor])
+    ),
+    providePrimeNG({
+            theme: {
+                preset: Aura
+            }
+    }),
+    provideZoneChangeDetection()
+  ]
+});

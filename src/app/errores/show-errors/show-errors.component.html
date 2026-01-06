@@ -1,11 +1,21 @@
-<p *ngIf="withoutConexion">
-  Conectando con el servidor
-</p>
+@if (withoutConexion) {
+  <p-message severity="warn" icon="pi pi-spin pi-spinner">
+    Conectando con el servidor
+  </p-message>
+}
 
-<p *ngIf= "typeError=='Errors'">
-  {{errores$ | async}}
-</p>
-<p *ngIf= "typeError=='Error404'">  
-  {{errores404$ | async}}
-</p>
+@if (typeError=='Errors') {
+  @if (erroresValue) {
+    <p-message severity="error">
+      {{erroresValue}}
+    </p-message>
+  }
+}
+@if (typeError=='Error404') {
+  @if (errores404Value) {
+    <p-message severity="info">
+      {{errores404Value}}
+    </p-message>
+  }
+}
 

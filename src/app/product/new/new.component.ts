@@ -5,8 +5,18 @@ import { Observable, Subscription } from 'rxjs';
 import { TYPES } from '../products-types';
 import { ToolsService } from 'src/app/tools/tools.service';
 import { ButtonType } from 'src/app/tools/button-type';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, FormControl, FormsModule } from '@angular/forms';
 import { FormErrors } from '@app/tools/form-errors';
+import { AsyncPipe } from '@angular/common';
+import { SortPipe } from '../sort.pipe';
+import { FilterPipe } from '../filter.pipe';
+import { RouterModule } from '@angular/router';
+import { SelectModule } from 'primeng/select';
+import { InputNumberModule } from 'primeng/inputnumber'
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
+import { DialogModule } from 'primeng/dialog';
 
 /*function productValidator(control: FormControl): {[s: string]: boolean} {
   if(this.productsService.getProductByName(control.value) != undefined) {
@@ -14,13 +24,19 @@ import { FormErrors } from '@app/tools/form-errors';
   }
 }*/
 
+import { ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-new',
   templateUrl: './new.component.html',
-  styleUrls: ['./new.component.css']
+  styleUrls: ['./new.component.css'],
+  standalone: true,
+  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, SortPipe, ButtonModule,
+    FilterPipe, RouterModule, SelectModule, InputNumberModule, InputTextModule, MessageModule, DialogModule]
 })
 export class NewComponent implements OnInit {
 
+
+  @Input() display: boolean = true;
   @Input() isModal: boolean = false;
   @Output() savedProduct = new EventEmitter<Product>();
 
@@ -39,7 +55,7 @@ export class NewComponent implements OnInit {
 
   @ViewChild('elementForm') elementForm: ElementRef;
 
-  formGroup: FormGroup;
+  formGroup: UntypedFormGroup;
 
   public types = TYPES;
   products$: Observable<Product[]>;
@@ -55,7 +71,7 @@ export class NewComponent implements OnInit {
   
 
   constructor(private productsService: ProductsService, private toolsServices: ToolsService,
-    formBuilder: FormBuilder) {
+    formBuilder: UntypedFormBuilder) {
     this.formGroup = formBuilder.group({
       'name': ['', Validators.required],
       'type': ['', Validators.required],
@@ -79,6 +95,13 @@ export class NewComponent implements OnInit {
         }
       });
     }
+  }
+
+  onDialogHide() {
+    // Resetea el formulario o notifica al padre si es necesario
+    this.display = false;
+    this.savedProduct.emit(null);
+
   }
 
   format() {
@@ -138,7 +161,7 @@ export class NewComponent implements OnInit {
     campo.focus();
   }
 
-  checkError(field: string): boolean {
+  isFieldValid(field: string): boolean {
     return FormErrors.checkError(field, this.formGroup)
   }
 

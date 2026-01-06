@@ -1,25 +1,31 @@
-<div class="login">
-  <form class="form" [formGroup]="formGroup">
-    <label class="label">Usuario: </label>
-    <input class="input" type="text" [formControl]="formGroup.controls['username']" #user
-    (keyup.enter)="onEnter($event, password)" />
-    <div class="help is-danger" *ngIf="checkError('username')">
-      <p>{{getError('Usuario', 'username')}} </p>
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-md" [formGroup]="formGroup">
+    <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2">Usuario:</label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" formControlName="username" #user (keyup)="onEnter($event, password)" />
+      @if (checkError('username')) {
+        <div class="text-red-600 text-sm mt-1">
+          <p>{{getError('Usuario', 'username')}}</p>
+        </div>
+      }
     </div>
-
-    <label class="label">Contraseña: </label>
-    <div class="control has-icons-right">
-      <input class="input" [type]="hide ? 'password':'text'" autocomplete="off"
-        [formControl]="formGroup.controls['password']" #password (keyup.enter)="onEnter($event, submit)" />
-      <span class="icon" class="icon is-small is-right">
-        <i [class]="hide ? 'fas fa-eye': 'fas fa-eye-slash'" (click)="hide = !hide" #icon></i>
-      </span>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2">Contraseña:</label>
+      <div class="relative">
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline pr-10" [type]="hide ? 'password':'text'" autocomplete="off" formControlName="password" #password (keyup)="onEnter($event, submit)" />
+        <span class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" (click)="hide = !hide" #icon>
+          <i [class]="hide ? 'fas fa-eye': 'fas fa-eye-slash'"></i>
+        </span>
+      </div>
+      @if (checkError('password')) {
+        <div class="text-red-600 text-sm mt-1">
+          <p>{{getError('Password', 'password')}}</p>
+        </div>
+      }
     </div>
-
-    <div class="help is-danger" *ngIf="checkError('password')">
-     <p> {{getError('Password', 'password')}} </p>
+    <div class="mb-6">
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline" type="submit" #submit (click)="onLogin()">Login</button>
     </div>
-
-    <button class="button is-fullwidth" type="submit" #submit (click)="onLogin()">Login</button>
   </form>
 </div>

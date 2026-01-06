@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, fakeAsync, inject, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, inject, tick } from '@angular/core/testing';
 
 import { PurchasesComponent } from './purchases.component';
 import { MockPurchasesService } from 'src/app/test/purchases.service.mock';
@@ -18,7 +18,6 @@ import {
 import { ProductsService } from 'src/app/product/products.service';
 import { Product } from 'src/app/product/product';
 import { Purchase } from '../purchase';
-import { error } from 'protractor';
 
 
 describe('PurchasesComponent', () => {
@@ -26,7 +25,7 @@ describe('PurchasesComponent', () => {
   let fixture: ComponentFixture<PurchasesComponent>;
 
 
-  beforeEach(async(() => {
+  beforeEach(async() => {
     const mockProductsService: MockProductsService = new MockProductsService();
     const mocktoolsServices: MockToolsServices = new MockToolsServices();
     const mockPurchasesService: MockPurchasesService = new MockPurchasesService();
@@ -41,7 +40,7 @@ describe('PurchasesComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PurchasesComponent);
@@ -79,7 +78,7 @@ describe('PurchasesComponent', () => {
   describe('funciones', () => {
     it('guardar compra correcta', fakeAsync(inject([PurchasesService],
       (mockpurchasesService: MockPurchasesService) => {
-        component.purchases.push(new Purchase());
+        component.purchaseList.push(new Purchase());
         component.showButtonType('EnviarPurchase');
         expect(mockpurchasesService.guardarpurchasespy).toHaveBeenCalled();
       })));
@@ -157,7 +156,7 @@ describe('PurchasesComponent', () => {
         component.formGroup.markAllAsTouched();
         fixture.detectChanges();
         component.showButtonType("Add");
-        expect(component.purchases.length).toBe(1);
+        expect(component.purchaseList.length).toBe(1);
       });
     });
 
@@ -227,10 +226,10 @@ describe('PurchasesComponent', () => {
 
       it('Enviar formGroup no válido', () => {
         component.showButtonType("Add");
-        expect(expect(component.purchases.length).toBe(0));
+        expect(expect(component.purchaseList.length).toBe(0));
         component.formGroup.markAllAsTouched();
         component.showButtonType("Add");
-        expect(expect(component.purchases.length).toBe(0));
+        expect(expect(component.purchaseList.length).toBe(0));
       });
     });
 

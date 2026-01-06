@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpHandler, HttpRequest, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/internal/operators';
+import { catchError, retry } from 'rxjs/operators';
 import { ErrorService } from './error.service';
 import { Router } from '@angular/router';
 

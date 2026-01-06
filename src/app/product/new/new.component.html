@@ -1,58 +1,63 @@
-<form *ngIf="!sent" [formGroup]="formGroup" [class.error]="!formGroup.valid && formGroup.touched" #elementForm>
-    <div>
-        <div class="columns">
-            <div class="column is-half">
-                <label class="label">Nombre: </label>
-                <input class="input" name="name" id="name" type="text" autocomplete="off"
-                    (keypress)="keyPress($event, type)" #name [formControl]="formGroup.controls['name']">
-                <div class="help is-danger"
-                    *ngIf="repeatedProduct!='' && formGroup.controls['name'].value == repeatedProduct">Ya existe un
-                    producto
-                    {{formGroup.controls['name'].value}}
-                </div>
-
-                <div class="help is-danger" *ngIf="checkError('name')">
-                    {{getError('Nombre', 'name')}}
-                </div>
-                <div id="productList">
-                    <ul>
-                        <li
-                            *ngFor="let p of products$ | async | sort:'name' | filter: formGroup.controls['name'].value">
-                            {{p.name}}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="column is-half">
-                <label class="label">Tipo: </label>
-                <div class="select">
-                    <select class="select" name="type" id="type" [formControl]="formGroup.controls['type']" #type
-                        (change)="onChange($event,price)">
-                        <option *ngFor="let type of types" [ngValue]="type">{{type}}</option>
-                    </select>
-                    
-                </div>
-
-                <div class="help is-danger" *ngIf="checkError('type')">
-                    {{getError('Tipo', 'type')}}
-                </div>
-                <label class="label">Precio: </label>
-                <input class="input" id="price" type="number" #price (keypress)="keyPress($event, sent)"
-                    [formControl]="formGroup.controls['price']">
-
-                <div class="help is-danger" *ngIf="checkError('price')">
-                    {{getError('Precio', 'price')}}
-                </div>
-                <div #sent id="sent"></div>
-            </div>
-
+@if (!sent) {
+<p-dialog [(visible)]="display" (onHide)="onDialogHide()" [modal]="true" [closable]="true" [dismissableMask]="true"
+  [style]="{width: '400px'}">
+  <ng-template pTemplate="header">
+    <span>Crear nuevo producto</span>
+  </ng-template>
+  <ng-template pTemplate="content">
+    <form [formGroup]="formGroup" class="space-y-4" #elementForm (ngSubmit)="onSubmit()">
+      <div class="mb-4">
+        <div class="flex-1">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nombre:</label>
+          <input pInputText name="name" id="name" type="text" autocomplete="off" (keypress)="keyPress($event, type)"
+            #name formControlName="name" #type
+            [invalid]="isFieldValid('name') || (repeatedProduct!='' && formGroup.controls['name'].value == repeatedProduct)"
+            class="w-full mb-2" />
+          @if (repeatedProduct!='' && formGroup.controls['name'].value == repeatedProduct) {
+          <p-message severity="error" size="small" variant="simple">
+            Ya existe un producto {{formGroup.controls['name'].value}}
+          </p-message>
+          }
+          @if (isFieldValid('name')) {
+          <p-message severity="error" size="small" variant="simple">{{getError('Nombre', 'name')}}</p-message>
+          }
+          <div id="productList">
+            <ul>
+              @for (p of products$ | async | sort:'name' | filter: formGroup.controls['name'].value; track p) {
+              <li class="text-gray-500 text-xs">{{p.name}}</li>
+              }
+            </ul>
+          </div>
         </div>
-    </div>
-</form>
-<div *ngIf="isModal && !sent">
-    <button class="button is-medium" #sentButton (click)="onSubmit()">Guardar</button>
+        <div class="flex-1">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Tipo:</label>
+          <p-select [options]="types" formControlName="type" filter="true" placeholder="'Selecciona tipo'"
+            class="w-full mb-2"></p-select>
+          @if (isFieldValid('type')) {
+          <p-message severity="error" size="small" variant="simple">
+            {{getError('Tipo', 'type')}}
+          </p-message>
+          }
+          <label class="block text-sm font-medium text-gray-700 mb-1">Precio:</label>
+          <p-inputnumber id="price" formControlName="price" inputId="price" mode="decimal" [maxFractionDigits]="2"
+            (keypress)="keyPress($event, sent)" class="w-full mb-2" />
+          @if (isFieldValid('price')) {
+          <p-message severity="error" size="small" variant="simple">
+            {{getError('Precio', 'price')}}
+          </p-message>
+          }
+          <div #sent id="sent"></div>
+        </div>
+      </div>
+      <div class="flex justify-end">
+        <p-button type="submit" label="Enviar" class="p-button-success"></p-button>
+      </div>
+    </form>
+  </ng-template>
+</p-dialog>
+}
+@if (sent) {
+<div>
+  <h2 class="text-green-600 text-lg font-semibold">Nuevo producto creado</h2>
 </div>
-
-<div *ngIf="sent">
-    <h2>Nuevo producto creado</h2>
-</div>
+}

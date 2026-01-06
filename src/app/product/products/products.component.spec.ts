@@ -1,5 +1,4 @@
 import {
-  async,
   ComponentFixture,
   TestBed,
   inject,
@@ -24,7 +23,7 @@ describe('ProductsComponent', () => {
   let component: ProductsComponent;
   let fixture: ComponentFixture<ProductsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(async () => {
     const mockProductsService: MockProductsService = new MockProductsService();
     TestBed.configureTestingModule({
       declarations: [ProductsComponent, FilterPipe, SortPipe, ProductPipe],
@@ -39,7 +38,7 @@ describe('ProductsComponent', () => {
       //})
       //.compileComponents();
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ProductsComponent);

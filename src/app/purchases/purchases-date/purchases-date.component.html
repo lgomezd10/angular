@@ -1,33 +1,28 @@
-<h2 class="title is-3">Buscador de compras</h2>
+<h2 class="text-2xl font-bold mb-4">Buscador de compras</h2>
 
 <app-select-dates (enviardates)="findPurchases($event)"></app-select-dates>
 
 @for (purchase of purchases$ | async | groupBydate; track purchase) {
-  <table class="table table is-striped">
-    <thead>
-      <tr>
-        <th>Fecha</th>
-        <td>{{purchase.key}}</td>
-      </tr>
-    </thead>
-    <thead>
-      <tr>
-        <th>Producto</th>
-        <th>Cantidad</th>
-        <th>Precio Kg/Unidad</th>
-        <th>Total</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (item of purchase.value; track item) {
+  <div class="flex-1">
+    <div class="font-semibold mb-2">Fecha: {{purchase.key}}</div>
+    <p-table [value]="purchase.value" class="mb-4">
+      <ng-template pTemplate="header">
         <tr>
-          <td>{{item.product.name}}</td>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Precio Kg/Unidad</th>
+          <th>Total</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item>
+        <tr>
+          <td>{{item.product.id}} {{item.product.name}}</td>
           <td>{{item.quantity}}</td>
           <td>{{item.price}}</td>
           <td>{{item.quantity * item.price | number: '1.0-2'}}</td>
         </tr>
-      }
-    </tbody>
-  </table>
+      </ng-template>
+    </p-table>
+  </div>
 }
 

@@ -8,6 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavPurchasesComponent implements OnInit {
 
+  tabs = [
+    { label: 'Compras', route: 'purchases' },
+    { label: 'Buscar compras', route: 'purchases-dates' }
+  ];
+
   constructor() { }
 
   ngOnInit(): void {

@@ -1,0 +1,50 @@
+<p-dialog [(visible)]="display" (onHide)="onDialogHide()" [modal]="true" [closable]="true" [dismissableMask]="true" [style]="{width: '400px'}">
+    <ng-template pTemplate="header">
+        <span>{{formName}}</span>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <form [formGroup]="formGroup" class="space-y-4" #elementForm (ngSubmit)="onSubmit()">
+            @for (field of formFields; track field) {
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1" [for]="field.name">{{ field.label }}</label>
+                    @if (field.type === 'text') {
+                        <input type="text" pInputText [formControlName]="field.name" [id]="field.name"
+                            [invalid]="isFieldValid(field.name)"
+                            [placeholder]="field.placeholder || ''" class="w-full mb-2" />
+                    }
+                    @if (field.type === 'number') {
+                        <p-inputnumber [formControlName]="field.name" [inputId]="field.name"
+                            [invalid]="isFieldValid(field.name)"
+                            [placeholder]="field.placeholder || ''" class="w-full mb-2" mode="decimal"
+                            [maxFractionDigits]="2"></p-inputnumber>
+                    }
+                    @if (field.type === 'select') {
+                        <p-select 
+                            [options]="field.options$ | async"
+                            [formControlName]="field.name"
+                            [inputId]="field.name"
+                            [invalid]="isFieldValid(field.name)"
+                            [filter]="true" filterBy="name"
+                            [placeholder]="field.placeholder || 'Selecciona'"
+                            optionLabel="name"
+                            class="w-full mb-2">
+                            <ng-template let-product pTemplate="item">
+                                <div class="flex flex-col">
+                                    <span>{{product.id}} {{product.name}}</span>
+                                </div>
+                            </ng-template>
+                        </p-select>
+                    }
+                    @if (isFieldValid(field.name)) {
+                        <p-message severity="error" size="small" variant="simple">
+                            {{getError(field.label, field.name)}}
+                        </p-message>
+                    }
+                </div>
+            }
+            <div class="flex justify-end">
+                <p-button type="submit" label="Enviar" class="p-button-success"></p-button>
+            </div>
+        </form>
+    </ng-template>
+</p-dialog>

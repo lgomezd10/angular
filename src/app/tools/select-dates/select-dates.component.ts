@@ -2,16 +2,16 @@ import { Component, OnInit, Output, EventEmitter, ChangeDetectorRef, AfterViewIn
 import { dates } from '../dates';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatDatepickerModule, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ButtonModule } from "primeng/button";
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
     selector: 'app-select-dates',
     templateUrl: './select-dates.component.html',
     styleUrls: ['./select-dates.component.css'],
     standalone: true,
-    imports: [MatFormFieldModule, MatInputModule, MatDatepickerModule, MatDatepickerToggle, MatDatepicker, ReactiveFormsModule, FormsModule],
+    imports: [MatFormFieldModule, DatePickerModule, ReactiveFormsModule, FormsModule, ButtonModule],
     providers: [DatePipe]
 })
 export class SelectionDatesComponent implements OnInit {

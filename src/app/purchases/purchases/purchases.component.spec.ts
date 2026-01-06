@@ -78,7 +78,7 @@ describe('PurchasesComponent', () => {
   describe('funciones', () => {
     it('guardar compra correcta', fakeAsync(inject([PurchasesService],
       (mockpurchasesService: MockPurchasesService) => {
-        component.purchases.push(new Purchase());
+        component.purchaseList.push(new Purchase());
         component.showButtonType('EnviarPurchase');
         expect(mockpurchasesService.guardarpurchasespy).toHaveBeenCalled();
       })));
@@ -156,7 +156,7 @@ describe('PurchasesComponent', () => {
         component.formGroup.markAllAsTouched();
         fixture.detectChanges();
         component.showButtonType("Add");
-        expect(component.purchases.length).toBe(1);
+        expect(component.purchaseList.length).toBe(1);
       });
     });
 
@@ -226,10 +226,10 @@ describe('PurchasesComponent', () => {
 
       it('Enviar formGroup no válido', () => {
         component.showButtonType("Add");
-        expect(expect(component.purchases.length).toBe(0));
+        expect(expect(component.purchaseList.length).toBe(0));
         component.formGroup.markAllAsTouched();
         component.showButtonType("Add");
-        expect(expect(component.purchases.length).toBe(0));
+        expect(expect(component.purchaseList.length).toBe(0));
       });
     });
 

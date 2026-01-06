@@ -9,6 +9,10 @@ import { ButtonType } from 'src/app/tools/button-type';
 import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { FormErrors } from '@app/tools/form-errors';
 import { ButtonListComponent } from '@app/tools/button-list/button-list.component';
+import { MessageModule } from 'primeng/message';
+import { SelectModule } from 'primeng/select';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { InputTextModule } from 'primeng/inputtext';
 
 
 @Component({
@@ -16,7 +20,7 @@ import { ButtonListComponent } from '@app/tools/button-list/button-list.componen
     templateUrl: './product.component.html',
     styleUrls: ['./product.component.css'],
     standalone: true,
-    imports: [ReactiveFormsModule, ButtonListComponent]
+    imports: [ReactiveFormsModule, ButtonListComponent, MessageModule, SelectModule, InputNumberModule, InputTextModule]
 })
 export class ProductComponent implements OnInit, OnDestroy {
 

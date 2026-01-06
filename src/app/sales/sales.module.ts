@@ -11,6 +11,7 @@ import { ToolsModule } from '../tools/tools.module';
 import { NavSalesComponent } from './nav-sales/nav-sales.component';
 import { AppRoutingModule } from '@app/app-routing.module';
 import { ErroresModule } from '@app/errores/errors.module';
+import { TabsModule } from 'primeng/tabs';
 
 
 /*//TODO Rehacer routes
@@ -28,13 +29,14 @@ const salesRoutes: Routes = [
 @NgModule({ declarations: [NavSalesComponent],
     exports: [SalesComponent, SalesDateComponent, NavSalesComponent], 
     imports: [ErroresModule,
-        AppRoutingModule,
-        SalesDateComponent,
-        SalesComponent,
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
-        ProductModule,
-        ToolsModule,
-        MatDatepickerModule], providers: [] })
+    AppRoutingModule,
+    SalesDateComponent,
+    SalesComponent,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ProductModule,
+    ToolsModule,
+    TabsModule,
+    MatDatepickerModule], providers: [] })
 export class SalesModule { }

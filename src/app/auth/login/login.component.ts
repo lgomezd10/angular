@@ -1,19 +1,21 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, FormControl } from '@angular/forms';
 import { FormErrors } from '@app/tools/form-errors';
 import { AuthService } from '../auth.service';
 import { User } from '../user';
 
+
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss'],
+    styleUrls: ['./login.component.css'],
     standalone: false
 })
 export class LoginComponent implements OnInit {
 
   formGroup: UntypedFormGroup;
   hide: boolean = true;
+  event$: KeyboardEvent;
 
   @ViewChild('password') password: ElementRef;
   @ViewChild('icon') icon: ElementRef;

@@ -12,7 +12,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MenuUserComponent } from './auth/menu-user/menu-user.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginModule } from './auth/login/login.module';
-
+import { ApplicationConfig } from '@angular/core';
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeuix/themes/aura';
+import { ButtonModule } from 'primeng/button';
 
 @NgModule({
     exports: [],
@@ -25,8 +28,10 @@ import { LoginModule } from './auth/login/login.module';
         LoginModule,
         ErroresModule,
         ToolsModule,
-        AppRoutingModule],
-    providers: [provideHttpClient(withInterceptorsFromDi())],
+        AppRoutingModule,
+        ButtonModule],
+    providers: [provideHttpClient(withInterceptorsFromDi())
+    ],
     bootstrap: []
 })
 export class AppModule { }

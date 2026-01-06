@@ -1,54 +1,47 @@
-<h2 class="title is-3">Productos</h2>
-
-<div class="columns">
-  <div class="column is-three-quarters">
-    <!--<app-new *ngIf="new" (savedProduct)="savedNewProduct(event$)"></app-new>-->
-
-    <label class="label">Buscar productos: </label>
-    <input class="input" type="text" [(ngModel)]="searchText"> <br>
-    @if (updatedProduct.show) {
-      <h3>Se ha actualizado el producto: {{updatedProduct.product.name}}</h3>
-    }
-    <div id="productList">
-      <ul class="products">
-        @for (product of products$ | async | sort:'name' | filter: searchText; track product.id) {
-          <li>
-            <span class="id">{{product.id}}</span>
-            <input class="name" type="text" [(ngModel)]="product.name">
-            <span class="stock"> {{product.stock}} </span>
-            <input class="price" type="number" [(ngModel)]="product.price">
-            <button (click)="changePrice(product, oldPrice)">Guardar</button>
-            <a [title]="product.name + ' details'" [routerLink]="['/product', product.id]">
-              Detalle
-            </a>
-          </li>
-        }
-      </ul>
+<h2 class="text-2xl font-bold mb-6">Productos</h2>
+<div class="flex flex-col md:flex-row w-full gap-6">
+  <div class="w-full md:w-48 order-1 md:order-2 mb-4 md:mb-0">
+    <app-button-list [lista]="botones" (sendButtonType)="showButtonType($event)"></app-button-list>
+  </div>
+  <div class="flex-1 order-2 md:order-1">
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700 mb-1">Buscar productos:</label>
+      <input pInputText type="text" [(ngModel)]="searchText" placeholder="Buscar..." class="w-full mb-2" />
     </div>
-  </div>
-
-
-  <div class="column">
-    <app-button-list [lista]="botones" (sendButtonType)= "showButtonType($event)"></app-button-list>
-  </div>
+    @if (updatedProduct.show) {
+      <p-message severity="success" text="Se ha actualizado el producto: {{updatedProduct.product.name}}"></p-message>
+    }
+    <p-table [value]="products$ | async | sort:'name' | filter: searchText" dataKey="id" class="mb-4">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Stock</th>
+          <th>Precio</th>
+          <th>Acciones</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product>
+        <tr>
+          <td>{{product.id}}</td>
+          <td>
+            <input pInputText type="text" [(ngModel)]="product.name" class="w-full" />
+          </td>
+          <td>{{product.stock}}</td>
+          <td>
+            <input pInputText type="number" [(ngModel)]="product.price" class="w-24" />
+          </td>
+          <td class="flex gap-2">
+            <p-button (click)="changePrice(product, oldPrice)" icon="pi pi-check" severity="success" size="small"></p-button>
+            <a [title]="product.name + ' details'" [routerLink]="['/product', product.id]">
+              <p-button icon="pi pi-info-circle" size="small" severity="info"></p-button>
+            </a>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>  
 </div>
-
-
-
-
-<div class="modal" #modal>
-  <div class="modal-background"></div>
-  <div class="modal-card">
-    <header class="modal-card-head">
-      <p class="modal-card-title">Crear nuevo producto</p>
-      <button class="delete" aria-label="close" (click)="closeModal()"></button>
-    </header>
-    <section class="modal-card-body">
-      <!-- Content ... -->
-      @if (showModal) {
-        <app-new [isModal] ="true" (savedProduct)="savedNewProduct(event$)"></app-new>
-      }
-    </section>
-  </div>
-</div>
-
+@if(showModal) {
+    <app-new (savedProduct)="savedNewProduct(event$)"></app-new>
+}

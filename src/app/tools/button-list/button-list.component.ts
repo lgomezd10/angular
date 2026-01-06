@@ -4,13 +4,16 @@ import { ToolsService } from '../tools.service';
 import { Observable, Subscription, combineLatest } from 'rxjs';
 import { filter, tap, map, delay } from 'rxjs/operators';
 import { AsyncPipe } from '@angular/common';
+import { MenuItem } from 'primeng/api';
+import { MenuModule } from 'primeng/menu';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
     selector: 'app-button-list',
     templateUrl: './button-list.component.html',
-    styleUrls: ['./button-list.component.scss'],
+    styleUrls: ['./button-list.component.css'],
     standalone: true,
-    imports: [AsyncPipe]
+    imports: [AsyncPipe, MenuModule, ButtonModule]
 })
 export class ButtonListComponent implements OnInit {
 
@@ -27,6 +30,8 @@ export class ButtonListComponent implements OnInit {
 
   _focoSub: Subscription;
 
+  menuItems: MenuItem[] = [];
+
   constructor(private toolsServices: ToolsService) {
 
   }
@@ -34,9 +39,18 @@ export class ButtonListComponent implements OnInit {
   ngOnInit() {
     this.toolsServices.crearButtonTypees(this.lista);
     this.buttonList$ = this.toolsServices.getButtonTypes$();
+    this.buttonList$.subscribe(buttons => {
+      this.menuItems = buttons
+        .filter(button => button.show)
+        .map(button => ({
+          label: button.name,
+          id: button.id,
+          command: () => this.onSend(button.id)
+        }));
+    });
     this.foco$ = this.toolsServices.getFoco$();
 
-    this.viewUpdated$ = combineLatest(this.foco$, this.buttonList$)
+    this.viewUpdated$ = combineLatest([this.foco$, this.buttonList$]);
 
     //TODO mirar si se puede evitar el delay
     this._focoSub = this.foco$
@@ -48,7 +62,7 @@ export class ButtonListComponent implements OnInit {
       )
       .subscribe(b => {
         this.buttons.forEach((button: ElementRef) => {
-          if (button.nativeElement.id === b) {
+          if (button && button.nativeElement && button.nativeElement.id === b) {
             button.nativeElement.focus();
           }
         });

@@ -77,7 +77,7 @@ export class ProductsService {
     return this.products$;
   }
 
-  private getProducts(): Product[] {    
+  getProducts(): Product[] {
     return this.products$.getValue();
   }
 

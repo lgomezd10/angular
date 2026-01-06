@@ -7,6 +7,10 @@ import { Component, OnInit } from '@angular/core';
     standalone: false
 })
 export class NavSalesComponent implements OnInit {
+  tabs = [
+    { label: 'Caja', route: 'sales' },
+    { label: 'Buscar ventas', route: 'sales-dates' }
+  ];
 
   constructor() { }
 

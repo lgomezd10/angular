@@ -6,14 +6,17 @@ import { ProductsService } from './products.service';
     name: 'product',
     standalone: true
 })
-export class ProductPipe implements PipeTransform {    
+export class ProductPipe implements PipeTransform {
 
-    constructor(private productsService: ProductsService){      
+    constructor(private productsService: ProductsService) {
     }
 
-    transform(item: any): any {
-        if (!item) return item;
-        return this.productsService.getProduct(item).name;
+    transform(item: number): string | number {
+        const product = this.productsService.getProduct(item);
+        if (!product) {
+            return 'Desconocido';
+        }
+        return `${product.id} ${product.name}`;
     }
 
 }

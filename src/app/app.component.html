@@ -14,41 +14,18 @@
 </div>-->
 
 
-<div id="principal">
-    <app-logo></app-logo>
-    <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand  has-text-white is-size-4">
-                   
-            <a role="button" class="navbar-burger burger" #buttoOculto id="buttoOculto" aria-label="menu" (click)="onClickBurger()"
-            aria-expanded="false" data-target="navMenu">
-              <span aria-hidden="true"></span>
-              <span aria-hidden="true"></span>
-              <span aria-hidden="true"></span>
-            </a>
-          </div>
-
-        <div id="navMenu" #navMenu class="navbar-menu">
-            <div class="navbar-start">
-                <a class="navbar-item" routerLink="/sales" routerLinkActive="active" (click)="onClickBurger()">
-                    Caja
-                </a>
-
-                <a class="navbar-item" routerLink="/products" routerLinkActive="active" (click)="onClickBurger()">
-                    Productos
-                </a>
-
-                <a class="navbar-item" routerLink="/purchases" routerLinkActive="active" (click)="onClickBurger()">
-                    Compras
-                </a>
-
-            </div>
-
-            <div class="navbar-end">
-                <div class="navbar-item">
-                    <app-menu-user></app-menu-user>
-                </div>
-            </div>
-        </div>
-    </nav>
+<div class="max-w-200 min-w-75 mx-auto text-left">
+    @if (router.url !== '/login') {
+        <app-logo></app-logo>
+        <p-menubar [model]="items">
+            <ng-template pTemplate="start">
+                <span class="font-bold text-lg">Menú</span>
+            </ng-template>
+            <ng-template pTemplate="end">
+                <app-menu-user></app-menu-user>
+            </ng-template>
+        </p-menubar>
+    }
     <router-outlet></router-outlet>
+    
 </div>

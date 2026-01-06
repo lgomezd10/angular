@@ -11,6 +11,7 @@ import { ToolsModule } from '../tools/tools.module';
 import { Routes, RouterModule } from '@angular/router';
 import { NavPurchasesComponent } from './nav-purchases/nav-purchases.component';
 import { AppRoutingModule } from '@app/app-routing.module';
+import { TabsModule } from 'primeng/tabs';
 
 /*const purchasesRoutes: Routes = [
   {
@@ -26,7 +27,7 @@ import { AppRoutingModule } from '@app/app-routing.module';
 @NgModule({ declarations: [NavPurchasesComponent],
     exports: [
         PurchasesComponent,
-        PurchasesDateComponent
+        PurchasesDateComponent,
     ], imports: [PurchasesComponent,
         PurchasesDateComponent,
         CommonModule,
@@ -35,5 +36,6 @@ import { AppRoutingModule } from '@app/app-routing.module';
         ProductModule,
         ToolsModule,
         MatDatepickerModule,
+        TabsModule,
         AppRoutingModule], providers: [] })
 export class PurchasesModule { }

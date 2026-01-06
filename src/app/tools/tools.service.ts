@@ -23,6 +23,10 @@ export class ToolsService {
     return this.buttons;
   }
 
+  setButtonTypes(buttons: ButtonType[]) {
+    this.buttons.next(buttons);
+  }
+
   getButtonTypes(): ButtonType[] {
     return this.buttons.getValue();
   }

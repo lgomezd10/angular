@@ -7,6 +7,7 @@ import { GroupBydatePipe } from '@app/tools/group-by.date.pipe';
 import { ToolsModule } from '@app/tools/tools.module';
 import { Observable } from 'rxjs';
 import { FormControl, FormsModule } from '@angular/forms';
+import { TableModule } from "primeng/table";
 
 @Component({
     selector: 'app-purchases-date',
@@ -14,7 +15,7 @@ import { FormControl, FormsModule } from '@angular/forms';
     styleUrls: ['./purchases-date.component.css'],
     providers: [DatePipe],
     standalone: true,
-    imports: [DecimalPipe, GroupBydatePipe, ToolsModule, AsyncPipe, FormsModule]
+    imports: [DecimalPipe, GroupBydatePipe, ToolsModule, AsyncPipe, FormsModule, TableModule]
 })
 export class PurchasesDateComponent {
 

@@ -11,6 +11,12 @@ import { AsyncPipe } from '@angular/common';
 import { SortPipe } from '../sort.pipe';
 import { FilterPipe } from '../filter.pipe';
 import { RouterModule } from '@angular/router';
+import { SelectModule } from 'primeng/select';
+import { InputNumberModule } from 'primeng/inputnumber'
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
+import { DialogModule } from 'primeng/dialog';
 
 /*function productValidator(control: FormControl): {[s: string]: boolean} {
   if(this.productsService.getProductByName(control.value) != undefined) {
@@ -24,10 +30,13 @@ import { ReactiveFormsModule } from '@angular/forms';
   templateUrl: './new.component.html',
   styleUrls: ['./new.component.css'],
   standalone: true,
-  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, SortPipe, FilterPipe, RouterModule]
+  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, SortPipe, ButtonModule,
+    FilterPipe, RouterModule, SelectModule, InputNumberModule, InputTextModule, MessageModule, DialogModule]
 })
 export class NewComponent implements OnInit {
 
+
+  @Input() display: boolean = true;
   @Input() isModal: boolean = false;
   @Output() savedProduct = new EventEmitter<Product>();
 
@@ -88,6 +97,13 @@ export class NewComponent implements OnInit {
     }
   }
 
+  onDialogHide() {
+    // Resetea el formulario o notifica al padre si es necesario
+    this.display = false;
+    this.savedProduct.emit(null);
+
+  }
+
   format() {
     this.product.name = this.product.name.toLowerCase();
     this.product.name = this.product.name[0].toUpperCase() + this.product.name.slice(1);
@@ -145,7 +161,7 @@ export class NewComponent implements OnInit {
     campo.focus();
   }
 
-  checkError(field: string): boolean {
+  isFieldValid(field: string): boolean {
     return FormErrors.checkError(field, this.formGroup)
   }
 

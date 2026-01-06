@@ -11,6 +11,11 @@ import { SortPipe } from '../sort.pipe';
 import { FilterPipe } from '../filter.pipe';
 import { ButtonListComponent } from '@app/tools/button-list/button-list.component';
 import { NewComponent } from '../new/new.component';
+import { DialogModule } from 'primeng/dialog';
+import { MessageModule } from 'primeng/message';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { ToolsService } from '@app/tools/tools.service';
 
 
 
@@ -19,7 +24,8 @@ import { NewComponent } from '../new/new.component';
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css'],
   standalone: true,
-  imports: [AsyncPipe, FormsModule, SortPipe, FilterPipe, RouterModule, ButtonListComponent, NewComponent]
+  imports: [AsyncPipe, FormsModule, SortPipe, FilterPipe, RouterModule, ButtonModule,
+    ButtonListComponent, NewComponent, DialogModule, MessageModule, TableModule]
 })
 export class ProductsComponent implements OnInit {
 
@@ -39,7 +45,7 @@ export class ProductsComponent implements OnInit {
   oldPrice: any;
   event$: Product;
 
-  constructor(private productsService: ProductsService, private route: ActivatedRoute) {
+  constructor(private productsService: ProductsService, private route: ActivatedRoute, private toolsService: ToolsService) {
     
     
     /*route.url.subscribe(url => {
@@ -58,6 +64,7 @@ export class ProductsComponent implements OnInit {
     
     console.log('ngOnInit ejecutado');
     this.productsService.loadProducts();
+    this.toolsService.setButtonTypes(this.botones);
     this.products$ = this.productsService.getProducts$().pipe(
       tap((value) => {
         this.new = false;
@@ -116,11 +123,9 @@ export class ProductsComponent implements OnInit {
   }
 
   savedNewProduct(product: Product) {
-    console.log("Producto recibido del modal:", product);
-    this.activateButtonType("AddNew");
+    if (product != null) {
+      console.log("Producto recibido del modal:", product);
+      this.activateButtonType("AddNew");
+    }
   }
-
-
-
-
 }

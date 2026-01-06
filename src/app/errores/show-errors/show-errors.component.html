@@ -1,17 +1,21 @@
 @if (withoutConexion) {
-  <p>
+  <p-message severity="warn" icon="pi pi-spin pi-spinner">
     Conectando con el servidor
-  </p>
+  </p-message>
 }
 
 @if (typeError=='Errors') {
-  <p>
-    {{errores$ | async}}
-  </p>
+  @if (erroresValue) {
+    <p-message severity="error">
+      {{erroresValue}}
+    </p-message>
+  }
 }
 @if (typeError=='Error404') {
-  <p>
-    {{errores404$ | async}}
-  </p>
+  @if (errores404Value) {
+    <p-message severity="info">
+      {{errores404Value}}
+    </p-message>
+  }
 }
 

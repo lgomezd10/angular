@@ -28,6 +28,22 @@ export class ErrorService {
      this.mensaje$.next(this.mensaje$.getValue() + mensaje);
    }
 
+  getMessageError(message: string): string {
+    if (message == 'Sale not found') {
+      return 'No se ha entrado la venta';
+    } else if (message == 'Product not found') {
+      return 'No se ha encontrado el producto';
+    } else if (message == 'Purchase not found') {
+      return 'No se ha encontrado la compra';
+    } else if (message == 'No sales found') {
+      return 'No se han encontrado ventas en las fechas indicadas';
+    } else if (message == 'No purchases found') {
+      return 'No se han encontrado compras en las fechas indicadas';
+    } else {
+      return message;
+    }
+  }
+
    showError404(mensaje: string) {
      this.mensaje404$.next(mensaje);
    }

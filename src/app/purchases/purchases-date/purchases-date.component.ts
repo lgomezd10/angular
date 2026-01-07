@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AsyncPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { PurchasesService } from '../purchases.service';
 import { Purchase } from '../purchase';
 import { dates } from 'src/app/tools/dates';
 import { GroupBydatePipe } from '@app/tools/group-by.date.pipe';
-import { ToolsModule } from '@app/tools/tools.module';
 import { Observable } from 'rxjs';
-import { FormControl, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { TableModule } from "primeng/table";
+import { ShowErrorsComponent } from "@app/errores/show-errors/show-errors.component";
+import { SelectionDatesComponent } from "@app/tools/select-dates/select-dates.component";
 
 @Component({
     selector: 'app-purchases-date',
@@ -15,7 +16,7 @@ import { TableModule } from "primeng/table";
     styleUrls: ['./purchases-date.component.css'],
     providers: [DatePipe],
     standalone: true,
-    imports: [DecimalPipe, GroupBydatePipe, ToolsModule, AsyncPipe, FormsModule, TableModule]
+    imports: [DecimalPipe, GroupBydatePipe, AsyncPipe, FormsModule, TableModule, ShowErrorsComponent, SelectionDatesComponent]
 })
 export class PurchasesDateComponent {
 

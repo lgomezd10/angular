@@ -49,9 +49,7 @@ export class SalesService {
   }
 
   getSale(saleId: number) : Observable<Sale> {
-    return this.http.get<Sale>(this.backendUrl + '/sales/sale/' + saleId).pipe(
-      catchError(() => of(null))
-    );
+    return this.http.get<Sale>(this.backendUrl + '/sales/sale/' + saleId);
   }
 
 

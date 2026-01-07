@@ -10,7 +10,10 @@ export class GroupBydatePipe implements PipeTransform {
     constructor(private datePipe: DatePipe){      
     }
 
-  transform(value: Array<any>): Array<any> {    
+  transform(value: Array<any>): Array<any> {
+    if (!value || value.length === 0) {
+      return [];
+    }
     const groupedObj = value.reduce((prev, cur)=> {
        let date: Date = cur['date'];
        let dateString: string = this.datePipe.transform(date, 'dd-MM-yy');

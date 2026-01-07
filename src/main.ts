@@ -8,12 +8,13 @@ import { requestInterceptor } from '@app/tools/interceptors/request-interceptor'
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 import { provideZoneChangeDetection } from '@angular/core';
+import { httpErrorInterceptor } from '@app/errores/http-error.interceptor';
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes),
     provideHttpClient(
-      withInterceptors([loggingInterceptor, requestInterceptor])
+      withInterceptors([loggingInterceptor, requestInterceptor, httpErrorInterceptor])
     ),
     providePrimeNG({
             theme: {

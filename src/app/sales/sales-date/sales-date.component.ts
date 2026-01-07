@@ -1,15 +1,16 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { AsyncPipe, DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { Sale } from '../sale';
 import { SalesService } from '../sales.service';
 import { dates } from 'src/app/tools/dates';
 import { ProductPipe } from '@app/product/product.pipe';
-import { ToolsModule } from "@app/tools/tools.module";
 import { Observable, tap } from 'rxjs';
 import { TableModule } from 'primeng/table';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ProductsService } from '@app/product/products.service';
 import { Product } from '@app/product/product';
+import { ShowErrorsComponent } from "@app/errores/show-errors/show-errors.component";
+import { SelectionDatesComponent } from "@app/tools/select-dates/select-dates.component";
 
 @Component({
     selector: 'app-sales-date',
@@ -17,7 +18,7 @@ import { Product } from '@app/product/product';
     styleUrls: ['./sales-date.component.css'],
     providers: [DatePipe],
     standalone: true,
-    imports: [ProductPipe, DecimalPipe, ToolsModule, DatePipe, TableModule, ProgressSpinnerModule]
+    imports: [ProductPipe, DecimalPipe, DatePipe, TableModule, ProgressSpinnerModule, ShowErrorsComponent, SelectionDatesComponent]
 })
 export class SalesDateComponent implements AfterViewInit {
   sales$: Observable<Sale[]>;
@@ -27,7 +28,7 @@ export class SalesDateComponent implements AfterViewInit {
   products: Product[] = [];
 
 
-  constructor(private datePipe: DatePipe, private salesService: SalesService, private productsService: ProductsService, private cdr: ChangeDetectorRef) {
+  constructor(private salesService: SalesService, private productsService: ProductsService, private cdr: ChangeDetectorRef) {
 
    }
   ngAfterViewInit(): void {
@@ -44,8 +45,8 @@ export class SalesDateComponent implements AfterViewInit {
   findSales(dates: dates) {
     this.total = 0;
     this.loading = true;
-    this.salesService.salesByDate(dates.from, dates.to).subscribe(
-      sales => {
+    this.salesService.salesByDate(dates.from, dates.to).subscribe({
+      next: sales => {
         sales.forEach(element => {
           element.itemsSale.forEach(e => {
             this.total += e.price * e.quantity;
@@ -53,8 +54,11 @@ export class SalesDateComponent implements AfterViewInit {
         });
         this.sales = sales;
         this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
       }
-    );
+    });
   }
 
 }

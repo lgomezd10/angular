@@ -3,8 +3,7 @@ import { ErrorService } from '../error.service';
 import { Observable } from 'rxjs';
 import { ProductsService } from '@app/product/products.service';
 import { MessageModule } from 'primeng/message';
-
-
+import { AuthService } from '@app/auth/auth.service';
 
 @Component({
     selector: 'app-show-errors',
@@ -20,13 +19,17 @@ export class ShowErrorsComponent implements OnInit {
   erroresValue: string = '';
   errores404Value: string = '';
   withoutConexion: boolean = false;
+  isLoged: boolean = false;
 
   @Input() typeError: string = "Errors";
 
-  constructor(private errorService: ErrorService, private productsServices: ProductsService) {
+  constructor(private errorService: ErrorService, private productsServices: ProductsService, private authService: AuthService) {
     this.productsServices.connetedServer().subscribe(connected => {
       this.withoutConexion = !connected;
       this.errorService.reset();
+    });
+    this.authService.isLoged().subscribe(loged => {
+      this.isLoged = loged;
     });
   }
 

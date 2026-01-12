@@ -14,11 +14,11 @@
     <p-table [value]="products$ | async | sort:'name' | filter: searchText" dataKey="id" class="mb-4">
       <ng-template pTemplate="header">
         <tr>
-          <th>ID</th>
-          <th>Nombre</th>
-          <th>Stock</th>
-          <th>Precio</th>
-          <th>Acciones</th>
+          <th scope="col">ID</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Stock</th>
+          <th scope="col">Precio</th>
+          <th scope="col">Acciones</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-product>

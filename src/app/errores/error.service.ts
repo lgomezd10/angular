@@ -1,4 +1,6 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -9,48 +11,88 @@ export class ErrorService {
   mensaje$: BehaviorSubject<string>;
   mensaje404$: BehaviorSubject<string>;
 
-  constructor() {
+  constructor(private router: Router) {
 
     this.mensaje$ = new BehaviorSubject('');
     this.mensaje404$ = new BehaviorSubject('');
 
-   }
+  }
 
-   getError$(): Observable<string> {
-     return this.mensaje$.asObservable();
-   }
+  getError$(): Observable<string> {
+    return this.mensaje$.asObservable();
+  }
 
-   getError404$(): Observable<string> {
-     return this.mensaje404$.asObservable();
-   }
+  getError404$(): Observable<string> {
+    return this.mensaje404$.asObservable();
+  }
 
-   show(mensaje: string) {
-     this.mensaje$.next(this.mensaje$.getValue() + mensaje);
-   }
+  show(mensaje: string) {
+    this.mensaje$.next(this.mensaje$.getValue() + mensaje);
+  }
 
-  getMessageError(message: string): string {
-    if (message == 'Sale not found') {
-      return 'No se ha entrado la venta';
-    } else if (message == 'Product not found') {
-      return 'No se ha encontrado el producto';
-    } else if (message == 'Purchase not found') {
-      return 'No se ha encontrado la compra';
-    } else if (message == 'No sales found') {
-      return 'No se han encontrado ventas en las fechas indicadas';
-    } else if (message == 'No purchases found') {
-      return 'No se han encontrado compras en las fechas indicadas';
+  showErrorInApp(error: any) {
+    let errorMessage = '';
+    if (error instanceof HttpErrorResponse) {
+      switch (error.status) {
+        case 0:
+          errorMessage = 'No se puede contactar con el servidor';
+          break;
+        case 401:
+          this.router.navigate(['/login']);
+          break;
+        case 400:
+          errorMessage = error.error.message;
+          break;
+        case 404:
+          errorMessage = this.getMessageError(error.error.message);
+          this.showError404(errorMessage);
+          break;
+        case 409:
+          errorMessage = 'Registro duplicado';
+          break;
+        default:
+          if (error.error.message == undefined) {
+            errorMessage = `Server-side error: ${error.status} ${error.message}`;
+          } else {
+            errorMessage = `Server-side error: ${error.status} ${error.message} ${error.error.message}`;
+          }
+      }
+    } else if (error instanceof ErrorEvent) {
+      errorMessage = 'Ha ocurrido un error inesperado en la aplicación. Por favor, contacte con el administrador.';
+      console.log('DESDE HTTP INTERCEPTOR RECIBIDO ERROREVENT', error.error.message, error);
     } else {
-      return message;
+      console.log('DESDE HTTP INTERCEPTOR RECIBIDO OTRO TIPO DE ERROR', error);
+      errorMessage = 'Ha ocurrido un error inesperado en la aplicación. Por favor, contacte con el administrador.';
+    }
+    if (errorMessage) {
+      this.show(errorMessage);
     }
   }
 
-   showError404(mensaje: string) {
-     this.mensaje404$.next(mensaje);
-   }
+  getMessageError(message: string): string {
+    switch (message) {
+      case 'Sale not found':
+        return 'No se ha entrado la venta';
+      case 'Product not found':
+        return 'No se ha encontrado el producto';
+      case 'Purchase not found':
+        return 'No se ha encontrado la compra';
+      case 'No sales found':
+        return 'No se han encontrado ventas en las fechas indicadas';
+      case 'No purchases found':
+        return 'No se han encontrado compras en las fechas indicadas';
+      default:
+        return message;
+    }
+  }
 
-   reset() {
-     this.mensaje$.next("");
-     this.mensaje404$.next("");
-   }
-  
+  showError404(mensaje: string) {
+    this.mensaje404$.next(mensaje);
+  }
+
+  reset() {
+    this.mensaje$.next("");
+    this.mensaje404$.next("");
+  }
+
 }

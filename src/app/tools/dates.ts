@@ -1,4 +1,4 @@
-export class dates {
+export class Dates {
     from: string;
     to: string;
 }

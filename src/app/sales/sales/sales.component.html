@@ -22,13 +22,13 @@
         <p-table [value]="saleList" class="mb-4">
           <ng-template pTemplate="header">
             <tr>
-              <th>Id</th>
-              <th>Producto</th>
-              <th>Cantidad</th>
-              <th>Precio Kg</th>
-              <th>Precio</th>
+              <th scope="col">Id</th>
+              <th scope="col">Producto</th>
+              <th scope="col">Cantidad</th>
+              <th scope="col">Precio Kg</th>
+              <th scope="col">Precio</th>
               @if (saleId == 0 || open) {
-                <th>Eliminar</th>
+                <th scope="col">Eliminar</th>
               }
             </tr>
           </ng-template>

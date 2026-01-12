@@ -24,10 +24,10 @@
       <p-table [value]="sale.itemsSale" class="mb-2">
         <ng-template pTemplate="header">
           <tr>
-            <th>Producto</th>
-            <th>Cantidad</th>
-            <th>Precio Kg</th>
-            <th>Total</th>
+            <th scope="col">Producto</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Precio Kg</th>
+            <th scope="col">Total</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item>

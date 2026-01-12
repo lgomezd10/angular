@@ -30,6 +30,10 @@ export class AuthService {
     return this.user.getValue();
   }
 
+  get token(): string {
+    return this.userValue?.token || '';
+  }
+
   isLoged(): Observable<boolean> {
     return this.loged;
   }

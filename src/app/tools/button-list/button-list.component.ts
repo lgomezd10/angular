@@ -2,7 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output, ViewChildren, QueryList
 import { ButtonType } from '../button-type';
 import { ToolsService } from '../tools.service';
 import { Observable, Subscription, combineLatest } from 'rxjs';
-import { filter, tap, map, delay } from 'rxjs/operators';
+import { filter, tap, delay } from 'rxjs/operators';
 import { AsyncPipe } from '@angular/common';
 import { MenuItem } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';

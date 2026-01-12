@@ -32,12 +32,14 @@ export class LoginComponent implements OnInit {
 
   onLogin(): void {
     if (this.formGroup.valid) {
-      this.auth.login(this.formGroup.value).subscribe((resp) => {
+      this.auth.login(this.formGroup.value).subscribe({
+        next: (resp) => {
         if (resp) {
-          console.log("Se ha logado", resp);
+          console.log("Logged user");
         }
-
-      }, (error) => { console.log(error) });
+      },
+        error: (error) => { console.log('login error', error) }
+      });
     }
   }
 

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { AuthService } from '@app/auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,15 +10,22 @@ import { environment } from '../../environments/environment';
 export class SocketService {
   private socket: Socket;
 
-  constructor() {
-    // Reemplaza 'http://localhost:3000' con la URL de tu servidor Socket.IO
+  constructor(private authService: AuthService) {
+    
+    const token = this.authService.token;
     this.socket = io(environment.API_URL, {
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
-      reconnectionAttempts: 5
+      reconnectionAttempts: 5,
+      auth: { token }
     });
-    console.log('Socket conectado al servidor.');
+
+    this.authService.isLoged().subscribe(loged => {
+      if (loged) {
+        this.connect();
+      }
+    });
   }
 
   /**
@@ -59,6 +67,7 @@ export class SocketService {
    */
   connect(): void {
     if (!this.socket.connected) {
+      this.socket.auth = { token: this.authService.token };
       this.socket.connect();
     }
   }

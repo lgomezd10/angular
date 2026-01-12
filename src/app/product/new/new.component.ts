@@ -5,7 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 import { TYPES } from '../products-types';
 import { ToolsService } from 'src/app/tools/tools.service';
 import { ButtonType } from 'src/app/tools/button-type';
-import { UntypedFormGroup, UntypedFormBuilder, Validators, FormControl, FormsModule } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormErrors } from '@app/tools/form-errors';
 import { AsyncPipe } from '@angular/common';
 import { SortPipe } from '../sort.pipe';
@@ -18,13 +18,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { DialogModule } from 'primeng/dialog';
 
-/*function productValidator(control: FormControl): {[s: string]: boolean} {
-  if(this.productsService.getProductByName(control.value) != undefined) {
-    return {nameRepetido: true};
-  }
-}*/
-
-import { ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-new',
   templateUrl: './new.component.html',
@@ -37,7 +30,7 @@ export class NewComponent implements OnInit {
 
 
   @Input() display: boolean = true;
-  @Input() isModal: boolean = false;
+  @Input() isModal: boolean = true;
   @Output() savedProduct = new EventEmitter<Product>();
 
   buttonName: ElementRef;
@@ -85,9 +78,7 @@ export class NewComponent implements OnInit {
     
     this.product = new Product();
     this.products$ = this.productsService.getProducts$();
-    if (this.isModal) {
-      
-    } else {
+    if (!this.isModal) {
       this.toolsServices.newButtonType(this.boton);
       this._pressSub = this.toolsServices.getPulsado$().subscribe(boton => {
         if (boton == "SaveNew") {
@@ -109,9 +100,7 @@ export class NewComponent implements OnInit {
     this.product.name = this.product.name[0].toUpperCase() + this.product.name.slice(1);
   }
 
-  // JSON.parse (JSON.stringif para pasar el objeto por referencia
   saveProduct() {
-    //this.productsService.postNewProduct(JSON.parse(JSON.stringify(this.product)));
     this.productsService.postNewProduct(this.product).subscribe(response => {
       this.sent=true;
       if (!this.isModal) this.toolsServices.deleteButtonType(this.boton);
@@ -127,7 +116,6 @@ export class NewComponent implements OnInit {
       
       if (this.goToSummit.nativeElement == campo) {
         if(this.isModal) this.sentButton.nativeElement.focus();
-        else this.toolsServices.activateFocus(this.boton.id);
       } else {
         campo.focus();
       }
@@ -152,7 +140,6 @@ export class NewComponent implements OnInit {
       this.repeatedProduct = value.name;
       this.buttonName.nativeElement.focus();
     } else {
-      //this.buttonName.nativeElement.focus();
       this.elementForm.nativeElement.querySelector('.ng-invalid').focus();
     }
   }

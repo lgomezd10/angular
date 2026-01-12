@@ -47,6 +47,9 @@ export class ProductsService {
     this.socket.fromEvent<boolean>('connected').subscribe(resp => {
       if(this.connected$.getValue() != resp)
         this.connected$.next(resp);
+      if (resp) {
+        this.loadProducts();
+      }
     });
 
   }

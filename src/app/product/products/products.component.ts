@@ -31,11 +31,10 @@ export class ProductsComponent implements OnInit {
 
   products$: Observable<Product[]>;
   showModal: boolean = false;
-  new = false;
-    updatedProduct = {
-      show: false,
-      product: null
-    }
+  updatedProduct = {
+    show: false,
+    product: null
+  }
   botones: ButtonType[] = [
     { id: "AddNew", name: "Añadir nuevo", show: true }
   ];
@@ -46,41 +45,13 @@ export class ProductsComponent implements OnInit {
   event$: Product;
 
   constructor(private productsService: ProductsService, private route: ActivatedRoute, private toolsService: ToolsService) {
-    
-    
-    /*route.url.subscribe(url => {
-      if (this.products == null) {
-        this.products$ = this.productsService.getProducts$();
-        this.products$.subscribe(products => {
-          this.products = products;
-          this.new = false;
-        });
-      }
-    })*/
+
   }
- 
 
   ngOnInit() {
-    
-    console.log('ngOnInit ejecutado');
-    this.productsService.loadProducts();
     this.toolsService.setButtonTypes(this.botones);
-    this.products$ = this.productsService.getProducts$().pipe(
-      tap((value) => {
-        this.new = false;
-        console.log('products$ emitió:', value);
-      })
-    );
-    this.productsService.getProducts$().subscribe(products => {
-      console.log("peticion al servidor", products);
-    });
-    /* this.products$.subscribe(products => {
-      this.products = products;
-      this.new = false;
-    }); */
+    this.products$ = this.productsService.getProducts$();
   }
-
-  
 
   activateButtonType(id: string) {
     this.botones.find(boton => { return boton.id == id }).show = true;
@@ -92,13 +63,8 @@ export class ProductsComponent implements OnInit {
 
   showButtonType(boton: string) {
     if (boton == "AddNew") {
-      /*
-      this.new = true;
-      this.disableButtonType("AddNew");
-      //this.disableButtonType("Añadir new");
-      */
-     this.showModal = true;
-     this.modal.nativeElement.classList.add('is-active');
+      this.showModal = true;
+      this.modal.nativeElement.classList.add('is-active');
 
     }
 
@@ -114,11 +80,11 @@ export class ProductsComponent implements OnInit {
       alert("el price debe ser mayor que 0");
     }
     else
-      this.productsService.postEditProduct(product).subscribe(response => { 
-        
+      this.productsService.postEditProduct(product).subscribe(response => {
+
         this.updatedProduct.show = true;
-        this.updatedProduct.product = response; 
-        setTimeout(() => {this.updatedProduct.show = false}, 5000);
+        this.updatedProduct.product = response;
+        setTimeout(() => { this.updatedProduct.show = false }, 5000);
       });
   }
 

@@ -23,7 +23,7 @@ import { MessageModule } from 'primeng/message';
 import { MenuItem } from 'primeng/api';
 import { CommonFormComponent } from '@app/tools/common-form/common-form.component';
 
-const nameButtonTypes = { newSale: 'NuevaSale', closeSale: 'FinalizarSale', addProduct: 'AddProduct', add: 'Add', reopenTicket: 'ReabrirTicket' };
+const nameButtonTypes = { newSale: 'NuevaSale', closeSale: 'FinalizarSale', addProduct: 'AddProduct', reopenTicket: 'ReabrirTicket' };
 
 @Component({
   selector: 'app-sales',
@@ -46,6 +46,13 @@ export class SalesComponent implements OnInit {
   @ViewChild('send', { static: false }) goToSummit: ElementRef;
   @ViewChild('elementForm') elementForm: ElementRef;
 
+  buttons: ButtonType[] = [
+    { id: nameButtonTypes.newSale, name: "Nueva venta", show: false },
+    { id: nameButtonTypes.closeSale, name: "Finalizar venta", show: false },
+    { id: nameButtonTypes.addProduct, name: "Añadir producto", show: true },
+    { id: nameButtonTypes.reopenTicket, name: "Reabrir ticket", show: false }
+  ];
+
   formGroup: UntypedFormGroup;
   saleList: ItemSale[] = [];
 
@@ -64,13 +71,6 @@ export class SalesComponent implements OnInit {
     options$?: Observable<any[]>;
     placeholder?: string;
   }>;
-
-  buttons: ButtonType[] = [
-    { id: nameButtonTypes.newSale, name: "Nueva venta", show: false },
-    { id: nameButtonTypes.closeSale, name: "Finalizar venta", show: false },
-    { id: nameButtonTypes.addProduct, name: "Añadir producto", show: true },
-    { id: nameButtonTypes.reopenTicket, name: "Reabrir ticket", show: false }
-  ];
 
   constructor(
     private productsService: ProductsService,
@@ -117,11 +117,15 @@ export class SalesComponent implements OnInit {
   }
 
   activateButtonType(id: string) {
-    this.buttons.find(boton => boton.id == id).show = true;
+    let boton =  this.buttons.find(boton => boton.id == id);
+    if (boton)
+      boton.show = true;
   }
 
   disableButtonType(id: string) {
-    this.buttons.find(boton => boton.id == id).show = false;
+    let boton =  this.buttons.find(boton => boton.id == id);
+    if (boton)
+      boton.show = false;
   }
 
   showButtonType(boton: string) {
@@ -150,8 +154,7 @@ export class SalesComponent implements OnInit {
   newProduct() {
     this.currentItem = new ItemSale();
     this.formGroup.reset();
-    this.showNew = true;
-    this.activateButtonType(nameButtonTypes.newSale);
+    this.showNew = true;    
   }
 
   totalSale(): number {
@@ -166,6 +169,10 @@ export class SalesComponent implements OnInit {
 
   deleteItem(sale: ItemSale) {
     this.saleList.splice(this.saleList.indexOf(sale), 1);
+    if (this.saleList.length == 0 && this.saleId == 0) {
+      this.disableButtonType(nameButtonTypes.newSale);
+      this.disableButtonType(nameButtonTypes.closeSale);
+    }
   }
 
   addPurchaseToList() {
@@ -180,7 +187,8 @@ export class SalesComponent implements OnInit {
     this.showNew = false;
     this.activateButtonType(nameButtonTypes.closeSale);
     this.activateButtonType(nameButtonTypes.addProduct);
-    this.disableButtonType(nameButtonTypes.add);
+    if (this.saleList.length > 0)
+      this.activateButtonType(nameButtonTypes.newSale);
     this.toolsService.activateFocus(nameButtonTypes.addProduct);
   }
 
@@ -216,7 +224,6 @@ export class SalesComponent implements OnInit {
     this.activateButtonType(nameButtonTypes.reopenTicket);
     this.disableButtonType(nameButtonTypes.addProduct);
     this.disableButtonType(nameButtonTypes.closeSale);
-    this.disableButtonType(nameButtonTypes.add);
     this.disableButtonType(nameButtonTypes.addProduct);
     this.toolsService.activateFocus(nameButtonTypes.reopenTicket);
     this.cdr.detectChanges();
@@ -245,14 +252,13 @@ export class SalesComponent implements OnInit {
     this.disableButtonType(nameButtonTypes.newSale);
     this.disableButtonType(nameButtonTypes.closeSale);
     this.activateButtonType(nameButtonTypes.addProduct);
-    this.disableButtonType(nameButtonTypes.add);
     this.disableButtonType(nameButtonTypes.reopenTicket);
     this.toolsService.activateFocus(nameButtonTypes.addProduct);
   }
 
   newSale(): void {
     if (this.saleId == 0 && this.saleList.length > 0) {
-      var statusConfirm = confirm("¿Desea crear una nueva venta? La venta actual no se ha guardado");
+      let statusConfirm = confirm("¿Desea crear una nueva venta? La venta actual no se ha guardado");
       if (statusConfirm) this.resetSales();
     } else {
       this.resetSales();
@@ -261,11 +267,7 @@ export class SalesComponent implements OnInit {
 
   keyPress(key: KeyboardEvent, field: HTMLElement) {
     if (key.code == "Enter") {
-      if (this.goToSummit.nativeElement == field) {
-        this.toolsService.activateFocus("Add");
-      } else {
         field.focus();
-      }
     }
   }
 

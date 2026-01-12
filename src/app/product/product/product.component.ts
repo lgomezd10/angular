@@ -24,7 +24,6 @@ import { InputTextModule } from 'primeng/inputtext';
 })
 export class ProductComponent implements OnInit, OnDestroy {
 
-  //private products$: Observable<Product[]>;
   id: number;
   product: Product;
   formGroup: UntypedFormGroup;
@@ -81,7 +80,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   loadProduct(product: Product) {
-    //if (product) {
+    if (product) {
       this.formGroup.patchValue({
         id: product?.id,
         name: product?.name,
@@ -89,7 +88,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         type: product?.type,
         stock: product?.stock
       });
-    //}
+    }
   }
 
   activateButtonType(id: string) {

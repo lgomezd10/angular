@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ButtonType } from './button-type';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ButtonListComponent } from './button-list/button-list.component';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +13,6 @@ export class ToolsService {
   foco$: BehaviorSubject<string> = new BehaviorSubject<string>("");
 
   constructor() {
-    /*this.buttons = new BehaviorSubject<ButtonType[]>(this.botones);
-    this.pulsado$ = new BehaviorSubject<string>("");
-    this.foco$ = new BehaviorSubject<string>("");*/
   }
 
   getButtonTypes$(): Observable<ButtonType[]> {
@@ -64,10 +60,6 @@ export class ToolsService {
   pushButtonType(boton: string) {
     this.pulsado$.next(boton);
     this.foco$.next("");
-  }
-
-  destroy() {
-
   }
 
 }

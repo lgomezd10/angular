@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { SocketService } from '@app/services/socket';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -11,11 +12,18 @@ export class ErrorService {
   mensaje$: BehaviorSubject<string>;
   mensaje404$: BehaviorSubject<string>;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private socket: SocketService) {
 
     this.mensaje$ = new BehaviorSubject('');
     this.mensaje404$ = new BehaviorSubject('');
+  }
 
+  connectedSocket$() : Observable<boolean> {
+    return this.socket.connectedSocket$();
+  }
+
+  connectingSocket$() : Observable<boolean> {
+    return this.socket.connectingSocket$();
   }
 
   getError$(): Observable<string> {

@@ -19,22 +19,29 @@ export class ShowErrorsComponent implements OnInit {
   erroresValue: string = '';
   errores404Value: string = '';
   withoutConexion: boolean = false;
+  conecting: boolean = true;
   isLoged: boolean = false;
 
   @Input() typeError: string = "Errors";
 
-  constructor(private errorService: ErrorService, private productsServices: ProductsService, private authService: AuthService) {
-    this.productsServices.connetedServer().subscribe(connected => {
+  constructor(private errorService: ErrorService, private authService: AuthService) {
+    this.errorService.connectedSocket$().subscribe(connected => {
       this.withoutConexion = !connected;
+      this.conecting = !connected;
       this.errorService.reset();
     });
+    this.errorService.connectingSocket$().subscribe(connecting => {
+      this.conecting = connecting;
+    });
     this.authService.isLoged().subscribe(loged => {
+      if (this.isLoged != loged && loged) {
+        this.errorService.reset();
+      }
       this.isLoged = loged;
     });
   }
 
   ngOnInit() {
-    this.errorService.reset();
     this.errores$ = this.errorService.getError$();
     this.errores404$ = this.errorService.getError404$();
     this.errores$.subscribe(val => this.erroresValue = val);

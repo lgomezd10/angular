@@ -31,8 +31,6 @@ export class ProductsService {
 
   products$: BehaviorSubject<Product[]>;
 
-  connected$: BehaviorSubject<boolean>;
-
   private _docSub: Subscription;
 
   backendUrl = environment.API_URL;
@@ -40,23 +38,17 @@ export class ProductsService {
 
   constructor(private http: HttpClient, private socket: SocketService) {
     this.products$ = new BehaviorSubject<Product[]>([]);
-    this.connected$ = new BehaviorSubject<boolean>(false);
     this.loadProducts();
     this.updateProducts$.subscribe(products => this.products$.next(products));
 
-    this.socket.fromEvent<boolean>('connected').subscribe(resp => {
-      if(this.connected$.getValue() != resp)
-        this.connected$.next(resp);
-      if (resp) {
+    // Suscribirse al estado de conexión expuesto por SocketService
+    this.socket.connectedSocket$().subscribe(isConnected => {
+      if (isConnected)
         this.loadProducts();
-      }
     });
 
   }
 
-  connetedServer(): Observable<boolean> {
-    return this.connected$;
-  }
 
   private getProductsServer(): Observable<Product[]> {
     return this.http.get<Product[]>(this.backendUrl + '/products').pipe(

@@ -1,3 +1,5 @@
+import { BehaviorSubject } from 'rxjs';
+  // Observable para exponer el estado de conexión  
 import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { Observable } from 'rxjs';
@@ -8,9 +10,23 @@ import { AuthService } from '@app/auth/auth.service';
   providedIn: 'root'
 })
 export class SocketService {
+
+  private reconnectIntervalId: any;
   private socket: Socket;
+  private isConnected$: BehaviorSubject<boolean>;
+  private connecting$: BehaviorSubject<boolean>;
+
+  connectedSocket$(): Observable<boolean> {
+    return this.isConnected$.asObservable();
+  }
+
+  connectingSocket$(): Observable<boolean> {
+    return this.connecting$.asObservable();
+  }
 
   constructor(private authService: AuthService) {
+    this.isConnected$ = new BehaviorSubject<boolean>(false);
+    this.connecting$ = new BehaviorSubject<boolean>(true);
     
     const token = this.authService.token;
     this.socket = io(environment.API_URL, {
@@ -19,6 +35,39 @@ export class SocketService {
       reconnectionDelayMax: 5000,
       reconnectionAttempts: 5,
       auth: { token }
+    });
+
+    this.socket.on('connect', () => {
+      this.isConnected$.next(true);
+      this.connecting$.next(false);
+      if (this.reconnectIntervalId) {
+        clearInterval(this.reconnectIntervalId);
+        this.reconnectIntervalId = null;
+      }
+    });
+
+    this.socket.on('disconnect', () => {
+      this.isConnected$.next(false);
+      this.connecting$.next(true);
+      if (!this.reconnectIntervalId) {
+        this.reconnectIntervalId = setInterval(() => {
+          if (!this.socket.connected) {
+            this.connect();
+          }
+        }, 60000);
+      }
+    });
+
+    this.socket.io.on('reconnect_failed', () => {
+      this.isConnected$.next(false);
+      this.connecting$.next(false);
+      if (!this.reconnectIntervalId) {
+        this.reconnectIntervalId = setInterval(() => {
+          if (!this.socket.connected) {
+            this.connect();
+          }
+        }, 60000);
+      }
     });
 
     this.authService.isLoged().subscribe(loged => {
@@ -70,6 +119,10 @@ export class SocketService {
       this.socket.auth = { token: this.authService.token };
       this.socket.connect();
     }
+    // Si conecta manualmente, actualizar el estado
+    if (this.socket.connected) {
+      this.isConnected$.next(true);
+    }
   }
 
   /**
@@ -79,6 +132,7 @@ export class SocketService {
     if (this.socket.connected) {
       this.socket.disconnect();
     }
+    this.isConnected$.next(false);
   }
 
   /**

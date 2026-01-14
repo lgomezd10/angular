@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ProductsService } from 'src/app/product/products.service';
 import { Purchase } from '../purchase';
 import { Observable } from 'rxjs';
@@ -17,6 +17,7 @@ import { TableModule } from 'primeng/table';
 import { SelectModule } from 'primeng/select';
 import { InputNumberModule } from 'primeng/inputnumber'
 import { CommonFormComponent } from "@app/tools/common-form/common-form.component";
+import { MessageModule } from 'primeng/message';
 
 const nameButtonTypes = { sendPurchase: 'SendPruchase', newPurchase: 'NewPurchase', createProduct: 'CreateProduct', addProduct: 'AddProduct', add: 'Add' };
 
@@ -26,7 +27,7 @@ const nameButtonTypes = { sendPurchase: 'SendPruchase', newPurchase: 'NewPurchas
   styleUrls: ['./purchases.component.css'],
   standalone: true,
   imports: [ProductPipe, ReactiveFormsModule,
-    NewComponent, ButtonListComponent, DecimalPipe, TableModule, SelectModule, InputNumberModule, CommonFormComponent, ShowErrorsComponent]
+    NewComponent, ButtonListComponent, DecimalPipe, TableModule, SelectModule, InputNumberModule, CommonFormComponent, ShowErrorsComponent, MessageModule]
 })
 export class PurchasesComponent implements OnInit {
 
@@ -64,7 +65,7 @@ export class PurchasesComponent implements OnInit {
   ];
 
   constructor(private productsService: ProductsService, private purchasesService: PurchasesService,
-    private toolsServices: ToolsService, formBuilder: UntypedFormBuilder, private cdr: ChangeDetectorRef) {
+    private toolsServices: ToolsService, formBuilder: UntypedFormBuilder) {
     this.formGroup = formBuilder.group({
       'find': [''],
       'product': [null, Validators.required],
@@ -197,10 +198,12 @@ export class PurchasesComponent implements OnInit {
     this.searchText = "";
   }
 
-  newGuardado(product: Product) {
+  endNewProduct(response: string) {
+    console.log('Nuevo producto guardado:', response);
     this.activateButtonType(nameButtonTypes.addProduct);
     this.activateButtonType(nameButtonTypes.createProduct);
     this.toolsServices.activateFocus(nameButtonTypes.addProduct);
+    this.showNewProduct = false;
   }
 
   totalPurchase(): number {
@@ -224,7 +227,6 @@ export class PurchasesComponent implements OnInit {
       this.purchasesService.guardarPurchase(this.purchaseList).subscribe(purchases => {
         this.purchaseCompleted = true;
         this.purchaseList = purchases;
-        this.cdr.detectChanges();
       });
       this.disableButtonType(nameButtonTypes.addProduct);
       this.disableButtonType(nameButtonTypes.createProduct);

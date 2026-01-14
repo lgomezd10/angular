@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ItemSale } from '../item-sale';
 import { Product } from 'src/app/product/product';
 import { Observable } from 'rxjs';
@@ -71,13 +71,13 @@ export class SalesComponent implements OnInit {
     options$?: Observable<any[]>;
     placeholder?: string;
   }>;
+  showSuccessMessage: string = '';
 
   constructor(
     private productsService: ProductsService,
     private salesService: SalesService,
     private toolsService: ToolsService,
-    formBuilder: UntypedFormBuilder,
-    private cdr: ChangeDetectorRef
+    formBuilder: UntypedFormBuilder
   ) {
     this.formGroup = formBuilder.group({
       'find': [''],
@@ -129,6 +129,8 @@ export class SalesComponent implements OnInit {
   }
 
   showButtonType(boton: string) {
+    this.showSuccessMessage = '';
+    this.toolsService.cleanShowErrorsComponent();
     if (boton == nameButtonTypes.addProduct) {
       this.newProduct();
       this.searchText = "";
@@ -148,7 +150,6 @@ export class SalesComponent implements OnInit {
       this.activateButtonType(nameButtonTypes.closeSale);
       this.toolsService.activateFocus(nameButtonTypes.addProduct);
     }
-    this.cdr.detectChanges();
   }
 
   newProduct() {
@@ -209,14 +210,15 @@ export class SalesComponent implements OnInit {
     if (this.saleId == 0)
       this.salesService.saveSales(this.saleList, this.creditCard).subscribe(cod => {
         this.saleId = cod;
-        this.cdr.detectChanges();
+        this.showSuccessMessage = `Compra finalizada. Código Venta: ${this.saleId}`;
       });
     else
       this.salesService.updateSales(this.saleId, this.saleList, this.creditCard).subscribe(cod => {
         this.saleId = cod;
+        this.showSuccessMessage = `Compra finalizada. Código Venta: ${this.saleId}`;
         if (cod == 0) {
-          window.alert("Se ha eliminado la compra tras eliminar sus elementos");
           this.resetSales();
+          this.showSuccessMessage = 'Se ha eliminado la compra tras eliminar sus elementos';
         }
       });
     this.showNew = false;
@@ -226,10 +228,10 @@ export class SalesComponent implements OnInit {
     this.disableButtonType(nameButtonTypes.closeSale);
     this.disableButtonType(nameButtonTypes.addProduct);
     this.toolsService.activateFocus(nameButtonTypes.reopenTicket);
-    this.cdr.detectChanges();
   }
 
   openSale(saleId: number) {
+    this.showSuccessMessage = '';
     this.salesService.getSale(saleId).subscribe({
       next: sale => {
         this.saleList = sale.itemsSale;
@@ -237,8 +239,11 @@ export class SalesComponent implements OnInit {
         this.creditCard = sale.creditCard;
         this.open = true;
         this.activateButtonType(nameButtonTypes.closeSale);
+        this.activateButtonType(nameButtonTypes.addProduct);
+        this.activateButtonType(nameButtonTypes.newSale);
       },
       error: () => {
+        this.resetSales();
         console.log(`No se ha encontrado la compra ${saleId}`);
       }
     });

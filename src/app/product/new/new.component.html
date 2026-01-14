@@ -1,5 +1,6 @@
-@if (!sent) {
-<p-dialog [(visible)]="display" (onHide)="onDialogHide()" [modal]="true" [closable]="true" [dismissableMask]="true"
+
+<p-dialog [(visible)]="display" (onHide)="onDialogHide()" [modal]="true" [closable]="true" 
+  [dismissableMask]="true"
   [style]="{width: '400px'}">
   <ng-template pTemplate="header">
     <span>Crear nuevo producto</span>
@@ -8,18 +9,20 @@
     <form [formGroup]="formGroup" class="space-y-4" #elementForm (ngSubmit)="onSubmit()">
       <div class="mb-4">
         <div class="flex-1">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Nombre:</label>
+          <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nombre:</label>
           <input pInputText name="name" id="name" type="text" autocomplete="off" (keypress)="keyPress($event, type)"
             #name formControlName="name" #type
-            [invalid]="isFieldValid('name') || (repeatedProduct!='' && formGroup.controls['name'].value == repeatedProduct)"
+            [invalid]="isFieldValid('name')"
             class="w-full mb-2" />
-          @if (repeatedProduct!='' && formGroup.controls['name'].value == repeatedProduct) {
+          @if (repeatedProduct) {
           <p-message severity="error" size="small" variant="simple">
-            Ya existe un producto {{formGroup.controls['name'].value}}
+            El nombre {{repeatedProduct}} ya existe. Por favor, elija otro.
           </p-message>
           }
           @if (isFieldValid('name')) {
-          <p-message severity="error" size="small" variant="simple">{{getError('Nombre', 'name')}}</p-message>
+          <p-message severity="error" size="small" variant="simple">
+            {{getError('Nombre', 'name')}}
+          </p-message>
           }
           <div id="productList">
             <ul>
@@ -30,34 +33,27 @@
           </div>
         </div>
         <div class="flex-1">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Tipo:</label>
-          <p-select [options]="types" formControlName="type" filter="true" placeholder="'Selecciona tipo'"
+          <label for="types" class="block text-sm font-medium text-gray-700 mb-1">Tipo:</label>
+          <p-select id="types" [options]="types" formControlName="type" filter="true" placeholder="'Selecciona tipo'"
             class="w-full mb-2"></p-select>
           @if (isFieldValid('type')) {
           <p-message severity="error" size="small" variant="simple">
             {{getError('Tipo', 'type')}}
           </p-message>
           }
-          <label class="block text-sm font-medium text-gray-700 mb-1">Precio:</label>
+          <label for="price" class="block text-sm font-medium text-gray-700 mb-1">Precio:</label>
           <p-inputnumber id="price" formControlName="price" inputId="price" mode="decimal" [maxFractionDigits]="2"
-            (keypress)="keyPress($event, sent)" class="w-full mb-2" />
+            (keypress)="keyPress($event, submit)" class="w-full mb-2" />
           @if (isFieldValid('price')) {
           <p-message severity="error" size="small" variant="simple">
             {{getError('Precio', 'price')}}
           </p-message>
           }
-          <div #sent id="sent"></div>
         </div>
       </div>
       <div class="flex justify-end">
-        <p-button type="submit" label="Enviar" class="p-button-success"></p-button>
+        <p-button #submit id="submit" type="submit" label="Enviar" class="p-button-success" [disabled]="formGroup.invalid"></p-button>
       </div>
     </form>
   </ng-template>
 </p-dialog>
-}
-@if (sent) {
-<div>
-  <h2 class="text-green-600 text-lg font-semibold">Nuevo producto creado</h2>
-</div>
-}

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AsyncPipe, DecimalPipe } from '@angular/common';
+import { AsyncPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { PurchasesService } from '../purchases.service';
 import { Purchase } from '../purchase';
 import { Dates } from 'src/app/tools/dates';
@@ -14,13 +14,13 @@ import { SelectionDatesComponent } from "@app/tools/select-dates/select-dates.co
     selector: 'app-purchases-date',
     templateUrl: './purchases-date.component.html',
     styleUrls: ['./purchases-date.component.css'],
-    providers: [],
+    providers: [DatePipe],
     standalone: true,
     imports: [DecimalPipe, GroupBydatePipe, AsyncPipe, FormsModule, TableModule, ShowErrorsComponent, SelectionDatesComponent]
 })
 export class PurchasesDateComponent {
 
-  purchases$: Observable<Purchase[]>;
+  purchases$: Observable<Purchase[]> = new Observable<Purchase[]>();
 
   constructor(private purchasesService: PurchasesService) {
   }

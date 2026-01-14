@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Dates } from '../dates';
 import { DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -23,7 +23,7 @@ export class SelectionDatesComponent implements OnInit {
   @Output()
   enviardates: EventEmitter<Dates> = new EventEmitter<Dates>();
 
-  constructor(private datePipe: DatePipe, private cdr: ChangeDetectorRef) { }
+  constructor(private datePipe: DatePipe) { }
 
 
   ngOnInit() {
@@ -31,7 +31,6 @@ export class SelectionDatesComponent implements OnInit {
     this.to = new Date();
     this.fromString = "";
     this.toString = "";
-    this.cdr.detectChanges();
   }
   
   onSend() {
@@ -49,7 +48,6 @@ export class SelectionDatesComponent implements OnInit {
           to: this.toString
         }
         this.enviardates.emit(fechas);
-        this.cdr.markForCheck();
       }
     });
   }

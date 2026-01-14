@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { Sale } from '../sale';
 import { SalesService } from '../sales.service';
@@ -25,7 +25,7 @@ export class SalesDateComponent {
   loading: boolean = false;
   sales: Sale[] = [];
 
-  constructor(private salesService: SalesService, private productsService: ProductsService, private cdr: ChangeDetectorRef) {}
+  constructor(private salesService: SalesService, private productsService: ProductsService) {}
 
   findSales(dates: Dates) {
     this.total = 0;

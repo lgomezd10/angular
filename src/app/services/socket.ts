@@ -1,8 +1,6 @@
-import { BehaviorSubject } from 'rxjs';
-  // Observable para exponer el estado de conexión  
+import { BehaviorSubject, Observable } from 'rxjs'; 
 import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
-import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthService } from '@app/auth/auth.service';
 
@@ -10,6 +8,8 @@ import { AuthService } from '@app/auth/auth.service';
   providedIn: 'root'
 })
 export class SocketService {
+
+  private reconnectIntervalTime = 60000;
 
   private reconnectIntervalId: any;
   private socket: Socket;
@@ -25,8 +25,8 @@ export class SocketService {
   }
 
   constructor(private authService: AuthService) {
-    this.isConnected$ = new BehaviorSubject<boolean>(false);
-    this.connecting$ = new BehaviorSubject<boolean>(true);
+    this.isConnected$ = new BehaviorSubject<boolean>(true);
+    this.connecting$ = new BehaviorSubject<boolean>(false);
     
     const token = this.authService.token;
     this.socket = io(environment.API_URL, {
@@ -47,18 +47,25 @@ export class SocketService {
     });
 
     this.socket.on('disconnect', () => {
+      console.log('Socket disconnected');
       this.isConnected$.next(false);
-      this.connecting$.next(true);
       if (!this.reconnectIntervalId) {
         this.reconnectIntervalId = setInterval(() => {
           if (!this.socket.connected) {
             this.connect();
           }
-        }, 60000);
+        }, this.reconnectIntervalTime);
       }
     });
 
+
+    this.socket.io.on('reconnect_attempt', () => {
+      console.log('Reconnecting attempt...');
+      this.connecting$.next(true);
+    });
+
     this.socket.io.on('reconnect_failed', () => {
+      console.log('Reconnection failed.');
       this.isConnected$.next(false);
       this.connecting$.next(false);
       if (!this.reconnectIntervalId) {
@@ -66,7 +73,7 @@ export class SocketService {
           if (!this.socket.connected) {
             this.connect();
           }
-        }, 60000);
+        }, this.reconnectIntervalTime);
       }
     });
 

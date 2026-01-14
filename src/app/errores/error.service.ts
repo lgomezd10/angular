@@ -35,7 +35,7 @@ export class ErrorService {
   }
 
   show(mensaje: string) {
-    this.mensaje$.next(this.mensaje$.getValue() + mensaje);
+    this.mensaje$.next(mensaje);
   }
 
   showErrorInApp(error: any) {
@@ -52,11 +52,10 @@ export class ErrorService {
           errorMessage = error.error.message;
           break;
         case 404:
-          errorMessage = this.getMessageError(error.error.message);
-          this.showError404(errorMessage);
+          this.showError404(this.getMessageError(error.error.message));
           break;
         case 409:
-          errorMessage = 'Registro duplicado';
+          this.showError404('Registro duplicado');
           break;
         default:
           if (error.error.message == undefined) {

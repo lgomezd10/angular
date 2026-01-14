@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ErrorService } from '../error.service';
 import { Observable } from 'rxjs';
-import { ProductsService } from '@app/product/products.service';
 import { MessageModule } from 'primeng/message';
 import { AuthService } from '@app/auth/auth.service';
 
@@ -12,19 +11,23 @@ import { AuthService } from '@app/auth/auth.service';
     standalone: true,
     imports: [MessageModule]
 })
-export class ShowErrorsComponent implements OnInit {
+export class ShowErrorsComponent {
 
   errores$: Observable<string>;
   errores404$: Observable<string>;
   erroresValue: string = '';
   errores404Value: string = '';
   withoutConexion: boolean = false;
-  conecting: boolean = true;
+  conecting: boolean = false;
   isLoged: boolean = false;
 
   @Input() typeError: string = "Errors";
 
   constructor(private errorService: ErrorService, private authService: AuthService) {
+    this.errores$ = this.errorService.getError$();
+    this.errores404$ = this.errorService.getError404$();
+    this.errores$.subscribe(val => this.erroresValue = val);
+    this.errores404$.subscribe(val => this.errores404Value = val);
     this.errorService.connectedSocket$().subscribe(connected => {
       this.withoutConexion = !connected;
       this.conecting = !connected;
@@ -39,13 +42,8 @@ export class ShowErrorsComponent implements OnInit {
       }
       this.isLoged = loged;
     });
+    console.log('ShowErrorsComponent loaded');
   }
 
-  ngOnInit() {
-    this.errores$ = this.errorService.getError$();
-    this.errores404$ = this.errorService.getError404$();
-    this.errores$.subscribe(val => this.erroresValue = val);
-    this.errores404$.subscribe(val => this.errores404Value = val);
-  }
 
 }

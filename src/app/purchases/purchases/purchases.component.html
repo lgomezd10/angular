@@ -3,6 +3,12 @@
 
   <app-show-errors [typeError]="'Error404'"></app-show-errors>
 
+  <app-new [display]="showNewProduct" (savedProduct)="endNewProduct($event)"></app-new>
+
+  @if (purchaseCompleted) {
+    <p-message severity="success">Compra guardada correctamente</p-message>
+   }
+
   <div class="flex flex-col md:flex-row w-full gap-6">
     <div class="w-full md:w-48 order-1 md:order-2 mb-4 md:mb-0">
       <app-button-list [lista]="buttons" (sendButtonType)="showButtonType($event)"></app-button-list>
@@ -47,23 +53,12 @@
 
         <h1>Total: {{totalPurchase()}}</h1>
         <br><br>
-        @if (purchaseCompleted) {
-        <p>Compra guardada correctamente</p>
-        }
+        
 
       </div>
 
       <app-common-form [display]="showNew" [formGroup]="formGroup" [formFields]="formFields" formName="Añadir producto"
         (sendButtonOption)="onSubmit($event)"></app-common-form>
 
-
-      <div class="crear-new">
-        @if (showNewProduct) {
-        <app-new (savedProduct)="newGuardado($event)"></app-new>
-        }
-      </div>
-
-
     </div>
-
   </div>

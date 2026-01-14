@@ -66,8 +66,6 @@ export class ButtonListComponent implements OnInit {
             button.nativeElement.focus();
           }
         });
-        /*if(document.getElementById(button) != null)
-          document.getElementById(button).focus();      */
       });
 
   }

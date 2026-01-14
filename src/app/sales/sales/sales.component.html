@@ -4,13 +4,8 @@
 
   <app-show-errors [typeError]="'Error404'"></app-show-errors>
 
-  <div class="flex gap-2 mb-4">
-    <input pInputText type="text" [(ngModel)]="findSale" placeholder="Buscar venta..." class="w-full" />
-    <button pButton type="button" label="Buscar" (click)="openSale(findSale)"></button>
-  </div>
-
-  @if (saleId > 0 && !open) {
-    <p-message severity="success">Compra finalizada. Código Venta: {{saleId}}</p-message>
+   @if (showSuccessMessage) {
+    <p-message severity="success">{{showSuccessMessage}}</p-message>
   }
 
   <div class="flex w-full gap-6">
@@ -19,6 +14,10 @@
     <!-- Tabla y formularios -->
     <div class="flex-1">
       <div class="overflow-x-auto">
+        <div class="flex gap-2 mb-4">
+          <input pInputText type="text" [(ngModel)]="findSale" placeholder="Buscar venta..." class="w-full" />
+          <button pButton type="button" label="Buscar" (click)="openSale(findSale)"></button>
+        </div>
         <p-table [value]="saleList" class="mb-4">
           <ng-template pTemplate="header">
             <tr>

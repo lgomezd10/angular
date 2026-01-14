@@ -1,4 +1,4 @@
-import { Injectable, Output, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Product } from './product';
 import { Observable, of, BehaviorSubject, Subscription, catchError } from 'rxjs';
@@ -39,7 +39,10 @@ export class ProductsService {
   constructor(private http: HttpClient, private socket: SocketService) {
     this.products$ = new BehaviorSubject<Product[]>([]);
     this.loadProducts();
-    this.updateProducts$.subscribe(products => this.products$.next(products));
+    this.updateProducts$.subscribe(products => {
+      console.log('Productos actualizados recibidos por socket:', products);
+      this.products$.next(products);
+    });
 
     // Suscribirse al estado de conexión expuesto por SocketService
     this.socket.connectedSocket$().subscribe(isConnected => {

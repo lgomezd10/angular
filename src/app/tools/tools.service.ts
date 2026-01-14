@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ButtonType } from './button-type';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { ErrorService } from '@app/errores/error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,11 @@ export class ToolsService {
   pulsado$: BehaviorSubject<string> = new BehaviorSubject<string>("");
   foco$: BehaviorSubject<string> = new BehaviorSubject<string>("");
 
-  constructor() {
+  constructor(private errorService: ErrorService) {
+  }
+
+  cleanShowErrorsComponent() {
+    this.errorService.reset();
   }
 
   getButtonTypes$(): Observable<ButtonType[]> {

@@ -3,6 +3,7 @@
 
 <app-select-dates (enviardates)="findPurchases($event)"></app-select-dates>
 
+
 @for (purchase of purchases$ | async | groupBydate; track purchase) {
   <div class="flex-1">
     <div class="font-semibold mb-2">Fecha: {{purchase.key}}</div>

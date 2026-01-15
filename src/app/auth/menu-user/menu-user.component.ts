@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { UserResponse } from '../user';
 
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 
@@ -22,13 +21,13 @@ export class MenuUserComponent implements OnInit {
   loginItems: MenuItem[] = [];
   userItems: MenuItem[] = [];
 
-  constructor(private auth: AuthService, private router: Router) {
+  constructor(private readonly auth: AuthService, private readonly router: Router) {
     this.auth.user$.subscribe((user: UserResponse) => {
-      if (user != null) {
-        this.user = user.username;
+      if (user == null) {
+        this.user = "";
         this.setUserItems();
       } else {
-        this.user = "";
+        this.user = user.username;
         this.setUserItems();
       }
     });

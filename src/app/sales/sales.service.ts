@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ItemSale } from './item-sale';
-import { Observable, BehaviorSubject, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Sale } from './sale';
-import { ProductsService } from '../product/products.service';
-import { catchError, map, tap } from 'rxjs/operators';
+import { map} from 'rxjs/operators';
 import { environment } from '@env/environment';
 
 const httpOptions = {
@@ -25,7 +24,7 @@ class ResponseSavedSales {
 export class SalesService {
 
 
-  constructor(private http: HttpClient, private productsService: ProductsService) { }
+  constructor(private readonly http: HttpClient) { }
 
   backendUrl = environment.API_URL;
 

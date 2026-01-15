@@ -16,11 +16,11 @@ import { InputTextModule } from 'primeng/inputtext';
 
 
 @Component({
-    selector: 'app-product',
-    templateUrl: './product.component.html',
-    styleUrls: ['./product.component.css'],
-    standalone: true,
-    imports: [ReactiveFormsModule, ButtonListComponent, MessageModule, SelectModule, InputNumberModule, InputTextModule]
+  selector: 'app-product',
+  templateUrl: './product.component.html',
+  styleUrls: ['./product.component.css'],
+  standalone: true,
+  imports: [ReactiveFormsModule, ButtonListComponent, MessageModule, SelectModule, InputNumberModule, InputTextModule]
 })
 export class ProductComponent implements OnInit, OnDestroy {
 
@@ -52,7 +52,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   @ViewChild('elementForm') elementForm: ElementRef;
 
-  constructor(private productsService: ProductsService, private route: ActivatedRoute, private location: Location, formBuilder: UntypedFormBuilder) {
+  constructor(private readonly productsService: ProductsService, private readonly route: ActivatedRoute, private readonly location: Location, formBuilder: UntypedFormBuilder) {
 
     this.formGroup = formBuilder.group({
       'id': [''],
@@ -113,9 +113,9 @@ export class ProductComponent implements OnInit, OnDestroy {
     if (product && product.id != this.id) {
       this.repeatedProduct = product.name;
       this.buttonName.nativeElement.focus();
-    }     
-    else if(this.formGroup.valid){
-    this.repeatedProduct = "";
+    }
+    else if (this.formGroup.valid) {
+      this.repeatedProduct = "";
       this.productsService.postEditProduct(this.formGroup.value).subscribe(response => {
         this.updatedProduct.show = true;
         this.updatedProduct.product = response;

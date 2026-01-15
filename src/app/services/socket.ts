@@ -9,12 +9,12 @@ import { AuthService } from '@app/auth/auth.service';
 })
 export class SocketService {
 
-  private reconnectIntervalTime = 60000;
+  private readonly reconnectIntervalTime = 60000;
 
   private reconnectIntervalId: any;
-  private socket: Socket;
-  private isConnected$: BehaviorSubject<boolean>;
-  private connecting$: BehaviorSubject<boolean>;
+  private readonly socket: Socket;
+  private readonly isConnected$: BehaviorSubject<boolean>;
+  private readonly connecting$: BehaviorSubject<boolean>;
 
   connectedSocket$(): Observable<boolean> {
     return this.isConnected$.asObservable();
@@ -24,7 +24,7 @@ export class SocketService {
     return this.connecting$.asObservable();
   }
 
-  constructor(private authService: AuthService) {
+  constructor(private readonly authService: AuthService) {
     this.isConnected$ = new BehaviorSubject<boolean>(true);
     this.connecting$ = new BehaviorSubject<boolean>(false);
     

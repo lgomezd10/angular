@@ -3,9 +3,12 @@ import { CommonModule } from '@angular/common';
 import { PerdidasComponent } from './perdidas/perdidas.component';
 
 @NgModule({
-  declarations: [PerdidasComponent],
+  declarations: [],
   imports: [
-    CommonModule
+    CommonModule,
+    PerdidasComponent
+  ],
+  exports: [PerdidasComponent
   ]
 })
 export class PerdidasModule { }

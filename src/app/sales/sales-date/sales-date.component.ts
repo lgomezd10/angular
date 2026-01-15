@@ -7,7 +7,6 @@ import { ProductPipe } from '@app/product/product.pipe';
 import { Observable } from 'rxjs';
 import { TableModule } from 'primeng/table';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { ProductsService } from '@app/product/products.service';
 import { ShowErrorsComponent } from "@app/errores/show-errors/show-errors.component";
 import { SelectionDatesComponent } from "@app/tools/select-dates/select-dates.component";
 
@@ -25,7 +24,7 @@ export class SalesDateComponent {
   loading: boolean = false;
   sales: Sale[] = [];
 
-  constructor(private salesService: SalesService, private productsService: ProductsService) {}
+  constructor(private readonly salesService: SalesService) {}
 
   findSales(dates: Dates) {
     this.total = 0;

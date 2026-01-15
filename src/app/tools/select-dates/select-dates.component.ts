@@ -23,7 +23,7 @@ export class SelectionDatesComponent implements OnInit {
   @Output()
   enviardates: EventEmitter<Dates> = new EventEmitter<Dates>();
 
-  constructor(private datePipe: DatePipe) { }
+  constructor(private readonly datePipe: DatePipe) { }
 
 
   ngOnInit() {
@@ -34,7 +34,7 @@ export class SelectionDatesComponent implements OnInit {
   }
   
   onSend() {
-    // Usar Promise.resolve().then() para asegurar que los valores de ngModel estén actualizados
+    
     Promise.resolve().then(() => {
       this.from.setHours(0,0,0);
       this.to.setHours(23,59,59);

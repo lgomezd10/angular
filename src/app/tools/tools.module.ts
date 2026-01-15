@@ -8,9 +8,10 @@ import { ButtonListComponent } from './button-list/button-list.component';
 import { ErroresModule } from '@app/errores/errors.module';
 
 @NgModule({
-    declarations: [GroupByPipe],
+    declarations: [],
     exports: [SelectionDatesComponent, GroupByPipe, GroupBydatePipe, ButtonListComponent],
     imports: [CommonModule,
+        GroupByPipe,
         FormsModule,
         ButtonListComponent,
         GroupBydatePipe,

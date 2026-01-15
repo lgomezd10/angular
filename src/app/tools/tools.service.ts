@@ -13,7 +13,7 @@ export class ToolsService {
   pulsado$: BehaviorSubject<string> = new BehaviorSubject<string>("");
   foco$: BehaviorSubject<string> = new BehaviorSubject<string>("");
 
-  constructor(private errorService: ErrorService) {
+  constructor(private readonly errorService: ErrorService) {
   }
 
   cleanShowErrorsComponent() {
@@ -55,7 +55,7 @@ export class ToolsService {
   }
 
   deleteButtonType(boton: ButtonType) {
-    if (this.botones.find((b) => b.name === boton.name) != undefined) {
+    if (this.botones.some((b) => b.name === boton.name)) {
       this.botones.splice(this.botones.indexOf(boton), 1);
       this.buttons.next(this.botones);
     }

@@ -1,34 +1,34 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators, FormControl } from '@angular/forms';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { FormErrors } from '@app/tools/form-errors';
 import { AuthService } from '../auth.service';
-import { User } from '../user';
+import { MessageModule } from 'primeng/message';
 
 
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.css'],
-    standalone: false
+    imports: [ReactiveFormsModule, MessageModule],
+    standalone: true
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
   formGroup: UntypedFormGroup;
   hide: boolean = true;
   event$: KeyboardEvent;
+  authErrorMessage: string = '';
 
   @ViewChild('password') password: ElementRef;
   @ViewChild('icon') icon: ElementRef;
 
-  constructor(formBuilder: UntypedFormBuilder, private auth: AuthService) {
+  constructor(formBuilder: UntypedFormBuilder, private readonly auth: AuthService) {
     this.formGroup = formBuilder.group({
       'username': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
       'password': ['', Validators.compose([Validators.required, Validators.minLength(6)])]
     });
   }
 
-  ngOnInit(): void {
-  }
 
   onLogin(): void {
     if (this.formGroup.valid) {
@@ -38,7 +38,9 @@ export class LoginComponent implements OnInit {
           console.log("Logged user");
         }
       },
-        error: (error) => { console.log('login error', error) }
+        error: (error) => {
+          console.error('Login error:', error);
+          this.authErrorMessage = 'El usuario o la contraseña no son válidos'; } 
       });
     }
   }

@@ -7,7 +7,7 @@ import { DatePipe } from '@angular/common';
 })
 export class GroupBydatePipe implements PipeTransform {
 
-    constructor(private datePipe: DatePipe){      
+    constructor(private readonly datePipe: DatePipe){      
     }
 
   transform(value: Array<any>): Array<any> {
@@ -17,10 +17,10 @@ export class GroupBydatePipe implements PipeTransform {
     const groupedObj = value.reduce((prev, cur)=> {
        let date: Date = cur['date'];
        let dateString: string = this.datePipe.transform(date, 'dd-MM-yy');
-      if(!prev[dateString]) {
-        prev[dateString] = [cur];
-      } else {
+      if(prev[dateString]) {
         prev[dateString].push(cur);
+      } else {
+        prev[dateString] = [cur];
       }
       return prev;
     }, {});

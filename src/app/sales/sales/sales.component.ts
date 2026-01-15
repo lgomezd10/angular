@@ -74,9 +74,9 @@ export class SalesComponent implements OnInit {
   showSuccessMessage: string = '';
 
   constructor(
-    private productsService: ProductsService,
-    private salesService: SalesService,
-    private toolsService: ToolsService,
+    private readonly productsService: ProductsService,
+    private readonly salesService: SalesService,
+    private readonly toolsService: ToolsService,
     formBuilder: UntypedFormBuilder
   ) {
     this.formGroup = formBuilder.group({
@@ -178,12 +178,12 @@ export class SalesComponent implements OnInit {
 
   addPurchaseToList() {
     let itemSale = this.saleList.find(item => ((item.product.name == this.currentItem.product.name) && (item.price == this.currentItem.product.price)));
-    if (!itemSale) {
+    if (itemSale) {
+      itemSale.quantity = this.currentItem.quantity + itemSale.quantity;
+    } else {
       this.currentItem.price = this.currentItem.product.price;
       console.log(`Añadiendo item: ${this.currentItem.product.name}, cantidad: ${this.currentItem.quantity}, precio: ${this.currentItem.price}`);
       this.saleList.push(this.currentItem);
-    } else {
-      itemSale.quantity = this.currentItem.quantity + itemSale.quantity;
     }
     this.showNew = false;
     this.activateButtonType(nameButtonTypes.closeSale);

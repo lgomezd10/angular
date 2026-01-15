@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
 import { ProductsService } from '../products.service';
 import { Product } from '../product';
-import { Observable } from 'rxjs';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { ButtonType } from 'src/app/tools/button-type';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SortPipe } from '../sort.pipe';
@@ -21,7 +19,7 @@ import { ShowErrorsComponent } from "@app/errores/show-errors/show-errors.compon
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css'],
   standalone: true,
-  imports: [AsyncPipe, FormsModule, SortPipe, FilterPipe, RouterModule, ButtonModule, ReactiveFormsModule,
+  imports: [FormsModule, SortPipe, FilterPipe, RouterModule, ButtonModule, ReactiveFormsModule,
     ButtonListComponent, NewComponent, MessageModule, TableModule, ShowErrorsComponent]
 })
 export class ProductsComponent implements OnInit {
@@ -41,9 +39,8 @@ export class ProductsComponent implements OnInit {
   event$: Product;
   oldProducts: Product[];
 
-  constructor(private productsService: ProductsService, private route: ActivatedRoute, private toolsService: ToolsService) {
-
-  }
+  constructor(private readonly productsService: ProductsService,
+    private readonly toolsService: ToolsService) {}
 
   ngOnInit() {
     this.toolsService.setButtonTypes(this.botones);

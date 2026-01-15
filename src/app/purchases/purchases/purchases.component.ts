@@ -46,7 +46,6 @@ export class PurchasesComponent implements OnInit {
   products$: Observable<Product[]>;
   showNew: boolean = false;
   showNewProduct: boolean = false;
-  //total: number = 0;
   purchaseCompleted: boolean = false;
   myDateValue: Date = new Date();
   formFields: Array<{
@@ -64,8 +63,8 @@ export class PurchasesComponent implements OnInit {
     { id: nameButtonTypes.add, name: "Añadir", show: false }
   ];
 
-  constructor(private productsService: ProductsService, private purchasesService: PurchasesService,
-    private toolsServices: ToolsService, formBuilder: UntypedFormBuilder) {
+  constructor(private readonly productsService: ProductsService, private readonly purchasesService: PurchasesService,
+    private readonly toolsServices: ToolsService, formBuilder: UntypedFormBuilder) {
     this.formGroup = formBuilder.group({
       'find': [''],
       'product': [null, Validators.required],

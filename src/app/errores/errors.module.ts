@@ -1,7 +1,6 @@
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ShowErrorsComponent } from './show-errors/show-errors.component';
-import { CapturaErrores } from './captura-errores';
 import { ErrorService } from './error.service';
 
 @NgModule({
@@ -11,9 +10,7 @@ import { ErrorService } from './error.service';
   ],
   exports: [ShowErrorsComponent],
   providers: [
-    ErrorService,
-    CapturaErrores,
-    { provide: ErrorHandler, useClass: CapturaErrores }
+      ErrorService
   ],
 })
 export class ErroresModule { }

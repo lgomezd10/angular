@@ -22,7 +22,7 @@ export class PurchasesDateComponent {
 
   purchases$: Observable<Purchase[]> = new Observable<Purchase[]>();
 
-  constructor(private purchasesService: PurchasesService) {
+  constructor(private readonly purchasesService: PurchasesService) {
   }
 
   findPurchases(dates: Dates) {    

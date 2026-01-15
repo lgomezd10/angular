@@ -23,7 +23,7 @@ export class ShowErrorsComponent {
 
   @Input() typeError: string = "Errors";
 
-  constructor(private errorService: ErrorService, private authService: AuthService) {
+  constructor(private readonly errorService: ErrorService, private readonly authService: AuthService) {
     this.errores$ = this.errorService.getError$();
     this.errores404$ = this.errorService.getError404$();
     this.errores$.subscribe(val => this.erroresValue = val);
@@ -44,6 +44,5 @@ export class ShowErrorsComponent {
     });
     console.log('ShowErrorsComponent loaded');
   }
-
 
 }

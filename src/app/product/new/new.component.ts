@@ -1,9 +1,8 @@
-import { Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Product } from '../product';
 import { ProductsService } from '../products.service';
 import { Observable } from 'rxjs';
 import { TYPES } from '../products-types';
-import { ToolsService } from 'src/app/tools/tools.service';
 import { UntypedFormGroup, UntypedFormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormErrors } from '@app/tools/form-errors';
 import { AsyncPipe } from '@angular/common';
@@ -38,9 +37,7 @@ export class NewComponent implements OnInit {
   product: Product;
   repeatedProduct: string = "";
 
-  
-
-  constructor(private productsService: ProductsService, private toolsServices: ToolsService,
+  constructor(private readonly productsService: ProductsService,
     formBuilder: UntypedFormBuilder) {
     this.formGroup = formBuilder.group({
       'name': ['', Validators.required],
@@ -48,17 +45,15 @@ export class NewComponent implements OnInit {
       'price': ['', Validators.compose([Validators.required, Validators.min(0.01)])]
 
     });
-
   }
- 
+
   ngOnInit() {
-    
+
     this.product = new Product();
     this.products$ = this.productsService.getProducts$();
   }
 
   onDialogHide() {
-    // Resetea el formulario o notifica al padre si es necesario
     this.display = false;
     this.savedProduct.emit('closed');
 
@@ -97,17 +92,14 @@ export class NewComponent implements OnInit {
 
     if (this.formGroup.valid) {
       if (this.productsService.getProductByName(value.name) == undefined) {
-        console.log('Creating product with values:', value);
         this.product.name = value.name;
         this.product.type = value.type;
-        this.product.price = value.price;        
-        this.saveProduct();        
+        this.product.price = value.price;
+        this.saveProduct();
       } else {
-        console.log('Product name already exists:', value.name);
         this.repeatedProduct = value.name;
       }
     } else if (value.name != "" && this.productsService.getProductByName(value.name) != undefined) {
-      console.log('Product name already exists:', value.name);
       this.repeatedProduct = value.name;
     }
   }

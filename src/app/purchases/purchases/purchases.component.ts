@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ProductsService } from 'src/app/product/products.service';
 import { Purchase } from '../purchase';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Product } from 'src/app/product/product';
 import { PurchasesService } from '../purchases.service';
 import { ButtonType } from 'src/app/tools/button-type';
@@ -17,16 +17,17 @@ import { TableModule } from 'primeng/table';
 import { SelectModule } from 'primeng/select';
 import { InputNumberModule } from 'primeng/inputnumber'
 import { CommonFormComponent } from "@app/tools/common-form/common-form.component";
+import { MessageModule } from 'primeng/message';
 
 const nameButtonTypes = { sendPurchase: 'SendPruchase', newPurchase: 'NewPurchase', createProduct: 'CreateProduct', addProduct: 'AddProduct', add: 'Add' };
 
 @Component({
-    selector: 'app-purchases',
-    templateUrl: './purchases.component.html',
-    styleUrls: ['./purchases.component.css'],
-    standalone: true,
-    imports: [ProductPipe, ReactiveFormsModule,
-    NewComponent, ButtonListComponent, DecimalPipe, TableModule, SelectModule, InputNumberModule, CommonFormComponent, ShowErrorsComponent]
+  selector: 'app-purchases',
+  templateUrl: './purchases.component.html',
+  styleUrls: ['./purchases.component.css'],
+  standalone: true,
+  imports: [ProductPipe, ReactiveFormsModule,
+    NewComponent, ButtonListComponent, DecimalPipe, TableModule, SelectModule, InputNumberModule, CommonFormComponent, ShowErrorsComponent, MessageModule]
 })
 export class PurchasesComponent implements OnInit {
 
@@ -45,7 +46,6 @@ export class PurchasesComponent implements OnInit {
   products$: Observable<Product[]>;
   showNew: boolean = false;
   showNewProduct: boolean = false;
-  //total: number = 0;
   purchaseCompleted: boolean = false;
   myDateValue: Date = new Date();
   formFields: Array<{
@@ -63,8 +63,8 @@ export class PurchasesComponent implements OnInit {
     { id: nameButtonTypes.add, name: "Añadir", show: false }
   ];
 
-  constructor(private productsService: ProductsService, private purchasesService: PurchasesService,
-    private toolsServices: ToolsService, formBuilder: UntypedFormBuilder, private cdr: ChangeDetectorRef) {
+  constructor(private readonly productsService: ProductsService, private readonly purchasesService: PurchasesService,
+    private readonly toolsServices: ToolsService, formBuilder: UntypedFormBuilder) {
     this.formGroup = formBuilder.group({
       'find': [''],
       'product': [null, Validators.required],
@@ -78,7 +78,7 @@ export class PurchasesComponent implements OnInit {
   ngOnInit() {
     this.products$ = this.productsService.getProducts$();
     this.toolsServices.activateFocus(nameButtonTypes.addProduct);
-    this. formFields = [
+    this.formFields = [
       {
         name: 'product',
         label: 'Buscar producto',
@@ -101,7 +101,7 @@ export class PurchasesComponent implements OnInit {
     ];
   }
 
-  
+
   activateButtonType(id: string) {
     this.buttons.find(boton => { return boton.id == id }).show = true;
   }
@@ -116,8 +116,6 @@ export class PurchasesComponent implements OnInit {
       this.showNewProduct = false;
       this.newProduct();
       this.activateButtonType(nameButtonTypes.createProduct);
-      //setTimeout(() => this.autoFoco.nativeElement.focus(), 100);
-      //this.autoFoco.nativeElement.focus();
     }
 
     if (button == nameButtonTypes.newPurchase) {
@@ -137,30 +135,30 @@ export class PurchasesComponent implements OnInit {
 
   resetPurchase() {
     this.purchaseList = [];
-        this.showNew = false;
-        this.showNewProduct = false;
-        this.disableButtonType(nameButtonTypes.add);
-        this.disableButtonType(nameButtonTypes.sendPurchase);
-        this.disableButtonType(nameButtonTypes.newPurchase);
-        this.activateButtonType(nameButtonTypes.addProduct);
-        this.activateButtonType(nameButtonTypes.createProduct);
-        this.toolsServices.activateFocus(nameButtonTypes.addProduct);
-        this.purchaseCompleted = false;
+    this.showNew = false;
+    this.showNewProduct = false;
+    this.disableButtonType(nameButtonTypes.add);
+    this.disableButtonType(nameButtonTypes.sendPurchase);
+    this.disableButtonType(nameButtonTypes.newPurchase);
+    this.activateButtonType(nameButtonTypes.addProduct);
+    this.activateButtonType(nameButtonTypes.createProduct);
+    this.toolsServices.activateFocus(nameButtonTypes.addProduct);
+    this.purchaseCompleted = false;
   }
 
   newPurchase(): void {
-    if (!this.purchaseCompleted) {
-      var statusConfirm = confirm("¿Desea crear una nueva compra? La compra actual no se ha guardado");
+    if (this.purchaseCompleted) {
+      this.resetPurchase();
+    } else {
+      let statusConfirm = confirm("¿Desea crear una nueva compra? La compra actual no se ha guardado");
       if (statusConfirm) {
         this.resetPurchase();
-      } 
-    } else {
-      this.resetPurchase();
+      }
     }
   }
 
   addPurchaseToList() {
-    let purchase = this.purchaseList.find(purchase => purchase.product.name == this.currentPurchase.product.name);    
+    let purchase = this.purchaseList.find(purchase => purchase.product.name == this.currentPurchase.product.name);
 
     if (purchase == undefined || purchase.price != this.currentPurchase.price) {
       this.purchaseList.push(this.currentPurchase);
@@ -168,7 +166,6 @@ export class PurchasesComponent implements OnInit {
       purchase.quantity = purchase.quantity + this.currentPurchase.quantity;
     }
 
-    //this.total = this.totalPurchase();
     this.showNew = false;
     this.activateButtonType(nameButtonTypes.addProduct);
     this.disableButtonType(nameButtonTypes.add);
@@ -200,10 +197,12 @@ export class PurchasesComponent implements OnInit {
     this.searchText = "";
   }
 
-  newGuardado(product: Product) {
+  endNewProduct(response: string) {
+    console.log('Nuevo producto guardado:', response);
     this.activateButtonType(nameButtonTypes.addProduct);
     this.activateButtonType(nameButtonTypes.createProduct);
     this.toolsServices.activateFocus(nameButtonTypes.addProduct);
+    this.showNewProduct = false;
   }
 
   totalPurchase(): number {
@@ -218,7 +217,6 @@ export class PurchasesComponent implements OnInit {
 
   deletePurchase(purchase: Purchase) {
     this.purchaseList.splice(this.purchaseList.indexOf(purchase), 1);
-    //this.total = this.totalPurchase();
   }
 
   sendPurchase() {
@@ -228,15 +226,14 @@ export class PurchasesComponent implements OnInit {
       this.purchasesService.guardarPurchase(this.purchaseList).subscribe(purchases => {
         this.purchaseCompleted = true;
         this.purchaseList = purchases;
-        this.cdr.detectChanges();
       });
       this.disableButtonType(nameButtonTypes.addProduct);
       this.disableButtonType(nameButtonTypes.createProduct);
       this.disableButtonType(nameButtonTypes.sendPurchase);
       this.toolsServices.activateFocus(nameButtonTypes.newPurchase);
-      
+
     }
-  }  
+  }
 
   keyPress(key: KeyboardEvent, campo: HTMLElement) {
     if (key.code == "Enter") { // press Enter      

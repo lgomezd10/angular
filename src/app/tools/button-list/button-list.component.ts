@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChildren, QueryList, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChildren, QueryList, ElementRef, OnDestroy } from '@angular/core';
 import { ButtonType } from '../button-type';
 import { ToolsService } from '../tools.service';
 import { Observable, Subscription, combineLatest } from 'rxjs';
-import { filter, tap, map, delay } from 'rxjs/operators';
+import { filter, tap, delay } from 'rxjs/operators';
 import { AsyncPipe } from '@angular/common';
 import { MenuItem } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
@@ -15,7 +15,7 @@ import { ButtonModule } from 'primeng/button';
     standalone: true,
     imports: [AsyncPipe, MenuModule, ButtonModule]
 })
-export class ButtonListComponent implements OnInit {
+export class ButtonListComponent implements OnInit, OnDestroy {
 
   @Input() lista: ButtonType[] = [];
 
@@ -32,7 +32,7 @@ export class ButtonListComponent implements OnInit {
 
   menuItems: MenuItem[] = [];
 
-  constructor(private toolsServices: ToolsService) {
+  constructor(private readonly toolsServices: ToolsService) {
 
   }
 
@@ -62,12 +62,10 @@ export class ButtonListComponent implements OnInit {
       )
       .subscribe(b => {
         this.buttons.forEach((button: ElementRef) => {
-          if (button && button.nativeElement && button.nativeElement.id === b) {
+          if (button?.nativeElement?.id === b) {
             button.nativeElement.focus();
           }
         });
-        /*if(document.getElementById(button) != null)
-          document.getElementById(button).focus();      */
       });
 
   }

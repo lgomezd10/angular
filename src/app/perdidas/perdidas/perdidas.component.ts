@@ -1,16 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'app-perdidas',
     templateUrl: './perdidas.component.html',
     styleUrls: ['./perdidas.component.css'],
-    standalone: false
+    standalone: true
 })
-export class PerdidasComponent implements OnInit {
+export class PerdidasComponent {
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
 }

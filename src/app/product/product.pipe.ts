@@ -8,7 +8,7 @@ import { ProductsService } from './products.service';
 })
 export class ProductPipe implements PipeTransform {
 
-    constructor(private productsService: ProductsService) {
+    constructor(private readonly productsService: ProductsService) {
     }
 
     transform(item: number): string | number {

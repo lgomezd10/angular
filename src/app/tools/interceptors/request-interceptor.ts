@@ -4,7 +4,6 @@ import { AuthService } from '@app/auth/auth.service';
 import { ErrorService } from '@app/errores/error.service';
 
 export const requestInterceptor: HttpInterceptorFn = (req, next) => {
-  console.log('Request Interceptor Invoked');
   const auth = inject(AuthService);
   const errorSrv = inject(ErrorService);
 

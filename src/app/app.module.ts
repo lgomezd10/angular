@@ -1,20 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { AppComponent } from './app.component';
 import { ProductModule } from './product/product.module';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { SalesModule } from './sales/sales.module';
-import { LogoComponent } from './logo/logo.component';
 import { PurchasesModule } from './purchases/purchases.module';
 import { ErroresModule } from './errores/errors.module';
 import { ToolsModule } from './tools/tools.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MenuUserComponent } from './auth/menu-user/menu-user.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginModule } from './auth/login/login.module';
-import { ApplicationConfig } from '@angular/core';
-import { providePrimeNG } from 'primeng/config';
-import Aura from '@primeuix/themes/aura';
 import { ButtonModule } from 'primeng/button';
 
 @NgModule({

@@ -1,8 +1,7 @@
 <h2 class="text-2xl font-bold mb-6">Buscador de ventas</h2>
+<app-show-errors [typeError]="'Error404'"></app-show-errors>
 
 <app-select-dates (enviardates)="findSales($event)"></app-select-dates>
-
-
 
 @if (loading) {
   <div class="flex justify-center items-center min-h-30">
@@ -14,21 +13,21 @@
     <div class="mb-8 border rounded-lg shadow p-4 bg-white">
       <div class="mb-2 flex flex-col md:flex-row gap-4">
         <div>
-          <span class="font-semibold">Id Venta:</span>
+          <span class="font-semibold">Id Venta: </span>
           <span>{{sale.id}}</span>
         </div>
         <div>
-          <span class="font-semibold">Fecha:</span>
+          <span class="font-semibold">Fecha: </span>
           <span>{{sale.date | date: 'dd-MM-yy'}}</span>
         </div>
       </div>
       <p-table [value]="sale.itemsSale" class="mb-2">
         <ng-template pTemplate="header">
           <tr>
-            <th>Producto</th>
-            <th>Cantidad</th>
-            <th>Precio Kg</th>
-            <th>Total</th>
+            <th scope="col">Producto</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Precio Kg</th>
+            <th scope="col">Total</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item>

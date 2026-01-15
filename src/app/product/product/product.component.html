@@ -10,34 +10,34 @@
             <p-message severity="success">Se ha actualizado el producto: {{updatedProduct.product.name}}</p-message>
           }
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Identificador:</label>
+            <label for="id" class="block text-sm font-medium text-gray-700 mb-1">Identificador:</label>
             <span class="block font-mono mb-2">{{formGroup.controls['id'].value}}</span>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Nombre:</label>
+            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nombre:</label>
             <input pInputText id="name" #name type="text" formControlName="name" class="w-full mb-2" />
             @if (checkError('name')) {
               <p-message severity="error" size="small" variant="simple">{{getError('Nombre', 'name')}}</p-message>
             }
-            @if (repitedProduct != '' && formGroup.controls['name'].value == repeatedProduct) {
-              <p-message severity="error" size="small" variant="simple">
-                Ya existe otro producto con el nombre {{repitedProduct}}
-              </p-message>
+            @if (repeatedProduct) {
+            <p-message severity="error" size="small" variant="simple">
+              El nombre {{repeatedProduct}} ya existe. Por favor, elija otro.
+            </p-message>
             }
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Stock:</label>
+            <label for="stock" class="block text-sm font-medium text-gray-700 mb-1">Stock:</label>
             <span class="block font-mono mb-2">{{formGroup.controls['stock'].value}}</span>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Precio:</label>
+            <label for="price" class="block text-sm font-medium text-gray-700 mb-1">Precio:</label>
             <p-inputnumber id="price" formControlName="price" inputId="price" mode="decimal" [maxFractionDigits]="2" class="w-full mb-2" />
             @if (checkError('price')) {
               <p-message severity="error" size="small" variant="simple">{{getError('Precio', 'price')}}</p-message>
             }
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Tipo:</label>
+            <label for="type" class="block text-sm font-medium text-gray-700 mb-1">Tipo:</label>
             <p-select [options]="types" formControlName="type" placeholder="Selecciona tipo" class="w-full mb-2"></p-select>
             @if (checkError('type')) {
               <p-message severity="error" size="small" variant="simple">{{getError('Tipo', 'type')}}</p-message>

@@ -1,19 +1,25 @@
-@if (withoutConexion) {
+@if (typeError=='Errors' && conecting) {
   <p-message severity="warn" icon="pi pi-spin pi-spinner">
     Conectando con el servidor
   </p-message>
 }
 
+@if (typeError=='Errors' && withoutConexion && !erroresValue) {
+  <p-message severity="error" icon="pi pi-exclamation-triangle">
+    Sin conexión con el servidor
+  </p-message>
+}
+
 @if (typeError=='Errors') {
   @if (erroresValue) {
-    <p-message severity="error">
+    <p-message severity="error" icon="pi pi-exclamation-triangle">
       {{erroresValue}}
     </p-message>
   }
 }
 @if (typeError=='Error404') {
   @if (errores404Value) {
-    <p-message severity="info">
+    <p-message severity="info" icon="pi pi-info-circle">
       {{errores404Value}}
     </p-message>
   }

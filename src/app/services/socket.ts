@@ -1,23 +1,87 @@
+import { BehaviorSubject, Observable } from 'rxjs'; 
 import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
-import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { AuthService } from '@app/auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SocketService {
-  private socket: Socket;
 
-  constructor() {
-    // Reemplaza 'http://localhost:3000' con la URL de tu servidor Socket.IO
+  private readonly reconnectIntervalTime = 60000;
+
+  private reconnectIntervalId: any;
+  private readonly socket: Socket;
+  private readonly isConnected$: BehaviorSubject<boolean>;
+  private readonly connecting$: BehaviorSubject<boolean>;
+
+  connectedSocket$(): Observable<boolean> {
+    return this.isConnected$.asObservable();
+  }
+
+  connectingSocket$(): Observable<boolean> {
+    return this.connecting$.asObservable();
+  }
+
+  constructor(private readonly authService: AuthService) {
+    this.isConnected$ = new BehaviorSubject<boolean>(true);
+    this.connecting$ = new BehaviorSubject<boolean>(false);
+    
+    const token = this.authService.token;
     this.socket = io(environment.API_URL, {
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
-      reconnectionAttempts: 5
+      reconnectionAttempts: 5,
+      auth: { token }
     });
-    console.log('Socket conectado al servidor.');
+
+    this.socket.on('connect', () => {
+      this.isConnected$.next(true);
+      this.connecting$.next(false);
+      if (this.reconnectIntervalId) {
+        clearInterval(this.reconnectIntervalId);
+        this.reconnectIntervalId = null;
+      }
+    });
+
+    this.socket.on('disconnect', () => {
+      console.log('Socket disconnected');
+      this.isConnected$.next(false);
+      if (!this.reconnectIntervalId) {
+        this.reconnectIntervalId = setInterval(() => {
+          if (!this.socket.connected) {
+            this.connect();
+          }
+        }, this.reconnectIntervalTime);
+      }
+    });
+
+
+    this.socket.io.on('reconnect_attempt', () => {
+      console.log('Reconnecting attempt...');
+      this.connecting$.next(true);
+    });
+
+    this.socket.io.on('reconnect_failed', () => {
+      console.log('Reconnection failed.');
+      this.isConnected$.next(false);
+      this.connecting$.next(false);
+      if (!this.reconnectIntervalId) {
+        this.reconnectIntervalId = setInterval(() => {
+          if (!this.socket.connected) {
+            this.connect();
+          }
+        }, this.reconnectIntervalTime);
+      }
+    });
+
+    this.authService.isLoged().subscribe(loged => {
+      if (loged) {
+        this.connect();
+      }
+    });
   }
 
   /**
@@ -59,7 +123,12 @@ export class SocketService {
    */
   connect(): void {
     if (!this.socket.connected) {
+      this.socket.auth = { token: this.authService.token };
       this.socket.connect();
+    }
+    // Si conecta manualmente, actualizar el estado
+    if (this.socket.connected) {
+      this.isConnected$.next(true);
     }
   }
 
@@ -70,6 +139,7 @@ export class SocketService {
     if (this.socket.connected) {
       this.socket.disconnect();
     }
+    this.isConnected$.next(false);
   }
 
   /**

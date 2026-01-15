@@ -1,7 +1,6 @@
-import { Component, OnInit, Output, EventEmitter, ChangeDetectorRef, AfterViewInit } from '@angular/core';
-import { dates } from '../dates';
-import { AsyncPipe, DatePipe } from '@angular/common';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Dates } from '../dates';
+import { DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from "primeng/button";
 import { DatePickerModule } from 'primeng/datepicker';
@@ -11,7 +10,7 @@ import { DatePickerModule } from 'primeng/datepicker';
     templateUrl: './select-dates.component.html',
     styleUrls: ['./select-dates.component.css'],
     standalone: true,
-    imports: [MatFormFieldModule, DatePickerModule, ReactiveFormsModule, FormsModule, ButtonModule],
+    imports: [DatePickerModule, ReactiveFormsModule, FormsModule, ButtonModule],
     providers: [DatePipe]
 })
 export class SelectionDatesComponent implements OnInit {
@@ -22,9 +21,9 @@ export class SelectionDatesComponent implements OnInit {
   toString: string = "";
 
   @Output()
-  enviardates: EventEmitter<dates> = new EventEmitter<dates>();
+  enviardates: EventEmitter<Dates> = new EventEmitter<Dates>();
 
-  constructor(private datePipe: DatePipe, private cdr: ChangeDetectorRef) { }
+  constructor(private readonly datePipe: DatePipe) { }
 
 
   ngOnInit() {
@@ -32,11 +31,10 @@ export class SelectionDatesComponent implements OnInit {
     this.to = new Date();
     this.fromString = "";
     this.toString = "";
-    this.cdr.detectChanges();
   }
   
   onSend() {
-    // Usar Promise.resolve().then() para asegurar que los valores de ngModel estén actualizados
+    
     Promise.resolve().then(() => {
       this.from.setHours(0,0,0);
       this.to.setHours(23,59,59);
@@ -45,12 +43,11 @@ export class SelectionDatesComponent implements OnInit {
       } else {
         this.fromString = this.datePipe.transform(this.from, 'yyyy-MM-dd HH:mm:ss');
         this.toString = this.datePipe.transform(this.to, 'yyyy-MM-dd HH:mm:ss');      
-        let fechas: dates = {
+        let fechas: Dates = {
           from: this.fromString,
           to: this.toString
         }
         this.enviardates.emit(fechas);
-        this.cdr.markForCheck();
       }
     });
   }

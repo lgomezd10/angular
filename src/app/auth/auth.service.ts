@@ -15,10 +15,10 @@ const helper = new JwtHelperService();
 export class AuthService {
 
   backendUrl = environment.API_URL;
-  private user = new BehaviorSubject<UserResponse>(null);
-  private loged = new BehaviorSubject<boolean>(false);
+  private readonly user = new BehaviorSubject<UserResponse>(null);
+  private readonly loged = new BehaviorSubject<boolean>(false);
 
-  constructor(private http: HttpClient, private router: Router ) {
+  constructor(private readonly http: HttpClient, private readonly router: Router ) {
     this.checkToken();
    }
 
@@ -28,6 +28,10 @@ export class AuthService {
 
   get userValue(): UserResponse {
     return this.user.getValue();
+  }
+
+  get token(): string {
+    return this.userValue?.token || '';
   }
 
   isLoged(): Observable<boolean> {

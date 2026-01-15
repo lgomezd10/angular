@@ -2,15 +2,15 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
     name: 'groupBy',
-    standalone: false
+    standalone: true
 })
 export class GroupByPipe implements PipeTransform {
   transform(value: Array<any>, field: string): Array<any> {
     const groupedObj = value.reduce((prev, cur)=> {
-      if(!prev[cur[field]]) {
-        prev[cur[field]] = [cur];
-      } else {
+      if(prev[cur[field]]) {
         prev[cur[field]].push(cur);
+      } else {
+        prev[cur[field]] = [cur];
       }
       return prev;
     }, {});

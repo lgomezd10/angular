@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MessageModule } from 'primeng/message';
 
 @Component({
@@ -8,13 +8,10 @@ import { MessageModule } from 'primeng/message';
   imports: [MessageModule],
   standalone: true
 })
-export class LogoComponent implements OnInit {
+export class LogoComponent {
 
   nombre: string = "Nombre de tu tienda";
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
 }

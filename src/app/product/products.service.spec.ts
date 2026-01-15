@@ -1,6 +1,5 @@
 import { inject, fakeAsync, tick, TestBed } from "@angular/core/testing";
 import { HttpTestingController, TestRequest, provideHttpClientTesting } from "@angular/common/http/testing";
-import { HttpClient, HttpBackend, HttpRequest, HttpResponse, HttpHandler, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 
 import { ProductsService } from './products.service';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -93,15 +92,13 @@ describe('ProductsService', () => {
       [ProductsService, HttpTestingController],
       fakeAsync((ps: ProductsService, backend: HttpTestingController) => {
         let product;
-        let respuesta: Product;
         product = { id: 1, name: "Manzana", price: 0, type: "", stock: 0 };                     
-        ps.postEditProduct(product).subscribe(respuestaServ => respuesta = respuestaServ);
+        ps.postEditProduct(product).subscribe();
         let testRequest: TestRequest = backend.expectOne('http://localhost:3000/products/1');
         expect(testRequest.request.method).toBe('POST');
         testRequest.flush({status: 200, error: null, response: product});        
         tick();  
-        expect(testRequest.request.body).toBe(product);  
-        //backend.verify();
+        expect(testRequest.request.body).toBe(product);
       })
     ));
 
@@ -109,16 +106,14 @@ describe('ProductsService', () => {
       [ProductsService, HttpTestingController],
       fakeAsync((ps: ProductsService, backend: HttpTestingController) => {
         let product;
-        let respuesta: Product;
         product = { id: 1, name: "Manzana", price: 0, type: "", stock: 0 };
                      
-        ps.postNewProduct(product).subscribe(respuestaServ => respuesta = respuestaServ);
+        ps.postNewProduct(product).subscribe();
         let testRequest: TestRequest = backend.expectOne('http://localhost:3000/products/');
         expect(testRequest.request.method).toBe('POST');
         testRequest.flush(product);        
         tick();  
-        expect(testRequest.request.body).toBe(product);  
-        //backend.verify();
+        expect(testRequest.request.body).toBe(product);
       })
     ));
 

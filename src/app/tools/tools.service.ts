@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ButtonType } from './button-type';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ButtonListComponent } from './button-list/button-list.component';
+import { ErrorService } from '@app/errores/error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +13,11 @@ export class ToolsService {
   pulsado$: BehaviorSubject<string> = new BehaviorSubject<string>("");
   foco$: BehaviorSubject<string> = new BehaviorSubject<string>("");
 
-  constructor() {
-    /*this.buttons = new BehaviorSubject<ButtonType[]>(this.botones);
-    this.pulsado$ = new BehaviorSubject<string>("");
-    this.foco$ = new BehaviorSubject<string>("");*/
+  constructor(private readonly errorService: ErrorService) {
+  }
+
+  cleanShowErrorsComponent() {
+    this.errorService.reset();
   }
 
   getButtonTypes$(): Observable<ButtonType[]> {
@@ -54,7 +55,7 @@ export class ToolsService {
   }
 
   deleteButtonType(boton: ButtonType) {
-    if (this.botones.find((b) => b.name === boton.name) != undefined) {
+    if (this.botones.some((b) => b.name === boton.name)) {
       this.botones.splice(this.botones.indexOf(boton), 1);
       this.buttons.next(this.botones);
     }
@@ -64,10 +65,6 @@ export class ToolsService {
   pushButtonType(boton: string) {
     this.pulsado$.next(boton);
     this.foco$.next("");
-  }
-
-  destroy() {
-
   }
 
 }

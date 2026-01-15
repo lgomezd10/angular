@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ItemSale } from '../item-sale';
 import { Product } from 'src/app/product/product';
 import { Observable } from 'rxjs';
@@ -23,7 +23,7 @@ import { MessageModule } from 'primeng/message';
 import { MenuItem } from 'primeng/api';
 import { CommonFormComponent } from '@app/tools/common-form/common-form.component';
 
-const nameButtonTypes = { newSale: 'NuevaSale', closeSale: 'FinalizarSale', addProduct: 'AddProduct', add: 'Add', reopenTicket: 'ReabrirTicket' };
+const nameButtonTypes = { newSale: 'NuevaSale', closeSale: 'FinalizarSale', addProduct: 'AddProduct', reopenTicket: 'ReabrirTicket' };
 
 @Component({
   selector: 'app-sales',
@@ -46,6 +46,13 @@ export class SalesComponent implements OnInit {
   @ViewChild('send', { static: false }) goToSummit: ElementRef;
   @ViewChild('elementForm') elementForm: ElementRef;
 
+  buttons: ButtonType[] = [
+    { id: nameButtonTypes.newSale, name: "Nueva venta", show: false },
+    { id: nameButtonTypes.closeSale, name: "Finalizar venta", show: false },
+    { id: nameButtonTypes.addProduct, name: "Añadir producto", show: true },
+    { id: nameButtonTypes.reopenTicket, name: "Reabrir ticket", show: false }
+  ];
+
   formGroup: UntypedFormGroup;
   saleList: ItemSale[] = [];
 
@@ -64,20 +71,13 @@ export class SalesComponent implements OnInit {
     options$?: Observable<any[]>;
     placeholder?: string;
   }>;
-
-  buttons: ButtonType[] = [
-    { id: nameButtonTypes.newSale, name: "Nueva venta", show: false },
-    { id: nameButtonTypes.closeSale, name: "Finalizar venta", show: false },
-    { id: nameButtonTypes.addProduct, name: "Añadir producto", show: true },
-    { id: nameButtonTypes.reopenTicket, name: "Reabrir ticket", show: false }
-  ];
+  showSuccessMessage: string = '';
 
   constructor(
-    private productsService: ProductsService,
-    private salesService: SalesService,
-    private toolsService: ToolsService,
-    formBuilder: UntypedFormBuilder,
-    private cdr: ChangeDetectorRef
+    private readonly productsService: ProductsService,
+    private readonly salesService: SalesService,
+    private readonly toolsService: ToolsService,
+    formBuilder: UntypedFormBuilder
   ) {
     this.formGroup = formBuilder.group({
       'find': [''],
@@ -117,14 +117,20 @@ export class SalesComponent implements OnInit {
   }
 
   activateButtonType(id: string) {
-    this.buttons.find(boton => boton.id == id).show = true;
+    let boton =  this.buttons.find(boton => boton.id == id);
+    if (boton)
+      boton.show = true;
   }
 
   disableButtonType(id: string) {
-    this.buttons.find(boton => boton.id == id).show = false;
+    let boton =  this.buttons.find(boton => boton.id == id);
+    if (boton)
+      boton.show = false;
   }
 
   showButtonType(boton: string) {
+    this.showSuccessMessage = '';
+    this.toolsService.cleanShowErrorsComponent();
     if (boton == nameButtonTypes.addProduct) {
       this.newProduct();
       this.searchText = "";
@@ -144,14 +150,12 @@ export class SalesComponent implements OnInit {
       this.activateButtonType(nameButtonTypes.closeSale);
       this.toolsService.activateFocus(nameButtonTypes.addProduct);
     }
-    this.cdr.detectChanges();
   }
 
   newProduct() {
     this.currentItem = new ItemSale();
     this.formGroup.reset();
-    this.showNew = true;
-    this.activateButtonType(nameButtonTypes.newSale);
+    this.showNew = true;    
   }
 
   totalSale(): number {
@@ -166,21 +170,26 @@ export class SalesComponent implements OnInit {
 
   deleteItem(sale: ItemSale) {
     this.saleList.splice(this.saleList.indexOf(sale), 1);
+    if (this.saleList.length == 0 && this.saleId == 0) {
+      this.disableButtonType(nameButtonTypes.newSale);
+      this.disableButtonType(nameButtonTypes.closeSale);
+    }
   }
 
   addPurchaseToList() {
     let itemSale = this.saleList.find(item => ((item.product.name == this.currentItem.product.name) && (item.price == this.currentItem.product.price)));
-    if (!itemSale) {
+    if (itemSale) {
+      itemSale.quantity = this.currentItem.quantity + itemSale.quantity;
+    } else {
       this.currentItem.price = this.currentItem.product.price;
       console.log(`Añadiendo item: ${this.currentItem.product.name}, cantidad: ${this.currentItem.quantity}, precio: ${this.currentItem.price}`);
       this.saleList.push(this.currentItem);
-    } else {
-      itemSale.quantity = this.currentItem.quantity + itemSale.quantity;
     }
     this.showNew = false;
     this.activateButtonType(nameButtonTypes.closeSale);
     this.activateButtonType(nameButtonTypes.addProduct);
-    this.disableButtonType(nameButtonTypes.add);
+    if (this.saleList.length > 0)
+      this.activateButtonType(nameButtonTypes.newSale);
     this.toolsService.activateFocus(nameButtonTypes.addProduct);
   }
 
@@ -201,14 +210,15 @@ export class SalesComponent implements OnInit {
     if (this.saleId == 0)
       this.salesService.saveSales(this.saleList, this.creditCard).subscribe(cod => {
         this.saleId = cod;
-        this.cdr.detectChanges();
+        this.showSuccessMessage = `Compra finalizada. Código Venta: ${this.saleId}`;
       });
     else
       this.salesService.updateSales(this.saleId, this.saleList, this.creditCard).subscribe(cod => {
         this.saleId = cod;
+        this.showSuccessMessage = `Compra finalizada. Código Venta: ${this.saleId}`;
         if (cod == 0) {
-          window.alert("Se ha eliminado la compra tras eliminar sus elementos");
           this.resetSales();
+          this.showSuccessMessage = 'Se ha eliminado la compra tras eliminar sus elementos';
         }
       });
     this.showNew = false;
@@ -216,13 +226,12 @@ export class SalesComponent implements OnInit {
     this.activateButtonType(nameButtonTypes.reopenTicket);
     this.disableButtonType(nameButtonTypes.addProduct);
     this.disableButtonType(nameButtonTypes.closeSale);
-    this.disableButtonType(nameButtonTypes.add);
     this.disableButtonType(nameButtonTypes.addProduct);
     this.toolsService.activateFocus(nameButtonTypes.reopenTicket);
-    this.cdr.detectChanges();
   }
 
   openSale(saleId: number) {
+    this.showSuccessMessage = '';
     this.salesService.getSale(saleId).subscribe({
       next: sale => {
         this.saleList = sale.itemsSale;
@@ -230,8 +239,11 @@ export class SalesComponent implements OnInit {
         this.creditCard = sale.creditCard;
         this.open = true;
         this.activateButtonType(nameButtonTypes.closeSale);
+        this.activateButtonType(nameButtonTypes.addProduct);
+        this.activateButtonType(nameButtonTypes.newSale);
       },
       error: () => {
+        this.resetSales();
         console.log(`No se ha encontrado la compra ${saleId}`);
       }
     });
@@ -245,14 +257,13 @@ export class SalesComponent implements OnInit {
     this.disableButtonType(nameButtonTypes.newSale);
     this.disableButtonType(nameButtonTypes.closeSale);
     this.activateButtonType(nameButtonTypes.addProduct);
-    this.disableButtonType(nameButtonTypes.add);
     this.disableButtonType(nameButtonTypes.reopenTicket);
     this.toolsService.activateFocus(nameButtonTypes.addProduct);
   }
 
   newSale(): void {
     if (this.saleId == 0 && this.saleList.length > 0) {
-      var statusConfirm = confirm("¿Desea crear una nueva venta? La venta actual no se ha guardado");
+      let statusConfirm = confirm("¿Desea crear una nueva venta? La venta actual no se ha guardado");
       if (statusConfirm) this.resetSales();
     } else {
       this.resetSales();
@@ -261,11 +272,7 @@ export class SalesComponent implements OnInit {
 
   keyPress(key: KeyboardEvent, field: HTMLElement) {
     if (key.code == "Enter") {
-      if (this.goToSummit.nativeElement == field) {
-        this.toolsService.activateFocus("Add");
-      } else {
         field.focus();
-      }
     }
   }
 

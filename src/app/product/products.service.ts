@@ -40,7 +40,6 @@ export class ProductsService implements OnDestroy {
     this.products$ = new BehaviorSubject<Product[]>([]);
     this.loadProducts();
     this.updateProducts$.subscribe(products => {
-      console.log('Productos actualizados recibidos por socket:', products);
       this.products$.next(products);
     });
 

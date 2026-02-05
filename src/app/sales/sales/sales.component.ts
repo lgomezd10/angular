@@ -20,7 +20,6 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectModule } from 'primeng/select';
 import { CheckboxModule } from 'primeng/checkbox';
 import { MessageModule } from 'primeng/message';
-import { MenuItem } from 'primeng/api';
 import { CommonFormComponent } from '@app/tools/common-form/common-form.component';
 
 const nameButtonTypes = { newSale: 'NuevaSale', closeSale: 'FinalizarSale', addProduct: 'AddProduct', reopenTicket: 'ReabrirTicket' };
@@ -46,12 +45,7 @@ export class SalesComponent implements OnInit {
   @ViewChild('send', { static: false }) goToSummit: ElementRef;
   @ViewChild('elementForm') elementForm: ElementRef;
 
-  buttons: ButtonType[] = [
-    { id: nameButtonTypes.newSale, name: "Nueva venta", show: false },
-    { id: nameButtonTypes.closeSale, name: "Finalizar venta", show: false },
-    { id: nameButtonTypes.addProduct, name: "Añadir producto", show: true },
-    { id: nameButtonTypes.reopenTicket, name: "Reabrir ticket", show: false }
-  ];
+  buttons: ButtonType[] = [];
 
   formGroup: UntypedFormGroup;
   saleList: ItemSale[] = [];
@@ -84,11 +78,17 @@ export class SalesComponent implements OnInit {
       'product': [null, Validators.required],
       'quantity': ['', Validators.compose([Validators.required, Validators.min(0.01)])]
     });
+
+    this.buttons = [
+      { id: nameButtonTypes.newSale, name: "Nueva venta", show: false, focused: false },
+      { id: nameButtonTypes.closeSale, name: "Finalizar venta", show: false, focused: false },
+      { id: nameButtonTypes.addProduct, name: "Añadir producto", show: true, focused: true },
+      { id: nameButtonTypes.reopenTicket, name: "Reabrir ticket", show: false, focused: false }
+    ];
   }
 
   ngOnInit() {
-    this.products$ = this.productsService.getProducts$();
-    this.toolsService.activateFocus(nameButtonTypes.addProduct);
+    this.products$ = this.productsService.getProducts$();    
     this. formFields = [
       {
         name: 'product',
@@ -104,22 +104,20 @@ export class SalesComponent implements OnInit {
         placeholder: 'Cantidad'
       }
     ];
-  }
-
-  get menuItems(): MenuItem[] {
-    return this.buttons
-      .filter(button => button.show)
-      .map(button => ({
-        label: button.name,
-        id: button.id,
-        command: () => this.showButtonType(button.id)
-      }));
+    
   }
 
   activateButtonType(id: string) {
     let boton =  this.buttons.find(boton => boton.id == id);
     if (boton)
       boton.show = true;
+  }
+
+  activateButtonFocus(targetId: string) {
+    // Primero quita el focused a todos los botones
+    this.buttons = this.buttons.map(b => ({ ...b, focused: false }));
+    // Luego activa el botón correspondiente
+    this.buttons = this.buttons.map(b => ({ ...b, focused: b.id === targetId }));
   }
 
   disableButtonType(id: string) {
@@ -148,7 +146,7 @@ export class SalesComponent implements OnInit {
       this.activateButtonType(nameButtonTypes.addProduct);
       this.disableButtonType(nameButtonTypes.reopenTicket);
       this.activateButtonType(nameButtonTypes.closeSale);
-      this.toolsService.activateFocus(nameButtonTypes.addProduct);
+      this.activateButtonFocus(nameButtonTypes.addProduct);
     }
   }
 
@@ -181,16 +179,15 @@ export class SalesComponent implements OnInit {
     if (itemSale) {
       itemSale.quantity = this.currentItem.quantity + itemSale.quantity;
     } else {
-      this.currentItem.price = this.currentItem.product.price;
-      console.log(`Añadiendo item: ${this.currentItem.product.name}, cantidad: ${this.currentItem.quantity}, precio: ${this.currentItem.price}`);
+      this.currentItem.price = this.currentItem.product.price;      
       this.saleList.push(this.currentItem);
     }
     this.showNew = false;
     this.activateButtonType(nameButtonTypes.closeSale);
     this.activateButtonType(nameButtonTypes.addProduct);
+    this.activateButtonFocus(nameButtonTypes.addProduct);
     if (this.saleList.length > 0)
       this.activateButtonType(nameButtonTypes.newSale);
-    this.toolsService.activateFocus(nameButtonTypes.addProduct);
   }
 
   onSubmit(action: string) {
@@ -204,9 +201,14 @@ export class SalesComponent implements OnInit {
         this.elementForm.nativeElement.querySelector('.ng-invalid').focus();
       }
     }
+    
   }
 
   closeSale(): void {
+    this.saveSale();
+  }
+
+  saveSale(): void {
     if (this.saleId == 0)
       this.salesService.saveSales(this.saleList, this.creditCard).subscribe(cod => {
         this.saleId = cod;
@@ -227,7 +229,7 @@ export class SalesComponent implements OnInit {
     this.disableButtonType(nameButtonTypes.addProduct);
     this.disableButtonType(nameButtonTypes.closeSale);
     this.disableButtonType(nameButtonTypes.addProduct);
-    this.toolsService.activateFocus(nameButtonTypes.reopenTicket);
+    this.activateButtonFocus(nameButtonTypes.reopenTicket);
   }
 
   openSale(saleId: number) {
@@ -258,7 +260,7 @@ export class SalesComponent implements OnInit {
     this.disableButtonType(nameButtonTypes.closeSale);
     this.activateButtonType(nameButtonTypes.addProduct);
     this.disableButtonType(nameButtonTypes.reopenTicket);
-    this.toolsService.activateFocus(nameButtonTypes.addProduct);
+    this.activateButtonFocus(nameButtonTypes.addProduct);
   }
 
   newSale(): void {

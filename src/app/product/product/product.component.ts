@@ -35,8 +35,8 @@ export class ProductComponent implements OnInit, OnDestroy {
     product: null
   }
   buttons: ButtonType[] = [
-    { id: "Save", name: "Guardar", show: true },
-    { id: "Return", name: "Volver", show: true }
+    { id: "Save", name: "Guardar", show: true, focused: false },
+    { id: "Return", name: "Volver", show: true, focused: false }
   ];
 
   buttonName: ElementRef;

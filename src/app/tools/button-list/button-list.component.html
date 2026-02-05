@@ -1,12 +1,18 @@
-<div class="w-full">
-    <ul>
-      @for (button of buttonList$ | async; track button) {
-        @if (button.show) {
-          <li>
-            <p-button styleClass="w-full" severity="success" id="{{button.id}}" (click)="onSend(button.id)"
-            #listButton (keydown)="processKeydown($event, button.id)">{{button.name}}</p-button>
-          </li>
-        }
+<div class="w-full mb-4">
+  <ul class="flex flex-col sm:flex-row gap-4">
+    @for (button of lista; track button) { 
+      @if (button.show) {
+        <li class="w-full sm:w-auto">
+          <p-button
+            severity="info"
+            id="{{button.id}}"
+            autofocus="{{button.focused}}"
+            (click)="onSend(button.id)"
+            (keydown)="processKeydown($event, button.id)">
+            {{button.name}}
+          </p-button>
+        </li>
       }
-    </ul>
+    }
+  </ul>
 </div>

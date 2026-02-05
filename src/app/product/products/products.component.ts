@@ -30,8 +30,8 @@ export class ProductsComponent implements OnInit {
     show: false,
     product: null
   }
-  botones: ButtonType[] = [
-    { id: "AddNew", name: "Añadir nuevo", show: true }
+  buttons: ButtonType[] = [
+    { id: "AddNew", name: "Añadir nuevo", show: true, focused: true }
   ];
 
   searchText: any;
@@ -43,16 +43,21 @@ export class ProductsComponent implements OnInit {
     private readonly toolsService: ToolsService) {}
 
   ngOnInit() {
-    this.toolsService.setButtonTypes(this.botones);
+    this.toolsService.setButtonTypes(this.buttons);
+    this.activateButtonFocus("AddNew");
     this.productsService.getProducts$().subscribe(products => this.products = products.map(product => ({ ...product })));
   }
 
   activateButtonType(id: string) {
-    this.botones.find(boton => { return boton.id == id }).show = true;
+    this.buttons.find(boton => { return boton.id == id }).show = true;
+  }
+
+  activateButtonFocus(targetId: string) {
+    this.buttons = this.buttons.map(b => ({ ...b, focused: b.id === targetId }));
   }
 
   disableButtonType(id: string) {
-    this.botones.find(boton => { return boton.id == id }).show = false;
+    this.buttons.find(boton => { return boton.id == id }).show = false;
   }
 
   showButtonType(boton: string) {
@@ -72,6 +77,8 @@ export class ProductsComponent implements OnInit {
 
         this.updatedProduct.show = true;
         this.updatedProduct.product = response;
+        this.activateButtonFocus("AddNew");
+        this.activateButtonType("AddNew");
         setTimeout(() => { this.updatedProduct.show = false }, 5000);
       },
       error: () => {
@@ -83,6 +90,7 @@ export class ProductsComponent implements OnInit {
 
   endNewProduct(response: string) {
     console.log('Nuevo producto guardado:', response);
+    this.activateButtonFocus("AddNew");
     this.activateButtonType("AddNew");
     this.showNewProduct = false;
   }

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { SalesComponent } from './sales/sales.component';
 import { ProductModule } from '../product/product.module';
 import { SalesDateComponent } from './sales-date/sales-date.component';
-import {MatDatepickerModule} from '@angular/material/datepicker';
 
 import { ToolsModule } from '../tools/tools.module';
 import { AppRoutingModule } from '@app/app-routing.module';
@@ -20,6 +19,5 @@ import { NavSalesComponent } from './nav-sales/nav-sales.component';
     SalesComponent,
     CommonModule,
     ProductModule,
-    ToolsModule,
-    MatDatepickerModule], providers: [] })
+    ToolsModule], providers: [] })
 export class SalesModule { }

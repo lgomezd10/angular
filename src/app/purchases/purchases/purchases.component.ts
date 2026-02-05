@@ -56,11 +56,11 @@ export class PurchasesComponent implements OnInit {
     placeholder?: string;
   }>;
   buttons: ButtonType[] = [
-    { id: nameButtonTypes.sendPurchase, name: "Enviar compra", show: false },
-    { id: nameButtonTypes.newPurchase, name: "Nueva compra", show: false },
-    { id: nameButtonTypes.createProduct, name: "Crear producto", show: true },
-    { id: nameButtonTypes.addProduct, name: "Añadir producto", show: true },
-    { id: nameButtonTypes.add, name: "Añadir", show: false }
+    { id: nameButtonTypes.sendPurchase, name: "Enviar compra", show: false, focused: false },
+    { id: nameButtonTypes.newPurchase, name: "Nueva compra", show: false, focused: false },
+    { id: nameButtonTypes.createProduct, name: "Crear producto", show: true, focused: false },
+    { id: nameButtonTypes.addProduct, name: "Añadir producto", show: true, focused: true },
+    { id: nameButtonTypes.add, name: "Añadir", show: false, focused: false }
   ];
 
   constructor(private readonly productsService: ProductsService, private readonly purchasesService: PurchasesService,
@@ -77,7 +77,7 @@ export class PurchasesComponent implements OnInit {
 
   ngOnInit() {
     this.products$ = this.productsService.getProducts$();
-    this.toolsServices.activateFocus(nameButtonTypes.addProduct);
+    this.activateButtonFocus(nameButtonTypes.addProduct);
     this.formFields = [
       {
         name: 'product',
@@ -104,6 +104,10 @@ export class PurchasesComponent implements OnInit {
 
   activateButtonType(id: string) {
     this.buttons.find(boton => { return boton.id == id }).show = true;
+  }
+
+  activateButtonFocus(targetId: string) {
+    this.buttons = this.buttons.map(b => ({ ...b, focused: b.id === targetId }));
   }
 
   disableButtonType(id: string) {
@@ -142,7 +146,7 @@ export class PurchasesComponent implements OnInit {
     this.disableButtonType(nameButtonTypes.newPurchase);
     this.activateButtonType(nameButtonTypes.addProduct);
     this.activateButtonType(nameButtonTypes.createProduct);
-    this.toolsServices.activateFocus(nameButtonTypes.addProduct);
+    this.activateButtonFocus(nameButtonTypes.addProduct);
     this.purchaseCompleted = false;
   }
 
@@ -171,7 +175,7 @@ export class PurchasesComponent implements OnInit {
     this.disableButtonType(nameButtonTypes.add);
     this.activateButtonType(nameButtonTypes.sendPurchase);
     this.activateButtonType(nameButtonTypes.newPurchase);
-    this.toolsServices.activateFocus(nameButtonTypes.addProduct);
+    this.activateButtonFocus(nameButtonTypes.addProduct);
 
   }
 
@@ -201,7 +205,7 @@ export class PurchasesComponent implements OnInit {
     console.log('Nuevo producto guardado:', response);
     this.activateButtonType(nameButtonTypes.addProduct);
     this.activateButtonType(nameButtonTypes.createProduct);
-    this.toolsServices.activateFocus(nameButtonTypes.addProduct);
+    this.activateButtonFocus(nameButtonTypes.addProduct);
     this.showNewProduct = false;
   }
 
@@ -230,7 +234,7 @@ export class PurchasesComponent implements OnInit {
       this.disableButtonType(nameButtonTypes.addProduct);
       this.disableButtonType(nameButtonTypes.createProduct);
       this.disableButtonType(nameButtonTypes.sendPurchase);
-      this.toolsServices.activateFocus(nameButtonTypes.newPurchase);
+      this.activateButtonFocus(nameButtonTypes.newPurchase);
 
     }
   }
@@ -238,7 +242,7 @@ export class PurchasesComponent implements OnInit {
   keyPress(key: KeyboardEvent, campo: HTMLElement) {
     if (key.code == "Enter") { // press Enter      
       if (this.goToSummit.nativeElement == campo) {
-        this.toolsServices.activateFocus(nameButtonTypes.add);
+        this.activateButtonFocus(nameButtonTypes.add);
       } else {
         campo.focus();
       }

@@ -4,14 +4,14 @@
 
   <app-show-errors [typeError]="'Error404'"></app-show-errors>
 
-   @if (showSuccessMessage) {
-    <p-message severity="success">{{showSuccessMessage}}</p-message>
+  @if (showSuccessMessage) {
+  <p-message severity="success">{{showSuccessMessage}}</p-message>
   }
+  <app-button-list [lista]="buttons" (sendButtonType)="showButtonType($event)"></app-button-list>
+
 
   <div class="flex w-full gap-6">
     
-
-    <!-- Tabla y formularios -->
     <div class="flex-1">
       <div class="overflow-x-auto">
         <div class="flex gap-2 mb-4">
@@ -27,7 +27,7 @@
               <th scope="col">Precio Kg</th>
               <th scope="col">Precio</th>
               @if (saleId == 0 || open) {
-                <th scope="col">Eliminar</th>
+              <th scope="col">Eliminar</th>
               }
             </tr>
           </ng-template>
@@ -39,9 +39,10 @@
               <td>{{item.price}}</td>
               <td>{{item.quantity * item.price | number: '1.0-2'}}</td>
               @if (saleId == 0 || open) {
-                <td>
-                  <button pButton type="button" icon="pi pi-trash" class="p-button-danger" (click)="deleteItem(item)"></button>
-                </td>
+              <td>
+                <button pButton type="button" icon="pi pi-trash" class="p-button-danger"
+                  (click)="deleteItem(item)"></button>
+              </td>
               }
             </tr>
           </ng-template>
@@ -50,19 +51,18 @@
       <h2 class="text-lg font-semibold mb-2">Total: {{totalSale()}}</h2>
 
       @if (saleId == 0 || open) {
-        <div class="mb-4">
-          <p-checkbox inputId="creditCard" [(ngModel)]="creditCard" binary="true"></p-checkbox>
-          <label for="creditCard" class="ml-2">Pago con Tarjeta</label>
-        </div>
+      <div class="mb-4">
+        <p-checkbox inputId="creditCard" [(ngModel)]="creditCard" binary="true"></p-checkbox>
+        <label for="creditCard" class="ml-2">Pago con Tarjeta</label>
+      </div>
       }
 
-      <app-common-form [display]="showNew" [formGroup]="formGroup" [formFields]="formFields" formName="Añadir producto" (sendButtonOption)="onSubmit($event)"></app-common-form>
+      <app-common-form [display]="showNew" [formGroup]="formGroup" [formFields]="formFields" formName="Añadir producto"
+        (sendButtonOption)="onSubmit($event)"></app-common-form>
 
-      
+
     </div>
-    <!-- Menú vertical de acciones -->
-    <div class="w-48">
-      <app-button-list [lista]="buttons" (sendButtonType)="showButtonType($event)"></app-button-list>
-    </div>
+
+
   </div>
 </div>

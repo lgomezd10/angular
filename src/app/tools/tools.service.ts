@@ -11,7 +11,6 @@ export class ToolsService {
   botones: ButtonType[] = [];
   buttons: BehaviorSubject<ButtonType[]> = new BehaviorSubject<ButtonType[]>(this.botones);
   pulsado$: BehaviorSubject<string> = new BehaviorSubject<string>("");
-  foco$: BehaviorSubject<string> = new BehaviorSubject<string>("");
 
   constructor(private readonly errorService: ErrorService) {
   }
@@ -36,14 +35,6 @@ export class ToolsService {
     return this.pulsado$;
   }
 
-  getFoco$(): Observable<string> {
-    return this.foco$;
-  }
-
-  activateFocus(boton: string) {
-    this.foco$.next(boton);
-  }
-
   crearButtonTypees(lista: ButtonType[]) {
     this.botones = lista;
     this.buttons.next(this.botones);
@@ -64,7 +55,6 @@ export class ToolsService {
 
   pushButtonType(boton: string) {
     this.pulsado$.next(boton);
-    this.foco$.next("");
   }
 
 }

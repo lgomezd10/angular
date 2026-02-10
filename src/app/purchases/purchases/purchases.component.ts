@@ -1,23 +1,24 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { ProductsService } from 'src/app/product/products.service';
+import { ProductsService } from '../../product/products.service';
 import { Purchase } from '../purchase';
 import { Observable } from 'rxjs';
-import { Product } from 'src/app/product/product';
+import { Product } from '../../product/product';
 import { PurchasesService } from '../purchases.service';
-import { ButtonType } from 'src/app/tools/button-type';
-import { ToolsService } from 'src/app/tools/tools.service';
+import { ButtonType } from '../../tools/button-type';
+import { ToolsService } from '../../tools/tools.service';
 import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { FormErrors } from '@app/tools/form-errors';
-import { ProductPipe } from '@app/product/product.pipe';
+import { FormErrors } from '../../tools/form-errors';
+import { ProductPipe } from '../../product/product.pipe';
 import { DecimalPipe } from '@angular/common';
-import { ShowErrorsComponent } from '@app/errores/show-errors/show-errors.component';
-import { NewComponent } from '@app/product/new/new.component';
-import { ButtonListComponent } from '@app/tools/button-list/button-list.component';
+import { ShowErrorsComponent } from '../../errores/show-errors/show-errors.component';
+import { NewComponent } from '../../product/new/new.component';
+import { ButtonListComponent } from '../../tools/button-list/button-list.component';
 import { TableModule } from 'primeng/table';
 import { SelectModule } from 'primeng/select';
 import { InputNumberModule } from 'primeng/inputnumber'
-import { CommonFormComponent } from "@app/tools/common-form/common-form.component";
+import { CommonFormComponent } from "../../tools/common-form/common-form.component";
 import { MessageModule } from 'primeng/message';
+import { CommonFormField } from '../../tools/common-form-field';
 
 const nameButtonTypes = { sendPurchase: 'SendPruchase', newPurchase: 'NewPurchase', createProduct: 'CreateProduct', addProduct: 'AddProduct', add: 'Add' };
 
@@ -36,25 +37,19 @@ export class PurchasesComponent implements OnInit {
       content.nativeElement.focus();
     }
   }
-  @ViewChild('send', { static: false }) goToSummit: ElementRef;
-  @ViewChild('elementForm') elementForm: ElementRef;
+  @ViewChild('send', { static: false }) goToSummit: ElementRef | undefined;
+  @ViewChild('elementForm') elementForm: ElementRef | undefined;
 
   formGroup: UntypedFormGroup;
   purchaseList: Purchase[] = [];
-  currentPurchase: Purchase;
-  searchText: string;
-  products$: Observable<Product[]>;
+  currentPurchase: Purchase = new Purchase();
+  searchText: string = "";
+  products$: Observable<Product[]> = new Observable<Product[]>();
   showNew: boolean = false;
   showNewProduct: boolean = false;
   purchaseCompleted: boolean = false;
   myDateValue: Date = new Date();
-  formFields: Array<{
-    name: string;
-    label: string;
-    type: 'text' | 'number' | 'select';
-    options$?: Observable<any[]>;
-    placeholder?: string;
-  }>;
+  formFields: Array<CommonFormField> = [];
   buttons: ButtonType[] = [
     { id: nameButtonTypes.sendPurchase, name: "Enviar compra", show: false, focused: false },
     { id: nameButtonTypes.newPurchase, name: "Nueva compra", show: false, focused: false },
@@ -103,7 +98,10 @@ export class PurchasesComponent implements OnInit {
 
 
   activateButtonType(id: string) {
-    this.buttons.find(boton => { return boton.id == id }).show = true;
+    const button = this.buttons.find(boton => { return boton.id == id });
+    if (button) {
+      button.show = true;
+    }
   }
 
   activateButtonFocus(targetId: string) {
@@ -111,7 +109,10 @@ export class PurchasesComponent implements OnInit {
   }
 
   disableButtonType(id: string) {
-    this.buttons.find(boton => { return boton.id == id }).show = false;
+    const button = this.buttons.find(boton => { return boton.id == id });
+    if (button) {
+      button.show = false;
+    }
   }
 
 
@@ -164,10 +165,10 @@ export class PurchasesComponent implements OnInit {
   addPurchaseToList() {
     let purchase = this.purchaseList.find(purchase => purchase.product.name == this.currentPurchase.product.name);
 
-    if (purchase == undefined || purchase.price != this.currentPurchase.price) {
-      this.purchaseList.push(this.currentPurchase);
-    } else {
+    if (purchase?.price == this.currentPurchase.price) {
       purchase.quantity = purchase.quantity + this.currentPurchase.quantity;
+    } else {
+      this.purchaseList.push(this.currentPurchase);
     }
 
     this.showNew = false;
@@ -189,7 +190,7 @@ export class PurchasesComponent implements OnInit {
         this.addPurchaseToList();
       } else {
         this.formGroup.markAllAsTouched();
-        this.elementForm.nativeElement.querySelector('.ng-invalid').focus();
+        this.elementForm?.nativeElement.querySelector('.ng-invalid').focus();
       }
     }
   }
@@ -239,27 +240,12 @@ export class PurchasesComponent implements OnInit {
     }
   }
 
-  keyPress(key: KeyboardEvent, campo: HTMLElement) {
-    if (key.code == "Enter") { // press Enter      
-      if (this.goToSummit.nativeElement == campo) {
-        this.activateButtonFocus(nameButtonTypes.add);
-      } else {
-        campo.focus();
-      }
-
-    }
-  }
-
   checkError(field: string): boolean {
     return FormErrors.checkError(field, this.formGroup)
   }
 
   getError(name: string, field: string): string {
     return FormErrors.getError(name, field, this.formGroup);
-  }
-
-  onChange(e, campo) {
-    campo.focus();
   }
 
 }

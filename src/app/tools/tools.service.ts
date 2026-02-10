@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ButtonType } from './button-type';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ErrorService } from '@app/errores/error.service';
+import { ErrorService } from '../errores/error.service';
 
 @Injectable({
   providedIn: 'root'

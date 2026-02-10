@@ -4,7 +4,7 @@ import { ItemSale } from './item-sale';
 import { Observable } from 'rxjs';
 import { Sale } from './sale';
 import { map} from 'rxjs/operators';
-import { environment } from '@env/environment';
+import { environment } from '../../environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -14,8 +14,8 @@ const httpOptions = {
 };
 
 class ResponseSavedSales {
-  message: string;
-  saleId: number;
+  message: string = '';
+  saleId: number = 0;
 }
 
 @Injectable({

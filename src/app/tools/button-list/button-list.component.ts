@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output, OnInit, AfterViewInit} from '@angular/core';
+import { Component, Input, EventEmitter, Output} from '@angular/core';
 import { ButtonType } from '../button-type';
 import { MenuItem } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
@@ -21,7 +21,6 @@ export class ButtonListComponent {
   menuItems: MenuItem[] = [];
 
   constructor() {}
-
 
   processKeydown(key: KeyboardEvent, idButtonType: string) {
     if (key.code == "ArrowUp" || key.code == "ArrowDown" || key.code == "ArrowLeft" || key.code == "ArrowRight") {

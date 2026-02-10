@@ -10,7 +10,7 @@
       <div class="mb-4">
         <div class="flex-1">
           <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nombre:</label>
-          <input pInputText name="name" id="name" type="text" autocomplete="off" (keypress)="keyPress($event, type)"
+          <input pInputText name="name" id="name" type="text" autocomplete="off"
             #name formControlName="name" #type
             [invalid]="isFieldValid('name')"
             class="w-full mb-2" />
@@ -43,7 +43,7 @@
           }
           <label for="price" class="block text-sm font-medium text-gray-700 mb-1">Precio:</label>
           <p-inputnumber id="price" formControlName="price" inputId="price" mode="decimal" [maxFractionDigits]="2"
-            (keypress)="keyPress($event, submit)" class="w-full mb-2" />
+            class="w-full mb-2" />
           @if (isFieldValid('price')) {
           <p-message severity="error" size="small" variant="simple">
             {{getError('Precio', 'price')}}

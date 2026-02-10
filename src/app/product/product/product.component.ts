@@ -5,15 +5,14 @@ import { ActivatedRoute } from '@angular/router';
 import { TYPES } from '../products-types';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { ButtonType } from 'src/app/tools/button-type';
+import { ButtonType } from '../../tools/button-type';
 import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { FormErrors } from '@app/tools/form-errors';
-import { ButtonListComponent } from '@app/tools/button-list/button-list.component';
+import { FormErrors } from '../../tools/form-errors';
+import { ButtonListComponent } from '../../tools/button-list/button-list.component';
 import { MessageModule } from 'primeng/message';
 import { SelectModule } from 'primeng/select';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
-
 
 @Component({
   selector: 'app-product',
@@ -24,22 +23,22 @@ import { InputTextModule } from 'primeng/inputtext';
 })
 export class ProductComponent implements OnInit, OnDestroy {
 
-  id: number;
-  product: Product;
+  id: number = 0;
+  product: Product = new Product();
   formGroup: UntypedFormGroup;
   repeatedProduct: string = "";
-  private _docSub: Subscription;
+  private _docSub: Subscription = new Subscription();
   public types = TYPES;
   updatedProduct = {
     show: false,
-    product: null
+    product: null as Product | null
   }
   buttons: ButtonType[] = [
     { id: "Save", name: "Guardar", show: true, focused: false },
     { id: "Return", name: "Volver", show: true, focused: false }
   ];
 
-  buttonName: ElementRef;
+  buttonName: ElementRef | undefined;
   repitedProduct: any = "";
 
   // set focus when init the component
@@ -50,7 +49,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
   }
 
-  @ViewChild('elementForm') elementForm: ElementRef;
+  @ViewChild('elementForm') elementForm: ElementRef | undefined;
 
   constructor(private readonly productsService: ProductsService, private readonly route: ActivatedRoute, private readonly location: Location, formBuilder: UntypedFormBuilder) {
 
@@ -71,11 +70,17 @@ export class ProductComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.productsService.loadProducts();
     this.route.paramMap.subscribe(params => {
-      this.id = +params.get('id');
-      this._docSub = this.productsService.getProducts$().subscribe(products => {
-        this.product = this.productsService.getProduct(this.id);
-        this.loadProduct(this.product);
-      });
+      const idParam = params.get('id');
+      if (idParam) {
+        this.id = +idParam;
+        this._docSub = this.productsService.getProducts$().subscribe(products => {
+          const product = this.productsService.getProduct(this.id);
+          if (product) {
+            this.product = product;
+            this.loadProduct(this.product);
+          }
+        });
+      }
     });
   }
 
@@ -92,11 +97,17 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   activateButtonType(id: string) {
-    this.buttons.find(button => { return button.id == id }).show = true;
+    const button = this.buttons.find(button => { return button.id == id });
+    if (button) {
+      button.show = true;
+    }
   }
 
   disableButtonType(id: string) {
-    this.buttons.find(button => { return button.id == id }).show = false;
+    const button = this.buttons.find(button => { return button.id == id });
+    if (button) {
+      button.show = false;
+    }
   }
 
   showButtonType(button: string) {
@@ -112,7 +123,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     const product = this.productsService.getProductByName(this.formGroup.controls['name'].value);
     if (product && product.id != this.id) {
       this.repeatedProduct = product.name;
-      this.buttonName.nativeElement.focus();
+      this.buttonName?.nativeElement.focus();
     }
     else if (this.formGroup.valid) {
       this.repeatedProduct = "";
@@ -124,7 +135,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       });
 
     } else {
-      this.elementForm.nativeElement.querySelector('.ng-invalid').focus();
+      this.elementForm?.nativeElement.querySelector('.ng-invalid')?.focus();
     }
   }
 

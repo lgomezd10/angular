@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Purchase } from './purchase';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '@env/environment';
+import { environment } from '../../environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -17,7 +17,7 @@ const httpOptions = {
 })
 export class PurchasesService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) { }
   backendUrl = environment.API_URL;
 
   guardarPurchase(purchases: Purchase[]): Observable<Purchase[]> {

@@ -3,7 +3,7 @@ import { ProductsService } from '../product/products.service';
 import { ToolsService } from '../tools/tools.service';
 
 export class MockToolsServices extends SpyObject {
-    fakePulsado: String;
+    fakePulsado: string;
     getPulsado$Spy;
     newButtonTypeSpy;
     deleteButtonTypeSpy;
@@ -18,14 +18,11 @@ export class MockToolsServices extends SpyObject {
         this.activateFocusSpy = this.spy('activateFocus').and.callFake(() => {});
     }
 
-    subscribe(callback) {
+    subscribe(callback: (pulsado: string) => void) {
         callback(this.fakePulsado);
         return this;
     }
 
-    unsubscribe() {
-
-    }
 
     setButtonType(pulsado: string) {
         this.fakePulsado = pulsado;

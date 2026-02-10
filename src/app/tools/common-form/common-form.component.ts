@@ -2,14 +2,14 @@ import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/
 import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { SelectModule } from 'primeng/select';
-import { InputNumberModule } from 'primeng/inputnumber'
-import { Observable } from 'rxjs';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { AsyncPipe } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
-import { FormErrors } from '@app/tools/form-errors';
+import { FormErrors } from '../../tools/form-errors';
 import { MessageModule } from 'primeng/message';
 import { InputTextModule } from 'primeng/inputtext';
+import { CommonFormField } from '../common-form-field';
 
 @Component({
   selector: 'app-common-form',
@@ -33,13 +33,7 @@ export class CommonFormComponent implements AfterViewInit {
    * ]
    */
   @Input() display: boolean = true;
-  @Input() formFields: Array<{
-    name: string;
-    label: string;
-    type: 'text' | 'number' | 'select';
-    options$?: Observable<any[]>;
-    placeholder?: string;
-  }> = [];
+  @Input() formFields: Array<CommonFormField> = [];
   @Input() formName: string = "Formulario";
 
   /** FormGroup externo a usar */

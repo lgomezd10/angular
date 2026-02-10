@@ -1,25 +1,29 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { render, screen } from '@testing-library/angular';
 import { PerdidasComponent } from './perdidas.component';
+import { describe, it, expect, beforeEach } from 'vitest';
+
+// --- Unit/Logic Tests ---
+import { TestBed } from '@angular/core/testing';
 
 describe('PerdidasComponent', () => {
-  let component: PerdidasComponent;
-  let fixture: ComponentFixture<PerdidasComponent>;
-
-  beforeEach(async() => {
-    TestBed.configureTestingModule({
-      declarations: [ PerdidasComponent ]
-    })
-    .compileComponents();
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [PerdidasComponent]
+    }).compileComponents();
   });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(PerdidasComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
+  it('should create the component', () => {
+    const fixture = TestBed.createComponent(PerdidasComponent);
+    const component = fixture.componentInstance;
     expect(component).toBeTruthy();
+  });
+});
+
+// --- Render/Template Tests ---
+describe('PerdidasComponent (template)', () => {
+  it('should render the default text', async () => {
+    await render(PerdidasComponent);
+    expect(screen.getByText(/perdidas works!/i)).toBeTruthy();
   });
 });

@@ -2,17 +2,18 @@ import { UntypedFormGroup } from '@angular/forms';
 
 export class FormErrors {
     static getError(name: string, field: string, formGroup: UntypedFormGroup): string {
-        const { errors } = formGroup.get(field);
+        const control = formGroup.get(field);
+        const errors = control?.errors;
 
         if (errors) {    
-            const mesasges = {
-                required: `Introduzca un valor en el campo ${name}`,
-                min: `${name} debe ser mayor que 0`,
-                minlength: `${name} debe tener un mínimo de ${errors.minlength?.requiredLength} caracteres`
-            };
+            const messages = new Map<string, string>([
+                ['required', `Introduzca un valor en el campo ${name}`],
+                ['min', `${name} debe ser mayor que 0`],
+                ['minlength', `${name} debe tener un mínimo de ${errors['minlength']?.requiredLength} caracteres`]
+            ]);
 
             const errorKey = Object.keys(errors).find(Boolean);
-            return mesasges[errorKey];
+            return errorKey ? messages.get(errorKey) ?? `Error en ${name}` : '';
         } else {
             return '';
         }

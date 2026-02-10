@@ -1,23 +1,24 @@
 /*
  * Utility functions for our browser tests
  */
-export function createEvent(eventType: any): Event {
-    const evt: Event = document.createEvent('Event');
-    evt.initEvent(eventType, true, true);
-    return evt;
+
+export function createEvent(eventType: string, bubbles: boolean = true, cancelable: boolean = true): Event {
+  return new Event(eventType, { bubbles, cancelable });
+}
+
+export function dispatchEvent(element: HTMLElement, eventType: string): void {
+  element.dispatchEvent(createEvent(eventType));
+}
+
+export class ConsoleSpy {
+  public logs: string[] = [];
+
+  log(...args: any[]): void {
+    this.logs.push(args.join(' '));
   }
-  
-  export function dispatchEvent(element: any, eventType: any) {
-    element.dispatchEvent(createEvent(eventType));
+
+  warn(...args: any[]): void {
+    this.log(...args);
   }
-  
-  export class ConsoleSpy {
-    public logs: string[] = [];
-    log(...args) {
-      this.logs.push(args.join(' '));
-    }
-    warn(...args) {
-        this.log(...args);
-    }
-  }
+}
   

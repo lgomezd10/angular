@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { GroupByPipe } from './group-by.pipe';
 import { GroupBydatePipe } from './group-by.date.pipe';
 import { ButtonListComponent } from './button-list/button-list.component';
-import { ErroresModule } from '@app/errores/errors.module';
+import { ErroresModule } from '../errores/errors.module';
 
 @NgModule({
     declarations: [],

@@ -1,122 +1,230 @@
-import { ComponentFixture, TestBed, fakeAsync, inject, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { Location } from '@angular/common';
+import { of } from 'rxjs';
+import { describe, it, expect } from 'vitest';
+import { render, screen, within } from '@testing-library/angular';
 
 import { ProductComponent } from './product.component';
-import { MockProductsService } from 'src/app/test/products.service.mock';
-import { ConfigureProductTest, createRoot, RootCmp, advance } from 'src/app/test/test.module';
-import { Router } from '@angular/router';
-import { Location } from '@angular/common';
 import { ProductsService } from '../products.service';
 import { Product } from '../product';
-import { DebugElement } from '@angular/core';
-import { By } from '@angular/platform-browser';
-
 
 describe('ProductComponent', () => {
+  let fixture: ComponentFixture<ProductComponent>;
+  let component: ProductComponent;
+  let productsServiceMock: {
+    loadProducts: ReturnType<typeof vi.fn>;
+    getProducts$: ReturnType<typeof vi.fn>;
+    getProduct: ReturnType<typeof vi.fn>;
+    getProductByName: ReturnType<typeof vi.fn>;
+    postEditProduct: ReturnType<typeof vi.fn>;
+  };
+  let locationMock: { back: ReturnType<typeof vi.fn> };
 
-  beforeEach(async () => {
-    ConfigureProductTest();
-  });
+  const createProduct = (overrides?: Partial<Product>): Product => {
+    const product = new Product();
+    product.id = 1;
+    product.name = 'patata';
+    product.price = 2;
+    product.stock = 3;
+    product.type = 'Patata/Verdura';
+    return Object.assign(product, overrides);
+  };
 
-  describe('uso funciones', () => {
-    let component: ProductComponent;
-    let fixture: ComponentFixture<ProductComponent>;
-    
-    beforeEach(() => {
-      fixture = TestBed.createComponent(ProductComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-      component.product = new Product();
+  const setup = async (routeId: string | null = '1', product = createProduct()) => {
+    productsServiceMock = {
+      loadProducts: vi.fn(),
+      getProducts$: vi.fn(() => of([product])),
+      getProduct: vi.fn(() => product),
+      getProductByName: vi.fn(() => undefined),
+      postEditProduct: vi.fn(() => of(product))
+    };
+    locationMock = { back: vi.fn() };
+
+    await TestBed.configureTestingModule({
+      imports: [ProductComponent],
+      providers: [
+        { provide: ProductsService, useValue: productsServiceMock },
+        {
+          provide: ActivatedRoute,
+          useValue: { paramMap: of(convertToParamMap(routeId ? { id: routeId } : {})) }
+        },
+        { provide: Location, useValue: locationMock }
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProductComponent);
+    component = fixture.componentInstance;
+  };
+
+  describe('Unit/Logic Tests', () => {
+    it('initializes default state and form controls', async () => {
+      await setup();
+
+      expect(component.formGroup).toBeTruthy();
+      expect(component.formGroup.controls['name']).toBeTruthy();
+      expect(component.formGroup.controls['price']).toBeTruthy();
+      expect(component.updatedProduct.show).toBe(false);
+      expect(component.repeatedProduct).toBe('');
     });
-    it('modificar product si price mayor que 0', fakeAsync(
-      inject([ProductsService], (mockProductsService: MockProductsService) => {
-        component.product.price = 1;
-        component.editProduct();
-        tick();
-        expect(mockProductsService.postEditProductSpy)
-          .toHaveBeenCalledWith(component.product);
-      })
-    ));
-    it('no modificar product si price menor que 0', fakeAsync(
-      inject([ProductsService], (mockProductsService: MockProductsService) => {
-        component.editProduct();
-        tick();
-        expect(mockProductsService.postEditProductSpy)
-          .not.toHaveBeenCalled();
-      })
-    ));
+
+    it('calls services to load and retrieve product', async () => {
+      await setup('5', createProduct({ id: 5 }));
+      fixture.detectChanges();
+
+      expect(productsServiceMock.loadProducts).toHaveBeenCalled();
+      expect(productsServiceMock.getProducts$).toHaveBeenCalled();
+      expect(productsServiceMock.getProduct).toHaveBeenCalledWith(5);
+    });
+
+    it('updates form state when product is retrieved', async () => {
+      const product = createProduct({ id: 7, name: 'manzana', price: 3.5, stock: 10, type: 'Fruta' });
+      await setup('7', product);
+      fixture.detectChanges();
+
+      expect(component.formGroup.controls['id'].value).toBe(7);
+      expect(component.formGroup.controls['name'].value).toBe('manzana');
+      expect(component.formGroup.controls['price'].value).toBe(3.5);
+      expect(component.formGroup.controls['stock'].value).toBe(10);
+      expect(component.formGroup.controls['type'].value).toBe('Fruta');
+    });
+
+    it('prevents invalid form submission', async () => {
+      await setup();
+      fixture.detectChanges();
+      component.formGroup.setValue({
+        id: 1,
+        name: '',
+        price: 0,
+        type: '',
+        stock: 0
+      });
+
+      component.editProduct();
+
+      expect(productsServiceMock.postEditProduct).not.toHaveBeenCalled();
+    });
+
+    it('invokes action handlers for save and return', async () => {
+      await setup();
+      const editSpy = vi.spyOn(component, 'editProduct');
+      const returnSpy = vi.spyOn(component, 'return');
+
+      component.showButtonType('Save');
+      component.showButtonType('Return');
+
+      expect(editSpy).toHaveBeenCalled();
+      expect(returnSpy).toHaveBeenCalled();
+    });
+
+    it('guards against duplicate product names', async () => {
+      await setup('1', createProduct({ id: 1, name: 'pera' }));
+      productsServiceMock.getProductByName.mockReturnValue(createProduct({ id: 2, name: 'manzana' }));
+      component.buttonName = { nativeElement: { focus: vi.fn() } } as any;
+      component.formGroup.setValue({
+        id: 1,
+        name: 'manzana',
+        price: 2,
+        type: 'Fruta',
+        stock: 5
+      });
+
+      component.editProduct();
+
+      expect(component.repeatedProduct).toBe('manzana');
+      expect(productsServiceMock.postEditProduct).not.toHaveBeenCalled();
+      expect(component.buttonName?.nativeElement.focus).toHaveBeenCalled();
+    });
   });
 
-  describe('render Product', () => {
+  describe('Render/Template Tests', () => {
+    const renderComponent = async (
+      product = createProduct(),
+      repeatedProduct?: string,
+      updatedProduct?: { show: boolean; product: Product | null }
+    ) => {
+      const resolvedUpdatedProduct = updatedProduct ?? { show: false, product: null };
+      const renderProductsServiceMock = {
+        loadProducts: vi.fn(),
+        getProducts$: vi.fn(() => of([product])),
+        getProduct: vi.fn(() => product),
+        getProductByName: vi.fn(() => undefined),
+        postEditProduct: vi.fn(() => of(product))
+      };
+      const renderLocationMock = {
+        back: vi.fn(),
+        subscribe: vi.fn(() => ({ unsubscribe: vi.fn() })),
+        path: vi.fn(() => ''),
+        getState: vi.fn(() => ({})),
+        isCurrentPathEqualTo: vi.fn(() => false),
+        replaceState: vi.fn()
+      };
 
-    let fixture;
-    let p: Product;
-    beforeEach(fakeAsync(
-      inject([Router, ProductsService],
-        (router: Router, mockProductsService: MockProductsService) => {
-          fixture = createRoot(router, RootCmp);
-          p = new Product();
-          p.id = 2; p.name = 'patata';
-          p.price = 2; p.stock = 3; p.type = "Patata/Verdura";
-          mockProductsService.setProduct(p);
-          router.navigateByUrl('/product/2');
-          advance(fixture);
+      const result = await render(ProductComponent, {
+        componentProperties: { repeatedProduct, updatedProduct: resolvedUpdatedProduct },
+        providers: [
+          { provide: ProductsService, useValue: renderProductsServiceMock },
+          {
+            provide: ActivatedRoute,
+            useValue: { paramMap: of(convertToParamMap({ id: String(product.id) })) }
+          },
+          { provide: Location, useValue: renderLocationMock }
+        ]
+      });
 
-        }
-      )))
+      return { ...result, renderProductsServiceMock };
+    };
 
-    it('se muestra el id en la vista', () => {
-      const de: DebugElement = fixture.debugElement.query(By.css('.id'));
-      expect(de.nativeElement.innerHTML).toContain(p.id);
-    })
+    it('renders main content and headings', async () => {
+      await renderComponent(createProduct({ name: 'patata' }));
 
-    it('se muestra el name en la vista', () => {
-      const de: DebugElement = fixture.debugElement.query(By.css('#name'));
-      expect(de.properties.outerHTML).toContain(p.name);
-    })
-    it('se muestra el stock en la vista', () => {
-      const de: DebugElement = fixture.debugElement.query(By.css('#stock'));
-      expect(de.nativeElement.innerHTML).toContain(p.stock);
-    })
-    it('se muestra el name en la vista', () => {
-      const de: DebugElement = fixture.debugElement.query(By.css('#price'));
-      expect(de.properties.outerHTML).toContain(p.price);
-    })
-    it('se muestra el stock en la vista', () => {
-      const de: DebugElement = fixture.debugElement.query(By.css('#type'));
-      expect(de.nativeElement.innerHTML).toContain(p.type);
-    })
-  })
+      expect(screen.getByRole('heading', { name: /Detalles de patata/i })).toBeTruthy();
+      expect(screen.getByText('Identificador:')).toBeTruthy();
+      expect(screen.getByText('Nombre:')).toBeTruthy();
+    });
 
-  describe('initialization', () => {
-    it('retrieves the product', fakeAsync(
-      inject([Router, ProductsService],
-        (router: Router,
-          mockProductsService: MockProductsService) => {
-          const fixture = createRoot(router, RootCmp);
+    it('renders product data in the template', async () => {
+      const product = createProduct({ id: 3, name: 'manzana', stock: 12 });
+      await renderComponent(product);
 
-          router.navigateByUrl('/product/2');
-          advance(fixture);
+      expect(screen.getByText('Detalles de manzana')).toBeTruthy();
+      expect(screen.getByText('3')).toBeTruthy();
+      expect(screen.getByText('12')).toBeTruthy();
+    });
 
-          expect(mockProductsService.getProductSpy).toHaveBeenCalledWith(2);
-        })));
+    it('shows duplicated product warning when repeatedProduct is set', async () => {
+      await renderComponent(createProduct(), 'pera');
+
+      expect(screen.getByText(/El nombre pera ya existe/i)).toBeTruthy();
+    });
+
+    it('hides duplicated product warning when repeatedProduct is empty', async () => {
+      const { fixture } = await renderComponent();
+
+      fixture.componentInstance.repeatedProduct = '';
+      fixture.detectChanges();
+
+      expect(screen.queryByText(/El nombre pera ya existe/i)).toBeNull();
+    });
+
+    it('shows feedback message after successful update', async () => {
+      await renderComponent(createProduct(), undefined, {
+        show: true,
+        product: createProduct({ name: 'producto actualizado' })
+      });
+
+      expect(screen.getByText(/Se ha actualizado el producto: producto actualizado/i)).toBeTruthy();
+    });
+
+    it('exposes accessible inputs and labels', async () => {
+      await renderComponent();
+
+      expect(screen.getByLabelText(/Nombre:/i)).toBeTruthy();
+      const form = screen.getByText('Identificador:').closest('form');
+      expect(form).toBeTruthy();
+
+      const formQueries = within(form as HTMLElement);
+      expect(formQueries.getByText('Precio:')).toBeTruthy();
+    });
   });
-
-  describe('back', () => {
-    it('return to de previous location', fakeAsync(
-      inject([Router, Location],
-        (router: Router, location: Location) => {
-          const fixture = createRoot(router, RootCmp);
-          expect(location.path()).toEqual('/');
-          advance(fixture);
-          router.navigateByUrl('/product/2');
-          advance(fixture);
-          expect(location.path()).toEqual('/product/2');
-          const product = fixture.debugElement.children[1].componentInstance;
-          product.return();
-          advance(fixture);
-          expect(location.path()).toEqual('/');
-        })));
-  });
-
-
 });

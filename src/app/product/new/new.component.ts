@@ -4,14 +4,14 @@ import { ProductsService } from '../products.service';
 import { Observable } from 'rxjs';
 import { TYPES } from '../products-types';
 import { UntypedFormGroup, UntypedFormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FormErrors } from '@app/tools/form-errors';
+import { FormErrors } from '../../tools/form-errors';
 import { AsyncPipe } from '@angular/common';
 import { SortPipe } from '../sort.pipe';
 import { FilterPipe } from '../filter.pipe';
 import { RouterModule } from '@angular/router';
 import { SelectModule } from 'primeng/select';
 import { InputNumberModule } from 'primeng/inputnumber'
-import { Button, ButtonModule } from 'primeng/button';
+import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { DialogModule } from 'primeng/dialog';
@@ -33,8 +33,8 @@ export class NewComponent implements OnInit {
   formGroup: UntypedFormGroup;
 
   public types = TYPES;
-  products$: Observable<Product[]>;
-  product: Product;
+  products$: Observable<Product[]> = new Observable<Product[]>();
+  product: Product = new Product();
   repeatedProduct: string = "";
 
   constructor(private readonly productsService: ProductsService,
@@ -77,15 +77,6 @@ export class NewComponent implements OnInit {
     this.repeatedProduct = "";
   }
 
-  keyPress(key: KeyboardEvent, campo: HTMLElement | Button) {
-    if (key.code == "Enter") {
-      if (campo instanceof Button) {
-        campo.el.nativeElement.click();
-      } else
-        campo.focus();
-    }
-  }
-
   onSubmit() {
     let value = this.formGroup.value;
     this.repeatedProduct = "";
@@ -102,10 +93,6 @@ export class NewComponent implements OnInit {
     } else if (value.name != "" && this.productsService.getProductByName(value.name) != undefined) {
       this.repeatedProduct = value.name;
     }
-  }
-
-  onChange(e, campo) {
-    campo.focus();
   }
 
   isFieldValid(field: string): boolean {

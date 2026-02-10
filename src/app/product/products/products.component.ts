@@ -2,17 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { ProductsService } from '../products.service';
 import { Product } from '../product';
 import { RouterModule } from '@angular/router';
-import { ButtonType } from 'src/app/tools/button-type';
+import { ButtonType } from '../../tools/button-type';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SortPipe } from '../sort.pipe';
 import { FilterPipe } from '../filter.pipe';
-import { ButtonListComponent } from '@app/tools/button-list/button-list.component';
-import { NewComponent } from '@app/product/new/new.component';
+import { ButtonListComponent } from '../../tools/button-list/button-list.component';
+import { NewComponent } from '../../product/new/new.component';
 import { MessageModule } from 'primeng/message';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import { ToolsService } from '@app/tools/tools.service';
-import { ShowErrorsComponent } from "@app/errores/show-errors/show-errors.component";
+import { ToolsService } from '../../tools/tools.service';
+import { ShowErrorsComponent } from "../../errores/show-errors/show-errors.component";
 
 @Component({
   selector: 'app-products',
@@ -28,7 +28,7 @@ export class ProductsComponent implements OnInit {
   showNewProduct: boolean = false;
   updatedProduct = {
     show: false,
-    product: null
+    product: new Product()
   }
   buttons: ButtonType[] = [
     { id: "AddNew", name: "Añadir nuevo", show: true, focused: true }
@@ -36,8 +36,8 @@ export class ProductsComponent implements OnInit {
 
   searchText: any;
   oldPrice: any;
-  event$: Product;
-  oldProducts: Product[];
+  event$: Product = new Product();
+  oldProducts: Product[] = [];
 
   constructor(private readonly productsService: ProductsService,
     private readonly toolsService: ToolsService) {}
@@ -49,7 +49,7 @@ export class ProductsComponent implements OnInit {
   }
 
   activateButtonType(id: string) {
-    this.buttons.find(boton => { return boton.id == id }).show = true;
+    this.buttons.find(boton => { return boton.id == id })!.show = true;
   }
 
   activateButtonFocus(targetId: string) {
@@ -57,7 +57,7 @@ export class ProductsComponent implements OnInit {
   }
 
   disableButtonType(id: string) {
-    this.buttons.find(boton => { return boton.id == id }).show = false;
+    this.buttons.find(boton => { return boton.id == id })!.show = false;
   }
 
   showButtonType(boton: string) {

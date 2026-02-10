@@ -5,8 +5,8 @@ import { ProductModule } from '../product/product.module';
 import { SalesDateComponent } from './sales-date/sales-date.component';
 
 import { ToolsModule } from '../tools/tools.module';
-import { AppRoutingModule } from '@app/app-routing.module';
-import { ErroresModule } from '@app/errores/errors.module';
+import { AppRoutingModule } from '../app-routing.module';
+import { ErroresModule } from '../errores/errors.module';
 import { NavSalesComponent } from './nav-sales/nav-sales.component';
 
 

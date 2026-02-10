@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { FormErrors } from '@app/tools/form-errors';
+import { FormErrors } from '../../tools/form-errors';
 import { AuthService } from '../auth.service';
 import { MessageModule } from 'primeng/message';
 
@@ -16,11 +16,11 @@ export class LoginComponent {
 
   formGroup: UntypedFormGroup;
   hide: boolean = true;
-  event$: KeyboardEvent;
+  event$: KeyboardEvent | undefined;
   authErrorMessage: string = '';
 
-  @ViewChild('password') password: ElementRef;
-  @ViewChild('icon') icon: ElementRef;
+  @ViewChild('password') password: ElementRef | undefined;
+  @ViewChild('icon') icon: ElementRef | undefined;
 
   constructor(formBuilder: UntypedFormBuilder, private readonly auth: AuthService) {
     this.formGroup = formBuilder.group({
@@ -46,12 +46,12 @@ export class LoginComponent {
   }
 
   showPassword() {
-    if (this.icon.nativeElement.classList.contains("fa-eye-slash")) {
-      this.password.nativeElement.setAttribute("type", "password");
-      this.icon.nativeElement.setAttribute("class", "fas fa-eye");
+    if (this.icon?.nativeElement.classList.contains("fa-eye-slash")) {
+      this.password?.nativeElement.setAttribute("type", "password");
+      this.icon?.nativeElement.setAttribute("class", "fas fa-eye");
     } else {
-      this.password.nativeElement.setAttribute("type", "text");
-      this.icon.nativeElement.setAttribute("class", "fas fa-eye-slash");
+      this.password?.nativeElement.setAttribute("type", "text");
+      this.icon?.nativeElement.setAttribute("class", "fas fa-eye-slash");
     }
   }
 

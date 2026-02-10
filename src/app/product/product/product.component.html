@@ -6,7 +6,7 @@
     <div class="flex flex-col md:flex-row gap-6">
       <div class="flex-1">
         <form [formGroup]="formGroup" class="space-y-4" #elementForm>
-          @if (updatedProduct.show) {
+          @if (updatedProduct.show && updatedProduct.product) {
             <p-message severity="success">Se ha actualizado el producto: {{updatedProduct.product.name}}</p-message>
           }
           <div>

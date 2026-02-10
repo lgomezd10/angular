@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@env/environment';
+import { environment } from '../../environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User, UserResponse } from './user';
@@ -15,18 +15,18 @@ const helper = new JwtHelperService();
 export class AuthService {
 
   backendUrl = environment.API_URL;
-  private readonly user = new BehaviorSubject<UserResponse>(null);
+  private readonly user = new BehaviorSubject<UserResponse | null>(null);
   private readonly loged = new BehaviorSubject<boolean>(false);
 
   constructor(private readonly http: HttpClient, private readonly router: Router ) {
     this.checkToken();
    }
 
-  get user$(): Observable<UserResponse> {
+  get user$(): Observable<UserResponse | null> {
     return this.user.asObservable();
   }
 
-  get userValue(): UserResponse {
+  get userValue(): UserResponse | null {
     return this.user.getValue();
   }
 
@@ -62,7 +62,15 @@ export class AuthService {
   }
 
   checkToken() {
-    const user:UserResponse = JSON.parse(localStorage.getItem('user')) || null;
+    let user: UserResponse | null = null;
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      try {
+        user = JSON.parse(userStr);
+      } catch {
+        user = null;
+      }
+    }
 
     if (user) {
       const isExpired = helper.isTokenExpired(user.token);

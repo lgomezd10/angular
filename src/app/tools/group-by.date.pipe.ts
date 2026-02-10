@@ -16,7 +16,7 @@ export class GroupBydatePipe implements PipeTransform {
     }
     const groupedObj = value.reduce((prev, cur)=> {
        let date: Date = cur['date'];
-       let dateString: string = this.datePipe.transform(date, 'dd-MM-yy');
+       let dateString: string = this.datePipe.transform(date, 'dd-MM-yy') ?? '';
       if(prev[dateString]) {
         prev[dateString].push(cur);
       } else {

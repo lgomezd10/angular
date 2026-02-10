@@ -21,8 +21,8 @@ import { MenuItem } from 'primeng/api';
 export class AppComponent {
   title = 'TU TIENDA DE ALIMENTACION';
 
-  @ViewChild('navMenu', { static: false }) navMenu: ElementRef;
-  @ViewChild('buttoOculto', { static: false }) buttoOculto: ElementRef;
+  @ViewChild('navMenu', { static: false }) navMenu: ElementRef | undefined;
+  @ViewChild('buttoOculto', { static: false }) buttoOculto: ElementRef | undefined;
   items: MenuItem[] = [
     {
       label: 'Caja',
@@ -38,7 +38,7 @@ export class AppComponent {
     }
   ];
 
-  constructor(private auth: AuthService, public router: Router) {
+  constructor(private readonly auth: AuthService, public router: Router) {
     console.log('AppComponent loaded');
   }
 
@@ -47,7 +47,10 @@ export class AppComponent {
   }
 
   onClickBurger() {
-    //this.dropdown.nativeElement.classList.remove('is-active');
+    if (!this.buttoOculto?.nativeElement || !this.navMenu?.nativeElement) {
+      return;
+    }
+
     if (this.buttoOculto.nativeElement.classList.contains('is-active')) {
       this.buttoOculto.nativeElement.classList.remove('is-active');
     this.navMenu.nativeElement.classList.remove('is-active');      

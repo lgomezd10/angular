@@ -1,4 +1,4 @@
 export class Dates {
-    from: string;
-    to: string;
+    from: string = "";
+    to: string = "";
 }

@@ -1,10 +1,10 @@
 <h2 class="text-2xl font-bold mb-4">Buscador de compras</h2>
 <app-show-errors [typeError]="'Error404'"></app-show-errors>
 
-<app-select-dates (enviardates)="findPurchases($event)"></app-select-dates>
+<app-select-dates (sendDates)="findPurchases($event)"></app-select-dates>
 
 
-@for (purchase of purchases$ | async | groupBydate; track purchase) {
+@for (purchase of ((purchases$ | async) ?? []) | groupBydate; track purchase) {
   <div class="flex-1">
     <div class="font-semibold mb-2">Fecha: {{purchase.key}}</div>
     <p-table [value]="purchase.value" class="mb-4">

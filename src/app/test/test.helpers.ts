@@ -1,5 +1,5 @@
 /* tslint:disable forin */
-declare var jasmine: any;
+import { vi } from 'vitest';
 import { DebugElement } from "@angular/core";
 import { HttpResponse } from "@angular/common/http";
 import { By } from "@angular/platform-browser";
@@ -8,7 +8,7 @@ class MockResponse extends HttpResponse<any> {
   _json: any;
 
   constructor(json: any) {
-    super(new HttpResponse());
+    super({ body: json, status: 200, statusText: 'OK' } as any);
     this._json = json;
   }
 
@@ -24,7 +24,7 @@ export class TestHelper {
     tagName: string
   ): DebugElement {
     return parent.query(
-      debugEl => debugEl.nativeElement.tagName.toLowerCase() === tagName
+      debugEl => debugEl.nativeElement.tagName.toLowerCase() === tagName.toLowerCase()
     );
   }
 
@@ -38,7 +38,7 @@ export class TestHelper {
     parent: DebugElement,
     selector: string
   ): DebugElement[] {
-    const results = [];
+    const results: DebugElement[] = [];
 
     parent.queryAll(By.css(selector)).forEach(el => results.push(el));
     parent.children.forEach(de => {
@@ -50,15 +50,7 @@ export class TestHelper {
     return results;
   }
 
-  static isPhantomJS(): boolean {
-    return (
-      navigator &&
-      navigator.userAgent &&
-      navigator.userAgent.indexOf("PhantomJS") > -1
-    );
-  }
-
-  static mockJSONResponse(payload: any) {
+  static mockJSONResponse(payload: any): MockResponse {
     return new MockResponse(payload);
   }
 }
@@ -71,11 +63,11 @@ export class SpyObject {
         try {
           m = type.prototype[prop];
         } catch (e) {
-            console.log("error en spy", e);
           // As we are creating spys for abstract classes,
           // these classes might have getters that throw when they are accessed.
           // As we are only auto creating spys for methods, this
           // should not matter.
+          console.log("error en spy", e);
         }
         if (typeof m === "function") {
           this.spy(prop);
@@ -84,14 +76,14 @@ export class SpyObject {
     }
   }
 
-  spy(name: string) {
+  spy(name: string): any {
     if (!(this as any)[name]) {
-      (this as any)[name] = jasmine.createSpy(name);
+      (this as any)[name] = vi.fn();
     }
     return (this as any)[name];
   }
 
-  prop(name: string, value: any) {
+  prop(name: string, value: any): void {
     (this as any)[name] = value;
   }
 }

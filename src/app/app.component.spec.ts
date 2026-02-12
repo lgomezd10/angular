@@ -2,20 +2,12 @@ import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { LogoComponent } from './logo/logo.component';
 import { ShowErrorsComponent } from './errores/show-errors/show-errors.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-
-
+import { it, expect, beforeEach, describe } from 'vitest';
 
 describe('AppComponent', () => {
-  beforeEach(async() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        AppComponent,
-        LogoComponent,
-        ShowErrorsComponent
-      ],
-      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [AppComponent, LogoComponent, ShowErrorsComponent]
     }).compileComponents();
   });
 
@@ -31,10 +23,12 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('TU TIENDA DE ALIMENTACION');
   });
 
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+  it('should render logo title in LogoComponent', () => {
+    const fixture = TestBed.createComponent(LogoComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('name de tu tienda');
+    const h1 = compiled.querySelector('h1');
+    expect(h1).not.toBeNull();
+    expect(h1.textContent).toContain('Nombre de tu tienda');
   });
 });

@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { ErrorService } from '../error.service';
 import { Observable } from 'rxjs';
 import { MessageModule } from 'primeng/message';
-import { AuthService } from '@app/auth/auth.service';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
     selector: 'app-show-errors',

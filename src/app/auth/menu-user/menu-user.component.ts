@@ -22,7 +22,7 @@ export class MenuUserComponent implements OnInit {
   userItems: MenuItem[] = [];
 
   constructor(private readonly auth: AuthService, private readonly router: Router) {
-    this.auth.user$.subscribe((user: UserResponse) => {
+    this.auth.user$.subscribe((user: UserResponse | null) => {
       if (user == null) {
         this.user = "";
         this.setUserItems();

@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { Sale } from '../sale';
 import { SalesService } from '../sales.service';
-import { Dates } from 'src/app/tools/dates';
-import { ProductPipe } from '@app/product/product.pipe';
+import { Dates } from '../../tools/dates';
+import { ProductPipe } from '../../product/product.pipe';
 import { Observable } from 'rxjs';
 import { TableModule } from 'primeng/table';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { ShowErrorsComponent } from "@app/errores/show-errors/show-errors.component";
-import { SelectionDatesComponent } from "@app/tools/select-dates/select-dates.component";
+import { ShowErrorsComponent } from "../../errores/show-errors/show-errors.component";
+import { SelectionDatesComponent } from "../../tools/select-dates/select-dates.component";
 
 @Component({
     selector: 'app-sales-date',
@@ -19,7 +19,7 @@ import { SelectionDatesComponent } from "@app/tools/select-dates/select-dates.co
     imports: [ProductPipe, DecimalPipe, DatePipe, TableModule, ProgressSpinnerModule, ShowErrorsComponent, SelectionDatesComponent]
 })
 export class SalesDateComponent {
-  sales$: Observable<Sale[]>;
+  sales$: Observable<Sale[]> = new Observable<Sale[]>();
   total: number = 0;
   loading: boolean = false;
   sales: Sale[] = [];

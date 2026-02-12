@@ -2,7 +2,7 @@
   <h2 class="text-lg font-bold mb-4">Seleccione las fechas:</h2>
   <div class="flex flex-col md:flex-row md:items-end gap-4 w-full">
     <div class="flex flex-col w-full md:w-auto">
-        <label class="block text-sm font-medium text-gray-700 mb-1 mx-auto w-full max-w-xs">Desde:</label>
+        <label for="from" class="block text-sm font-medium text-gray-700 mb-1 mx-auto w-full max-w-xs">Desde:</label>
         <div class="flex w-full">
           <div class="mx-auto w-full max-w-xs">
             <p-datepicker [(ngModel)]="from" dateFormat="dd/mm/yy" [showIcon]="true" inputId="from" class="w-full"></p-datepicker>
@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="flex flex-col w-full md:w-auto">
-        <label class="block text-sm font-medium text-gray-700 mb-1 mx-auto w-full max-w-xs">Hasta:</label>
+        <label for="to" class="block text-sm font-medium text-gray-700 mb-1 mx-auto w-full max-w-xs">Hasta:</label>
         <div class="flex w-full">
           <div class="mx-auto w-full max-w-xs">
             <p-datepicker [(ngModel)]="to" dateFormat="dd/mm/yy" [showIcon]="true" inputId="to" class="w-full"></p-datepicker>

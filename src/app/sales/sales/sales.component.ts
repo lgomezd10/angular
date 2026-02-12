@@ -1,16 +1,16 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ItemSale } from '../item-sale';
-import { Product } from 'src/app/product/product';
+import { Product } from '../../product/product';
 import { Observable } from 'rxjs';
-import { ProductsService } from 'src/app/product/products.service';
+import { ProductsService } from '../../product/products.service';
 import { SalesService } from '../sales.service';
-import { ButtonType } from 'src/app/tools/button-type';
-import { ButtonListComponent } from '@app/tools/button-list/button-list.component';
-import { ToolsService } from 'src/app/tools/tools.service';
+import { ButtonType } from '../../tools/button-type';
+import { ButtonListComponent } from '../../tools/button-list/button-list.component';
+import { ToolsService } from '../../tools/tools.service';
 import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { FormErrors } from '@app/tools/form-errors';
+import { FormErrors } from '../../tools/form-errors';
 import { DecimalPipe } from '@angular/common';
-import { ShowErrorsComponent } from '@app/errores/show-errors/show-errors.component';
+import { ShowErrorsComponent } from '../../errores/show-errors/show-errors.component';
 import { TableModule } from 'primeng/table';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuModule } from 'primeng/menu';
@@ -20,7 +20,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectModule } from 'primeng/select';
 import { CheckboxModule } from 'primeng/checkbox';
 import { MessageModule } from 'primeng/message';
-import { CommonFormComponent } from '@app/tools/common-form/common-form.component';
+import { CommonFormComponent } from '../../tools/common-form/common-form.component';
+import { CommonFormField } from '../../tools/common-form-field';
 
 const nameButtonTypes = { newSale: 'NuevaSale', closeSale: 'FinalizarSale', addProduct: 'AddProduct', reopenTicket: 'ReabrirTicket' };
 
@@ -42,8 +43,8 @@ export class SalesComponent implements OnInit {
       content.nativeElement.focus();
     }
   }
-  @ViewChild('send', { static: false }) goToSummit: ElementRef;
-  @ViewChild('elementForm') elementForm: ElementRef;
+  @ViewChild('send', { static: false }) goToSummit: ElementRef | undefined;
+  @ViewChild('elementForm') elementForm: ElementRef | undefined;
 
   buttons: ButtonType[] = [];
 
@@ -54,17 +55,11 @@ export class SalesComponent implements OnInit {
   creditCard: boolean = false;
   open: boolean = false;
   findSale: number = 0;
-  currentItem: ItemSale;
-  searchText: string;
+  currentItem: ItemSale = new ItemSale();
+  searchText: string = "";
   showNew: boolean = false;
-  products$: Observable<Product[]>;
-  formFields: Array<{
-    name: string;
-    label: string;
-    type: 'text' | 'number' | 'select';
-    options$?: Observable<any[]>;
-    placeholder?: string;
-  }>;
+  products$: Observable<Product[]> = new Observable<Product[]>();
+  formFields: Array<CommonFormField> = [];
   showSuccessMessage: string = '';
 
   constructor(
@@ -198,7 +193,7 @@ export class SalesComponent implements OnInit {
         this.currentItem.quantity = this.formGroup.value.quantity;
         this.addPurchaseToList();
       } else {
-        this.elementForm.nativeElement.querySelector('.ng-invalid').focus();
+        this.elementForm?.nativeElement.querySelector('.ng-invalid').focus();
       }
     }
     
@@ -270,16 +265,6 @@ export class SalesComponent implements OnInit {
     } else {
       this.resetSales();
     }
-  }
-
-  keyPress(key: KeyboardEvent, field: HTMLElement) {
-    if (key.code == "Enter") {
-        field.focus();
-    }
-  }
-
-  onChange(e, campo) {
-    campo.focus();
   }
 
   checkError(field: string): boolean {

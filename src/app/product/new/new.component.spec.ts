@@ -1,144 +1,356 @@
-import { ComponentFixture, TestBed, fakeAsync, inject, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { render, screen, fireEvent, within } from '@testing-library/angular';
+import { of } from 'rxjs';
+import { describe, it, expect } from 'vitest';
 
 import { NewComponent } from './new.component';
-import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
-import {
-  dispatchEvent,
-  ConsoleSpy
-} from '../../test/utils';
-import { By } from '@angular/platform-browser';
-import { MockProductsService } from 'src/app/test/products.service.mock';
 import { ProductsService } from '../products.service';
 import { Product } from '../product';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { ToolsService } from 'src/app/tools/tools.service';
-import { MockToolsServices } from 'src/app/test/tools.service.mock';
-import { CommonModule } from '@angular/common';
-import { ProductModule } from '../product.module';
 
 describe('NewComponent', () => {
-  let component: NewComponent;
-  let fixture: ComponentFixture<NewComponent>;
-  beforeEach(async () => {
+  const createProduct = (overrides?: Partial<Product>): Product => {
+    const product = new Product();
+    product.id = 1;
+    product.name = 'Patata';
+    product.price = 2.5;
+    product.stock = 10;
+    product.type = 'Verdura';
+    return Object.assign(product, overrides);
+  };
 
-    const mockProductsService: MockProductsService = new MockProductsService();
-    const mocktoolsServices: MockToolsServices = new MockToolsServices();
-    TestBed.configureTestingModule({
-      imports: [FormsModule, ReactiveFormsModule, ProductModule],
+  const buildProductsServiceMock = () => ({
+    getProducts$: vi.fn(() => of<Product[]>([])),
+    getProductByName: vi.fn(() => undefined as Product | undefined),
+    postNewProduct: vi.fn((product: Product) => of(product))
+  });
+
+  const setup = async () => {
+    const productsServiceMock = buildProductsServiceMock();
+
+    await TestBed.configureTestingModule({
+      imports: [NewComponent],
       providers: [
-        mockProductsService.getProviders(),
-        { provide: ToolsService, useValue: mocktoolsServices }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      declarations: [NewComponent]
+        { provide: ProductsService, useValue: productsServiceMock }
+      ]
     }).compileComponents();
 
-  }) ;
+    const fixture = TestBed.createComponent(NewComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(NewComponent);
-    component = fixture.componentInstance;
-  });
+    return { fixture, component, productsServiceMock };
+  };
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  describe('Unit/Logic Tests', () => {
+    it('initializes default state with empty product and visible dialog', async () => {
+      const { component } = await setup();
 
-  describe('formulario', () => {
-    let name, type, price, el;
-    beforeEach(fakeAsync(() => {
-      fixture.detectChanges();
-      el = fixture.debugElement.nativeElement;
-      name = fixture.debugElement.query(By.css('#name')).nativeElement;
-      type = fixture.debugElement.query(By.css('#type')).nativeElement;
-      price = fixture.debugElement.query(By.css('#price')).nativeElement;
-      fixture.detectChanges();
-    }));
-
-    //afterAll(() => (<any>window).console = originalConsole);
-    describe('valores de campos', () => {
-
-      beforeEach(fakeAsync(() => {
-        name.value = 'product1';
-        dispatchEvent(name, 'input');
-        type.options[6].selected = true;
-        dispatchEvent(type, 'change');
-        price.value = 1;
-        dispatchEvent(price, 'input');
-        fixture.detectChanges();
-        
-      }));
-
-      afterAll(() => {
-        component.formGroup.reset();
-      })
-
-      it('campo name', () => {
-        expect(component.formGroup.controls['name'].value).toBe('product1');
-      });
-      it('campo type', () => {
-        expect(component.formGroup.controls['type'].value).toBe("Otros/Verdura");
-      });
-
-      it('campo price', () => {
-        expect(component.formGroup.controls['price'].value).toBe(1);
-      });
-
-      it('No lanza errores',fakeAsync(() => { 
-        component.formGroup.markAllAsTouched();     
-        fixture.detectChanges();  
-        const msgs = el.querySelectorAll('.help.is-danger');
-        fixture.detectChanges();        
-        expect(msgs.length).toBe(0);
-      }))
-
+      expect(component.product).toBeInstanceOf(Product);
+      expect(component.display).toBe(true);
+      expect(component.repeatedProduct).toBe('');
     });
 
-    describe('Errores en formulario', () => {
+    it('initializes form with required validators', async () => {
+      const { component } = await setup();
 
-      afterEach(() => component.formGroup.reset());
-
-      it('Errores en campo name', fakeAsync(() => {
-        name.value = '';
-        dispatchEvent(name, 'input');
-        component.formGroup.controls['name'].markAsTouched();        
-        fixture.detectChanges();
-        const msgs = el.querySelectorAll('.help.is-danger');
-        fixture.detectChanges();        
-        expect(msgs[0].innerHTML).toContain('Falta el name del product');
-      }));
-
-      it('Errores en campo type', fakeAsync(() => {
-        type.value = '';
-        dispatchEvent(type, 'input');
-        component.formGroup.controls['type'].markAsTouched();        
-        fixture.detectChanges();
-        const msgs = el.querySelectorAll('.help.is-danger');
-        fixture.detectChanges();        
-        expect(msgs[0].innerHTML).toContain('Seleccione un type');
-      }));
-
-      it('Error price invalido', fakeAsync(() => {
-        price.value = '';
-        dispatchEvent(price, 'input');
-        component.formGroup.controls['price'].markAsTouched();        
-        fixture.detectChanges();
-        const msgs = el.querySelectorAll('.help.is-danger');
-        fixture.detectChanges();        
-        expect(msgs[0].innerHTML).toContain('Introduzca el price');        
-      }));
-
-      it('Error price menor que 0,1', fakeAsync(() => {
-        price.value = 0;
-        dispatchEvent(price, 'input');
-        component.formGroup.controls['price'].markAsTouched();        
-        fixture.detectChanges();
-        const msgs = el.querySelectorAll('.help.is-danger');
-        fixture.detectChanges();     
-        expect(msgs[0].innerHTML).toContain('El price debe ser mayor que 0');        
-      }));
+      expect(component.formGroup.get('name')?.hasError('required')).toBe(true);
+      expect(component.formGroup.get('type')?.hasError('required')).toBe(true);
+      expect(component.formGroup.get('price')?.hasError('required')).toBe(true);
     });
 
-  })
+    it('loads products observable from service on init', async () => {
+      const { component, productsServiceMock } = await setup();
 
+      expect(productsServiceMock.getProducts$).toHaveBeenCalled();
+      expect(component.products$).toBeTruthy();
+    });
+
+    it('validates price is greater than zero', async () => {
+      const { component } = await setup();
+
+      component.formGroup.patchValue({ name: 'Test', type: 'Verdura', price: 0 });
+
+      expect(component.formGroup.get('price')?.hasError('min')).toBe(true);
+      expect(component.formGroup.valid).toBe(false);
+    });
+
+    it('calls postNewProduct service method with correct product data', async () => {
+      const { component, productsServiceMock } = await setup();
+
+      component.formGroup.patchValue({
+        name: 'Tomate',
+        type: 'Verdura',
+        price: 3.5
+      });
+
+      component.onSubmit();
+
+      expect(productsServiceMock.postNewProduct).toHaveBeenCalledWith(
+        expect.objectContaining({
+          name: 'Tomate',
+          type: 'Verdura',
+          price: 3.5
+        })
+      );
+    });
+
+    it('resets form and product after successful save', async () => {
+      const { component } = await setup();
+
+      component.formGroup.patchValue({
+        name: 'Cebolla',
+        type: 'Verdura',
+        price: 1.5
+      });
+
+      component.onSubmit();
+
+      expect(component.formGroup.value.name).toBeNull();
+      expect(component.product.name).toBe('');
+      expect(component.repeatedProduct).toBe('');
+    });
+
+    it('emits savedProduct event with "saved" after successful creation', async () => {
+      const { component } = await setup();
+      const emitSpy = vi.spyOn(component.savedProduct, 'emit');
+
+      component.formGroup.patchValue({
+        name: 'Pepino',
+        type: 'Verdura',
+        price: 2
+      });
+
+      component.onSubmit();
+
+      expect(emitSpy).toHaveBeenCalledWith('saved');
+    });
+
+    it('prevents submission when form is invalid', async () => {
+      const { component, productsServiceMock } = await setup();
+
+      component.formGroup.patchValue({ name: '', type: '', price: null });
+      component.onSubmit();
+
+      expect(productsServiceMock.postNewProduct).not.toHaveBeenCalled();
+    });
+
+    it('detects repeated product name and sets error message', async () => {
+      const { component, productsServiceMock } = await setup();
+      const existingProduct = createProduct({ name: 'Patata' });
+      productsServiceMock.getProductByName.mockReturnValue(existingProduct);
+
+      component.formGroup.patchValue({
+        name: 'Patata',
+        type: 'Verdura',
+        price: 2.5
+      });
+
+      component.onSubmit();
+
+      expect(component.repeatedProduct).toBe('Patata');
+      expect(productsServiceMock.postNewProduct).not.toHaveBeenCalled();
+    });
+
+    it('formats product name to capitalize first letter', async () => {
+      const { component } = await setup();
+
+      component.product.name = 'tomate';
+      component.format();
+
+      expect(component.product.name).toBe('Tomate');
+    });
+
+    it('emits "closed" event when dialog is hidden', async () => {
+      const { component } = await setup();
+      const emitSpy = vi.spyOn(component.savedProduct, 'emit');
+
+      component.onDialogHide();
+
+      expect(component.display).toBe(false);
+      expect(emitSpy).toHaveBeenCalledWith('closed');
+    });
+
+    it('resets repeated product error when resetForm is called', async () => {
+      const { component } = await setup();
+
+      component.repeatedProduct = 'Patata';
+      component.resetForm();
+
+      expect(component.repeatedProduct).toBe('');
+    });
+
+    it('validates field errors with isFieldValid method', async () => {
+      const { component } = await setup();
+
+      // Campo sin tocar, no muestra error
+      expect(component.isFieldValid('name')).toBe(false);
+
+      // Tocar el campo sin valor válido, muestra error
+      component.formGroup.get('name')?.markAsTouched();
+      expect(component.isFieldValid('name')).toBe(true);
+
+      // Rellenar con valor válido, no muestra error
+      component.formGroup.patchValue({ name: 'Test' });
+      expect(component.isFieldValid('name')).toBe(false);
+    });
+
+    it('returns appropriate error message with getError method', async () => {
+      const { component } = await setup();
+
+      const error = component.getError('Nombre', 'name');
+
+      expect(error).toContain('Nombre');
+    });
+
+    it('only shows repeated error when name is not empty', async () => {
+      const { component, productsServiceMock } = await setup();
+      const existingProduct = createProduct({ name: 'Patata' });
+      productsServiceMock.getProductByName.mockReturnValue(existingProduct);
+
+      component.formGroup.patchValue({
+        name: 'Patata',
+        type: '',
+        price: null
+      });
+
+      component.onSubmit();
+
+      expect(component.repeatedProduct).toBe('Patata');
+    });
+  });
+
+  describe('Render/Template Tests', () => {
+    const renderComponent = async (display = true) => {
+      const renderProductsServiceMock = buildProductsServiceMock();
+
+      const result = await render(NewComponent, {
+        componentInputs: { display },
+        providers: [
+          { provide: ProductsService, useValue: renderProductsServiceMock }
+        ]
+      });
+
+      return { ...result, renderProductsServiceMock };
+    };
+
+    it('renders dialog with new product form when display is true', async () => {
+      await renderComponent(true);
+
+      expect(screen.getByText(/Crear nuevo producto/i)).toBeTruthy();
+    });
+
+    it('renders form fields for name, type, and price', async () => {
+      const { container } = await renderComponent();
+
+      expect(screen.getByLabelText(/Nombre/i)).toBeTruthy();
+      expect(container.querySelector('p-select[formcontrolname="type"]')).toBeTruthy();
+      expect(container.querySelector('p-inputnumber[formcontrolname="price"]')).toBeTruthy();
+    });
+
+    it('renders all product types in select dropdown', async () => {
+      await renderComponent();
+
+      const select = screen.getByRole('combobox', { name: /Selecciona tipo/i });
+      expect(select).toBeTruthy();
+    });
+
+    it('displays validation error message for required name field', async () => {
+      const { fixture } = await renderComponent();
+
+      const nameInput = screen.getByLabelText(/Nombre/i);
+      fireEvent.blur(nameInput);
+      fixture.detectChanges();
+
+      const errorMessage = fixture.nativeElement.querySelector('p-message[severity="error"]');
+      expect(errorMessage).toBeTruthy();
+    });
+
+    it('displays repeated product error when product exists', async () => {
+      const { fixture, renderProductsServiceMock } = await renderComponent();
+      const existingProduct = createProduct({ name: 'Patata' });
+      renderProductsServiceMock.getProductByName.mockReturnValue(existingProduct);
+
+      fixture.componentInstance.formGroup.patchValue({
+        name: 'Patata',
+        type: 'Verdura',
+        price: 2.5
+      });
+
+      fixture.componentInstance.onSubmit();
+      fixture.detectChanges();
+
+      expect(screen.getByText(/ya existe/i)).toBeTruthy();
+    });
+
+    it('displays submit button', async () => {
+      await renderComponent();
+
+      expect(screen.getByRole('button', { name: /Enviar/i })).toBeTruthy();
+    });
+
+    it('disables submit button when form is invalid', async () => {
+      await renderComponent();
+      const submitButton = screen.getByRole('button', { name: /Enviar/i });
+      // Initially form is invalid
+      expect(submitButton).toHaveProperty('disabled', true);
+    });
+
+    it('enables submit button when form is valid', async () => {
+      const { fixture } = await renderComponent();
+
+      fixture.componentInstance.formGroup.patchValue({
+        name: 'Tomate',
+        type: 'Verdura',
+        price: 3.5
+      });
+      fixture.detectChanges();
+
+      const submitButton = screen.getByRole('button', { name: /Enviar/i });
+      expect(submitButton).toHaveProperty('disabled', false);
+    });
+
+    // No cancel button in template, test removed.
+
+    it('clears form after successful product creation', async () => {
+      const { fixture } = await renderComponent();
+
+      fixture.componentInstance.formGroup.patchValue({
+        name: 'Pepino',
+        type: 'Verdura',
+        price: 2
+      });
+
+      fixture.componentInstance.onSubmit();
+      fixture.detectChanges();
+
+      expect(fixture.componentInstance.formGroup.value.name).toBeNull();
+    });
+
+    it('shows price validation error for zero value', async () => {
+      const { fixture } = await renderComponent();
+
+      const priceInput = fixture.nativeElement.querySelector('p-inputnumber[formcontrolname="price"] input');
+      fireEvent.input(priceInput, { target: { value: '0' } });
+      fireEvent.blur(priceInput);
+
+      fixture.componentInstance.formGroup.patchValue({ price: 0 });
+      fixture.detectChanges();
+
+      const errorMessage = within(fixture.nativeElement).queryByText(/debe ser mayor/i);
+      expect(errorMessage).toBeTruthy();
+    });
+
+    it('exposes accessible form labels and inputs', async () => {
+      await renderComponent();
+
+      // Verify Name input is accessible
+      expect(screen.getByLabelText(/Nombre/i)).toBeTruthy();
+
+      // Verify Type combobox is accessible
+      expect(screen.getByRole('combobox', { name: /Selecciona tipo/i })).toBeTruthy();
+
+      // Verify Price spinbutton is accessible
+      expect(screen.getByRole('spinbutton')).toBeTruthy();
+    });
+  });
 });

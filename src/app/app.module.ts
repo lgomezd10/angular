@@ -8,7 +8,6 @@ import { ErroresModule } from './errores/errors.module';
 import { ToolsModule } from './tools/tools.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
-import { LoginModule } from './auth/login/login.module';
 import { ButtonModule } from 'primeng/button';
 
 @NgModule({
@@ -19,7 +18,6 @@ import { ButtonModule } from 'primeng/button';
         ProductModule,
         SalesModule,
         PurchasesModule,
-        LoginModule,
         ErroresModule,
         ToolsModule,
         AppRoutingModule,

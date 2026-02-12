@@ -4,7 +4,7 @@ import { Product } from './product';
 import { Observable, of, BehaviorSubject, Subscription, catchError } from 'rxjs';
 
 import { SocketService } from '../services/socket';
-import { environment } from '@env/environment';
+import { environment } from '../../environments/environment';
 
 function formatoname(name: string): string {
   name = name.trim();
@@ -27,17 +27,18 @@ const httpOptions = {
 
 export class ProductsService implements OnDestroy {
 
-  updateProducts$ = this.socket.fromEvent<Product[]>('updateProducts');
+  updateProducts$: Observable<Product[]>;
 
   products$: BehaviorSubject<Product[]>;
 
-  private _docSub: Subscription;
+  private _docSub: Subscription = new Subscription();
 
   backendUrl = environment.API_URL;
 
 
   constructor(private readonly http: HttpClient, private readonly socket: SocketService) {
     this.products$ = new BehaviorSubject<Product[]>([]);
+    this.updateProducts$ = this.socket.fromEvent<Product[]>('updateProducts');
     this.loadProducts();
     this.updateProducts$.subscribe(products => {
       this.products$.next(products);
@@ -76,11 +77,11 @@ export class ProductsService implements OnDestroy {
   }
 
 
-  getProduct(id: number): Product {
+  getProduct(id: number): Product | undefined {
     return this.products$.getValue().find(product => { return product.id == id });
   }
 
-  getProductByName(name: string): Product {
+  getProductByName(name: string): Product | undefined {
     name = formatoname(name);
     return this.getProducts().find(product => { return product.name == name });
   }

@@ -21,7 +21,7 @@ export class SelectionDatesComponent implements OnInit {
   toString: string = "";
 
   @Output()
-  enviardates: EventEmitter<Dates> = new EventEmitter<Dates>();
+  sendDates = new EventEmitter<Dates>();
 
   constructor(private readonly datePipe: DatePipe) { }
 
@@ -41,13 +41,13 @@ export class SelectionDatesComponent implements OnInit {
       if (this.from > this.to) {
         alert("La segunda date debe ser igual o mayor");
       } else {
-        this.fromString = this.datePipe.transform(this.from, 'yyyy-MM-dd HH:mm:ss');
-        this.toString = this.datePipe.transform(this.to, 'yyyy-MM-dd HH:mm:ss');      
+        this.fromString = this.datePipe.transform(this.from, 'yyyy-MM-dd HH:mm:ss') ?? '';
+        this.toString = this.datePipe.transform(this.to, 'yyyy-MM-dd HH:mm:ss') ?? '';      
         let fechas: Dates = {
           from: this.fromString,
           to: this.toString
         }
-        this.enviardates.emit(fechas);
+        this.sendDates?.emit(fechas);
       }
     });
   }

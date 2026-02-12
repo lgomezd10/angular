@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { AsyncPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { PurchasesService } from '../purchases.service';
 import { Purchase } from '../purchase';
-import { Dates } from 'src/app/tools/dates';
-import { GroupBydatePipe } from '@app/tools/group-by.date.pipe';
+import { Dates } from '../../tools/dates';
+import { GroupBydatePipe } from '../../tools/group-by.date.pipe';
 import { Observable } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from "primeng/table";
-import { ShowErrorsComponent } from "@app/errores/show-errors/show-errors.component";
-import { SelectionDatesComponent } from "@app/tools/select-dates/select-dates.component";
+import { ShowErrorsComponent } from "../../errores/show-errors/show-errors.component";
+import { SelectionDatesComponent } from "../../tools/select-dates/select-dates.component";
 
 @Component({
     selector: 'app-purchases-date',
@@ -26,7 +26,7 @@ export class PurchasesDateComponent {
   }
 
   findPurchases(dates: Dates) {    
-    this.purchases$ = this.purchasesService.purchasesByDate(dates.from, dates.to);
+    this.purchases$ = this.purchasesService.purchasesByDate(dates.from, dates.to) ?? new Observable<Purchase[]>();
   }
 
 }
